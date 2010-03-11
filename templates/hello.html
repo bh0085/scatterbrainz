@@ -11,7 +11,7 @@
         <div class="jp-playlist">
             <ul>
                 % for track in c.tracks:
-                    <li class='song' href="/music/${track.dirname}/${track.filename}">${track.filename}</li>
+                    <li class='song' href="/.music/${track.dirname}/${track.filename}">${track.filename}</li>
                 % endfor
             </ul>
         </div> 

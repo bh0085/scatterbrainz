@@ -1,0 +1,20 @@
+== filesystem ==
+* store filesize + mod date
+* runtime filesystem watch/sync
+* app startup filesystem sync
+
+== front-end ==
+* tree browse music
+* drag-drop playlist
+* jquery table view of playlist songs
+* fix playlist next/prev
+* stretch to window
+* nice layout
+
+== id3 ==
+* store id3
+* musicbrainz stuff
+
+== couch ==
+* couch views for artist, album, etc
+* switch to couchdbkit
