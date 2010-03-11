@@ -1,90 +1,89 @@
 <html>
 <head>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery-1.4.1.min.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
-<link rel="stylesheet" type="text/css" href="http://www.happyworm.com/jquery/jplayer/1.0.0/skin/jplayer.blue.monday.css" />
+<link rel="stylesheet" type="text/css" href="/jplayer.blue.monday.css" />
 </head>
 
 <body>
 <div id="jquery_jplayer"></div>
-			<div class="jp-playlist-player">
-                                <div class="jp-playlist">
-                                    <ul>
-                                      % for track in c.tracks:
-                                        <li class='song' href="/music/${track.dirname}/${track.filename}">${track.filename}</li>
-                                      % endfor
-                                    </ul>
-                                </div> 
-				<div class="jp-interface"> 
-					<ul class="jp-controls"> 
-						<li id="jplayer_play" class="jp-play">play</li> 
-						<li id="jplayer_pause" class="jp-pause">pause</li> 
-						<li id="jplayer_stop" class="jp-stop">stop</li> 
-						<li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
-						<li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
-						<li id="jplayer_previous" class="jp-previous">previous</li> 
-						<li id="jplayer_next" class="jp-next">next</li> 
-					</ul> 
-					<div class="jp-progress"> 
-						<div id="jplayer_load_bar" class="jp-load-bar"> 
-							<div id="jplayer_play_bar" class="jp-play-bar"></div> 
-						</div> 
-					</div> 
-					<div id="jplayer_volume_bar" class="jp-volume-bar"> 
-						<div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
-					</div> 
-					<div id="jplayer_play_time" class="jp-play-time"></div> 
-					<div id="jplayer_total_time" class="jp-total-time"></div> 
-				</div>
-	                </div> 
+    <div class="jp-playlist-player">
+        <div class="jp-playlist">
+            <ul>
+                % for track in c.tracks:
+                    <li class='song' href="/music/${track.dirname}/${track.filename}">${track.filename}</li>
+                % endfor
+            </ul>
+        </div> 
+        <div class="jp-interface"> 
+            <ul class="jp-controls"> 
+                <li id="jplayer_play" class="jp-play">play</li> 
+                <li id="jplayer_pause" class="jp-pause">pause</li> 
+                <li id="jplayer_stop" class="jp-stop">stop</li> 
+                <li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
+                <li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
+                <li id="jplayer_previous" class="jp-previous">previous</li> 
+                <li id="jplayer_next" class="jp-next">next</li> 
+            </ul> 
+            <div class="jp-progress"> 
+                <div id="jplayer_load_bar" class="jp-load-bar"> 
+                    <div id="jplayer_play_bar" class="jp-play-bar"></div> 
+                </div> 
+            </div> 
+            <div id="jplayer_volume_bar" class="jp-volume-bar"> 
+                <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
+            </div> 
+            <div id="jplayer_play_time" class="jp-play-time"></div> 
+            <div id="jplayer_total_time" class="jp-total-time"></div> 
+        </div>
+    </div> 
 
 <script type="text/javascript">
 
 function play() {
-  $('.jplayer_playlist_current').removeClass('jplayer_playlist_current');
-  $("#jquery_jplayer").jPlayer("setFile", $(this).attr('href')).jPlayer("play");
-  $(this).addClass('jplayer_playlist_current');
+    $('.jplayer_playlist_current').removeClass('jplayer_playlist_current');
+    $("#jquery_jplayer").jPlayer("setFile", $(this).attr('href')).jPlayer("play");
+    $(this).addClass('jplayer_playlist_current');
 }
 
 $(document).ready(function() {
-  $("#jquery_jplayer").jPlayer( {
-    ready: function () {
-      $('.song').click(play);
-    }
-  });
+    $("#jquery_jplayer").jPlayer( {
+        ready: function () {
+            $('.song').click(play);
+        }
+    });
 });
 </script>
 
 <script> 
- 
+
 $(document).ready(function(){
 
-	// Local copy of jQuery selectors, for performance.
-	var jpPlayTime = $("#jplayer_play_time");
-	var jpTotalTime = $("#jplayer_total_time");
- 
-	$("#jquery_jplayer").jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-		jpPlayTime.text($.jPlayer.convertTime(playedTime));
-		jpTotalTime.text($.jPlayer.convertTime(totalTime));
-	})
-	.jPlayer("onSoundComplete", function() {
-		playListNext();
-	});
- 
-	$("#jplayer_previous").click( function() {
-		playListPrev();
-		return false;
-	});
- 
-	$("#jplayer_next").click( function() {
-		playListNext();
-		return false;
-	});
+    // Local copy of jQuery selectors, for performance.
+    var jpPlayTime = $("#jplayer_play_time");
+    var jpTotalTime = $("#jplayer_total_time");
+
+    $("#jquery_jplayer").jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
+        jpPlayTime.text($.jPlayer.convertTime(playedTime));
+        jpTotalTime.text($.jPlayer.convertTime(totalTime));
+    })
+    .jPlayer("onSoundComplete", function() {
+        playListNext();
+    });
+
+    $("#jplayer_previous").click( function() {
+        playListPrev();
+        return false;
+    });
+
+    $("#jplayer_next").click( function() {
+        playListNext();
+        return false;
+    });
 
 });
- 
+
 </script> 
 
 </body>
 </html>
-
