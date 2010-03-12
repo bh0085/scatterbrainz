@@ -1,6 +1,6 @@
 .playing {
     color: white;
-    background-color: #0099FF;
+    background-color: #0099FF !important;
 }
 
 th, td {
@@ -11,9 +11,12 @@ tr {
     cursor: pointer;
 }
 
-table {
-    border-spacing: 0px;
-    border-collapse: collapse;
+tbody tr:nth-child(odd) {
+    background-color: #EEEEEE;
+}
+
+tbody tr:hover {
+    background-color: #DDEEFF;
 }
 
 body {
