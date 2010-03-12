@@ -15,7 +15,7 @@ from scatterbrainz.lib.base import BaseController, render
 log = logging.getLogger(__name__)
 
 def getFullPath(track):
-    return '/' + '/'.join(track['filepath']) + '/' + track['filename']
+    return '/'.join(track['filepath']) + '/' + track['filename']
 
 def utf8(s):
     return s.decode('utf-8')
@@ -44,7 +44,7 @@ class HelloController(BaseController):
         numInserts = 0
         numBad = 0
         tracks = []
-        for dirname, dirnames, filenames in os.walk('/media/data/music/Bob Dylan'):
+        for dirname, dirnames, filenames in os.walk('/media/data/music/Bob Dylan/Bob Dylan'):
             for filename in filenames:
                 numFiles = numFiles + 1
                 idStr = str(id).rjust(10,'0')
@@ -58,6 +58,8 @@ class HelloController(BaseController):
                 # id3
                 id3dumb = EasyID3(filepath)
                 id3 = {}
+                # keys: ['album', 'date', 'version', 'composer', 'title'
+                #        'genre', 'tracknumber', 'lyricist', 'artist']
                 for key in id3dumb:
                     id3[key] = id3dumb[key][0]
                 

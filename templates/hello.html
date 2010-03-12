@@ -1,21 +1,40 @@
 <html>
 <head>
-<script type="text/javascript" src="/jquery-1.4.1.min.js"></script>
+<script type="text/javascript" src="/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="/jquery-ui-1.8rc3.custom.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/jplayer.blue.monday.css" />
+<link rel="stylesheet" type="text/css" href="/scatterbrainz.css" />
+<link rel="stylesheet" type="text/css" href="/jquery-ui-1.8rc3.custom.css" />
 </head>
 
 <body>
 <div id="jquery_jplayer"></div>
     <div class="jp-playlist-player">
         <div class="jp-playlist">
-            <ul>
+            <table id="playlist">
+              <thead style="display: block; width: 810px; text-align: left;">
+                <tr style="width: 800px;">
+                  <th style="width: 250px">artist</th>
+                  <th style="width: 250px">title</th>
+                  <th style="width: 200px">album</th>
+                  <th style="width: 100px">track</th>
+                </tr>
+              </thead>
+              <tbody id="playlistbody" style="overflow-x: hidden; overflow-y: auto; height: 600px; display: block; padding: 0px; ">
                 % for track in c.tracks:
-                    <li class='song' href="/.music/${c.getFullPath(track)}">${track['filename']}</li>
+                    <tr style="width: 800px;" class='song' href="/.music/${c.getFullPath(track)}">
+                      <td style='width: 250px;'>${track['id3']['artist']}</td>
+                      <td style='width: 250px;'>${track['id3']['title']}</td>
+                      <td style='width: 200px;'>${track['id3']['album']}</td>
+                      <td style='width: 100px;'>${track['id3']['tracknumber']}</td>
+                    </tr>
                 % endfor
-            </ul>
+              </tbody>
+            </table>
         </div> 
-        <div class="jp-interface"> 
+        <div class="jp-interface">
             <ul class="jp-controls"> 
                 <li id="jplayer_play" class="jp-play">play</li> 
                 <li id="jplayer_pause" class="jp-pause">pause</li> 
@@ -34,22 +53,25 @@
                 <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
             </div> 
             <div id="jplayer_play_time" class="jp-play-time"></div> 
-            <div id="jplayer_total_time" class="jp-total-time"></div> 
+            <div id="jplayer_total_time" class="jp-total-time"></div>
         </div>
     </div> 
 
 <script type="text/javascript">
 
+$('#playlist').tablesorter();
+$('#playlistbody').sortable();
+
 function play() {
-    $('.jplayer_playlist_current').removeClass('jplayer_playlist_current');
+    $('.playing').removeClass('playing');
     $("#jquery_jplayer").jPlayer("setFile", $(this).attr('href')).jPlayer("play");
-    $(this).addClass('jplayer_playlist_current');
+    $(this).addClass('playing');
 }
 
 $(document).ready(function() {
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
-            $('.song').click(play);
+            $('.song').dblclick(play);
         }
     });
 });

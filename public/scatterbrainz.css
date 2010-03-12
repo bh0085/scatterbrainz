@@ -1,0 +1,23 @@
+.playing {
+    color: white;
+    background-color: #0099FF;
+}
+
+th, td {
+    padding: 0px;
+}
+
+tr {
+    cursor: pointer;
+}
+
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+body {
+   -moz-user-select: none;
+   -khtml-user-select: none;
+   user-select: none;
+}
