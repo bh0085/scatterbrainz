@@ -1,5 +1,4 @@
 == filesystem ==
-* store filesize + mod date
 * runtime filesystem watch/sync
 * app startup filesystem sync
 
@@ -12,9 +11,19 @@
 * nice layout
 
 == id3 ==
-* store id3
 * musicbrainz stuff
 
 == couch ==
 * couch views for artist, album, etc
 * switch to couchdbkit
+
+== album art ==
+* figure it out
+
+== what.cd ==
+* greasemonkey script to validate musicbrainz mappings
+
+== not happening anytime soon ==
+* ability to pull in music from another instance
+* navigate musicbrainz relationships
+* download
