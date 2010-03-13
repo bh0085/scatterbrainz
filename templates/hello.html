@@ -26,13 +26,13 @@
               </thead>
               <tbody id="playlistbody" style="overflow-x: hidden; overflow-y: auto; height: 600px; display: block; padding: 0px; ">
                 % for track in c.tracks:
-                    <tr style="width: 750px;" class="song" href="/.music/${c.getFullPath(track)}">
-                      <td class="artist" style='width: 200px;'>${track['id3']['artist']}</td>
-                      <td class="title" style='width: 200px;'>${track['id3']['title']}</td>
-                      <td class="album" style='width: 200px;'>${track['id3']['album']}</td>
-                      <td class="track" style='width: 50px;'>${c.tracknum(track['id3']['tracknumber'])}</td>
-                      <td class="length" style='width: 50px;'>${c.minsec(track['mp3']['length'])}</td>
-                      <td class="bitrate" style='width: 50px;'>${c.kbps(track['mp3']['bitrate'])}</td>
+                    <tr style="width: 750px;" class="song" href="/.music/${c.r.getFullPath(track)}">
+                      <td class="artist" style='width: 200px;'>${c.r.artist(track)}</td>
+                      <td class="title" style='width: 200px;'>${c.r.title(track)}</td>
+                      <td class="album" style='width: 200px;'>${c.r.album(track)}</td>
+                      <td class="track" style='width: 50px;'>${c.r.tracknum(track)}</td>
+                      <td class="length" style='width: 50px;'>${c.r.length(track)}</td>
+                      <td class="bitrate" style='width: 50px;'>${c.r.bitrate(track)}</td>
                     </tr>
                 % endfor
               </tbody>

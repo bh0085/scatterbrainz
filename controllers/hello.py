@@ -15,12 +15,39 @@ from scatterbrainz.lib.base import BaseController, render
 
 log = logging.getLogger(__name__)
 
-def getFullPath(track):
-    return '/'.join(track['filepath']) + '/' + track['filename']
+class RenderingHelperFunctions:
+    
+    def getFullPath(self, track):
+        return '/'.join(track['filepath']) + '/' + track['filename']
+
+    
+    def minsec(self, sec):
+        return "%d:%02d" % (sec / 60, sec % 60)
+    
+    def artist(self, track):
+        return track['id3'].get('artist', '')
+        
+    def title(self, track):
+        return track['id3'].get('title', '')
+    
+    def album(self, track):
+        return track['id3'].get('album', '')
+    
+    def tracknum(self, track):
+        if 'tracknumber' in track['id3']:
+            return int(track['id3']['tracknumber'].split('/')[0])
+        else:
+            return ''
+
+    def length(self, track):
+        return self.minsec(track['mp3']['length'])
+
+    def bitrate(self, track):
+        return track['mp3']['bitrate'] / 1000
 
 def utf8(s):
     return s.decode('utf-8')
-
+    
 def mp3info(mp3):
     s = "MPEG %s layer %d, %d bps, %s Hz, %.2f seconds" % (
         mp3.version, mp3.layer, mp3.bitrate, mp3.sample_rate,
@@ -28,15 +55,6 @@ def mp3info(mp3):
     if mp3.sketchy:
         s += " (sketchy)"
     return s
-
-def minsec(sec):
-    return "%d:%02d" % (sec / 60, sec % 60)
-
-def kbps(bps):
-    return bps / 1000
-
-def tracknum(trackstr):
-    return int(trackstr.split('/')[0])
 
 class HelloController(BaseController):
 
@@ -62,66 +80,74 @@ class HelloController(BaseController):
         numInserts = 0
         numBad = 0
         tracks = []
-        for dirname, dirnames, filenames in os.walk('/media/data/music/Joanna Newsom'):
+        for dirname, dirnames, filenames in os.walk('/media/data/music/[Soundtracks]'):
             for filename in filenames:
-                numFiles = numFiles + 1
-                idStr = str(id).rjust(10,'0')
-                
-                # get path, size, date
-                reldir = os.path.relpath(dirname, '/media/data/music').strip('/').split('/')
-                filepath = os.path.join(dirname,filename)
-                size = os.path.getsize(filepath)
-                mtime = os.path.getmtime(filepath)
-                
-                # mp3 length, bitrate, etc.
-                mutagen = MP3(filepath, ID3=EasyID3)
-                info = mutagen.info
-                mp3 = {
-                    'version'    : info.version,
-                    'layer'      : info.layer,
-                    'bitrate'    : info.bitrate,
-                    'samplerate' : info.sample_rate,
-                    'length'     : info.length,
-                }
-                if info.sketchy:
-                    mp3['sketchy'] = true
 
-                # id3
-                id3 = {}
-                # keys: ['album', 'date', 'version', 'composer', 'title'
-                #        'genre', 'tracknumber', 'lyricist', 'artist']
-                for key in mutagen:
-                    id3[key] = mutagen[key][0]
-                
                 try:
+                
+                    numFiles = numFiles + 1
+                    idStr = str(id).rjust(10,'0')
+                    
+                    # get path, size, date
+                    reldir = os.path.relpath(dirname, '/media/data/music') \
+                                    .strip('/').split('/')
+                    filepath = os.path.join(dirname,filename)
+                    size = os.path.getsize(filepath)
+                    mtime = os.path.getmtime(filepath)
+                    
+                    # mp3 length, bitrate, etc.
+                    mutagen = MP3(filepath, ID3=EasyID3)
+                    info = mutagen.info
+                    mp3 = {
+                        'version'    : info.version,
+                        'layer'      : info.layer,
+                        'bitrate'    : info.bitrate,
+                        'samplerate' : info.sample_rate,
+                        'length'     : info.length,
+                    }
+                    if info.sketchy:
+                        mp3['sketchy'] = true
+                        log.warn('sketchy MP3: ' + filename)
+    
+                    # id3
+                    # keys: ['album', 'date', 'version', 'composer', 'title'
+                    #        'genre', 'tracknumber', 'lyricist', 'artist']
+                    id3 = {}
+                    for key in mutagen:
+                        if mutagen[key]:
+                            id3[key] = mutagen[key][0]
                     track = {
                         '_id'      : idStr,
                         'doctype'  : 'Track',
                         'filepath' : map(utf8, reldir),
                         'filename' : utf8(filename),
                         'size'     : size,
-                        'added'    : round(now),
-                        'mtime'    : round(mtime),
+                        'added'    : int(round(now)),
+                        'mtime'    : int(round(mtime)),
                         'id3'      : id3,
                         'mp3'      : mp3,
                     }
                     tracks.append(track)
                     id = id + 1
-                except UnicodeDecodeError:
+                    if len(tracks) == 1000:
+                        db.update(tracks)
+                        numInserts = numInserts + 1
+                        numLoaded = numLoaded + len(tracks)
+                        tracks = []
+                
+                except Exception as e:
+                    
                     numBad = numBad + 1
-                if len(tracks) == 1000:
-                    db.update(tracks)
-                    numInserts = numInserts + 1
-                    numLoaded = numLoaded + len(tracks)
-                    tracks = []
+                    log.error('Could not load file "' + filename + '" due to exception: '
+                              + e.__class__.__name__ + ': ' + str(e))
+
         if tracks:
             db.update(tracks)
             numInserts = numInserts + 1
             numLoaded = numLoaded + len(tracks)
 
-        return """Saw %(numFiles)d files, loaded %(numLoaded)d in %(numInserts)d inserts, %(numBad)d failed
-              due to encoding problems.""" \
-               % {'numFiles':numFiles,'numLoaded':numLoaded, 'numInserts':numInserts, \
+        return """Saw %(numFiles)d files, loaded %(numLoaded)d in %(numInserts)d inserts, %(numBad)d failed.""" \
+               % {'numFiles':numFiles,'numLoaded':numLoaded, 'numInserts':numInserts,
                   'numBad':numBad}
 
     def index(self):
@@ -130,9 +156,5 @@ class HelloController(BaseController):
         for key in db:
             tracks.append(db[key])
         c.tracks = tracks
-        c.getFullPath = getFullPath
-        c.minsec = minsec
-        c.kbps = kbps
-        c.tracknum = tracknum
+        c.r = RenderingHelperFunctions()
         return render('/hello.html')
-
