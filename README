@@ -1,0 +1,28 @@
+This is a streaming mp3 music server that's not very good right now.
+
+Current features
+* Catalogs a directory of mp3s and tags
+* Displays mp3s in a playlist
+* Plays mp3s in your html5 compliant browser
+
+Server dependencies
+* python 2.6
+* pylons
+* couchdb
+* python-couchdb
+* mutagen
+* large music collection
+
+Client dependencies
+* google chrome
+
+Thanks
+* jquery
+* musicbrainz
+* amarok 1.4
+* last.fm
+* viixy.com
+
+No thanks
+* flash
+* internet explorer

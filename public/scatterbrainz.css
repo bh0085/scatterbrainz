@@ -24,3 +24,16 @@ body {
    -khtml-user-select: none;
    user-select: none;
 }
+
+.playlistHead {
+    display: block;
+    width: 760px;
+}
+
+.playlistHeadRow {
+    width: 750px;
+}
+
+.placeholder {
+    height: 10px;
+}

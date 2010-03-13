@@ -4,9 +4,6 @@
 
 == front-end ==
 * tree browse music
-* drag-drop playlist
-* jquery table view of playlist songs
-* fix playlist next/prev
 * stretch to window
 * nice layout
 

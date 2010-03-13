@@ -14,21 +14,25 @@
     <div class="jp-playlist-player">
         <div class="jp-playlist">
             <table id="playlist" border="0" cellspacing="0" cellpadding="0">
-              <thead style="display: block; width: 810px; text-align: left;">
-                <tr style="width: 800px;">
-                  <th style="width: 250px">artist</th>
-                  <th style="width: 250px">title</th>
-                  <th style="width: 200px">album</th>
-                  <th style="width: 100px">track</th>
+              <thead class="playlistHead">
+                <tr class="playlistHeadRow">
+                  <th style="width: 200px">Artist</th>
+                  <th style="width: 200px">Title</th>
+                  <th style="width: 200px">Album</th>
+                  <th style="width: 50px">Track</th>
+                  <th style="width: 50px">Length</th>
+                  <th style="width: 50px">Bitrate</th>
                 </tr>
               </thead>
               <tbody id="playlistbody" style="overflow-x: hidden; overflow-y: auto; height: 600px; display: block; padding: 0px; ">
                 % for track in c.tracks:
-                    <tr style="width: 800px;" class='song' href="/.music/${c.getFullPath(track)}">
-                      <td style='width: 250px;'>${track['id3']['artist']}</td>
-                      <td style='width: 250px;'>${track['id3']['title']}</td>
-                      <td style='width: 200px;'>${track['id3']['album']}</td>
-                      <td style='width: 100px;'>${track['id3']['tracknumber']}</td>
+                    <tr style="width: 750px;" class="song" href="/.music/${c.getFullPath(track)}">
+                      <td class="artist" style='width: 200px;'>${track['id3']['artist']}</td>
+                      <td class="title" style='width: 200px;'>${track['id3']['title']}</td>
+                      <td class="album" style='width: 200px;'>${track['id3']['album']}</td>
+                      <td class="track" style='width: 50px;'>${c.tracknum(track['id3']['tracknumber'])}</td>
+                      <td class="length" style='width: 50px;'>${c.minsec(track['mp3']['length'])}</td>
+                      <td class="bitrate" style='width: 50px;'>${c.kbps(track['mp3']['bitrate'])}</td>
                     </tr>
                 % endfor
               </tbody>
@@ -60,12 +64,23 @@
 <script type="text/javascript">
 
 $('#playlist').tablesorter();
-$('#playlistbody').sortable();
+$('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
+                              containment: 'parent', items: 'tr',
+                              placeholder: 'placeholder'});
 
-function play() {
+function playRow(row) {
     $('.playing').removeClass('playing');
-    $("#jquery_jplayer").jPlayer("setFile", $(this).attr('href')).jPlayer("play");
-    $(this).addClass('playing');
+    $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
+                        .jPlayer("play");
+    row.addClass('playing');
+}
+
+function stop() {
+    $("#jquery_jplayer").jPlayer("stop");
+}
+                              
+function play() {
+    playRow($(this));
 }
 
 $(document).ready(function() {
@@ -75,13 +90,39 @@ $(document).ready(function() {
         }
     });
 });
-</script>
 
-<script> 
+function playlistNextPrev(next) {
+    var playing = $('.playing');
+    if (playing) {
+        playing.removeClass('playing');
+        if (next) {
+            if (playing.next().hasClass('song')) {
+                playing.next().addClass('playing');
+                playRow(playing.next());
+            } else {
+                stop();
+            }
+        } else {
+            if (playing.prev().hasClass('song')) {
+                playing.prev().addClass('playing');
+                playRow(playing.prev());
+            } else {
+                stop();
+            }
+        }
+    }
+}
+
+function playListPrev() {
+    playlistNextPrev(false);
+}
+
+function playListNext() {
+    playlistNextPrev(true);
+}
 
 $(document).ready(function(){
 
-    // Local copy of jQuery selectors, for performance.
     var jpPlayTime = $("#jplayer_play_time");
     var jpTotalTime = $("#jplayer_total_time");
 
