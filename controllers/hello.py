@@ -15,36 +15,6 @@ from scatterbrainz.lib.base import BaseController, render
 
 log = logging.getLogger(__name__)
 
-class RenderingHelperFunctions:
-    
-    def getFullPath(self, track):
-        return '/'.join(track['filepath']) + '/' + track['filename']
-
-    
-    def minsec(self, sec):
-        return "%d:%02d" % (sec / 60, sec % 60)
-    
-    def artist(self, track):
-        return track['id3'].get('artist', '')
-        
-    def title(self, track):
-        return track['id3'].get('title', '')
-    
-    def album(self, track):
-        return track['id3'].get('album', '')
-    
-    def tracknum(self, track):
-        if 'tracknumber' in track['id3']:
-            return int(track['id3']['tracknumber'].split('/')[0])
-        else:
-            return ''
-
-    def length(self, track):
-        return self.minsec(track['mp3']['length'])
-
-    def bitrate(self, track):
-        return track['mp3']['bitrate'] / 1000
-
 def utf8(s):
     return s.decode('utf-8')
     
@@ -55,6 +25,52 @@ def mp3info(mp3):
     if mp3.sketchy:
         s += " (sketchy)"
     return s
+
+librarysizemap = \
+'''function(doc) {
+    if (doc.type == 'Track') {
+      emit("size", doc.size);
+    }
+}'''
+
+librarysizereduce = \
+'''function(keys, values) {
+    return sum(values);
+}'''
+
+allartistsmap = \
+'''function(doc) {
+    if (doc.type == 'Track') {
+        emit(doc['id3']['artist'], 1);
+    }
+}'''
+
+allartistsreduce = \
+'''function(keys, values) {
+    return sum(values);
+}'''
+
+artistalbummap = \
+'''function(doc) {
+    if (doc.type == 'Track') {
+        emit(doc['id3']['artist'], doc['id3']['album']);
+    }
+}'''
+
+albumtrackmap = \
+'''function(doc) {
+    if (doc.type == 'Track') {
+        emit(doc['id3']['album'], doc['id3']['title']);
+    }
+}'''
+
+def create_views(db):
+    db['_design/scatterbrainz'] = {'views': {
+        'librarysize': {'map': librarysizemap, 'reduce': librarysizereduce},
+        'allartists': {'map': allartistsmap, 'reduce': allartistsreduce},
+        'artistalbum': {'map': artistalbummap},
+        'albumtrack': {'map': albumtrackmap},
+    }}
 
 class HelloController(BaseController):
 
@@ -72,6 +88,8 @@ class HelloController(BaseController):
             db = server.create('scatterbrainz')
             log.info('database deleted and created')
         
+        create_views(db)
+        
         now = time.time()
 
         id = 0
@@ -80,7 +98,7 @@ class HelloController(BaseController):
         numInserts = 0
         numBad = 0
         tracks = []
-        for dirname, dirnames, filenames in os.walk('/media/data/music/[Soundtracks]'):
+        for dirname, dirnames, filenames in os.walk('/media/data/music/Joanna Newsom'):
             for filename in filenames:
 
                 try:
@@ -118,7 +136,7 @@ class HelloController(BaseController):
                             id3[key] = mutagen[key][0]
                     track = {
                         '_id'      : idStr,
-                        'doctype'  : 'Track',
+                        'type'  : 'Track',
                         'filepath' : map(utf8, reldir),
                         'filename' : utf8(filename),
                         'size'     : size,
@@ -154,7 +172,15 @@ class HelloController(BaseController):
         db = Database('http://localhost:5984/scatterbrainz')
         tracks = []
         for key in db:
-            tracks.append(db[key])
+            track = db[key]
+            if track.get('type') == 'Track':
+                tracks.append(db[key])
         c.tracks = tracks
-        c.r = RenderingHelperFunctions()
         return render('/hello.html')
+    
+    def artists(self):
+        db = Database('http://localhost:5984/scatterbrainz')
+        results = db.view('scatterbrainz/allartists', group=True)
+        artists = map(lambda x : x['key'] + str(x['value']), results)
+        c.artists = artists
+        return str(artists)

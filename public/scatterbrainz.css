@@ -27,13 +27,35 @@ body {
 
 .playlistHead {
     display: block;
-    width: 760px;
+    width: 870px;
+    margin-right: 14px;
 }
 
 .playlistHeadRow {
-    width: 750px;
+    width: 870px;
 }
 
 .placeholder {
     height: 10px;
+}
+
+.artist, .title, .album {
+    width: 220px;
+}
+
+.track, .length, .bitrate {
+    width: 70px;
+}
+
+td.track, td.bitrate {
+    text-align: center;
+}
+
+td.length {
+    text-align: right;
+}
+
+div#browser {
+    width: 330px;
+    position: absolute;
 }

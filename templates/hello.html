@@ -1,3 +1,7 @@
+<%!
+    import scatterbrainz.controllers.renderer as r
+%>
+
 <html>
 <head>
 <script type="text/javascript" src="/jquery-1.4.2.min.js"></script>
@@ -10,29 +14,39 @@
 </head>
 
 <body>
+
+<div id="browser">
+<li>artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 </li>
+<li>artist2</li>
+<li>artist3</li>
+<li>artist4</li>
+<li>artist5</li>
+<li>artist6</li>
+</div>
+
 <div id="jquery_jplayer"></div>
     <div class="jp-playlist-player">
         <div class="jp-playlist">
             <table id="playlist" border="0" cellspacing="0" cellpadding="0">
               <thead class="playlistHead">
                 <tr class="playlistHeadRow">
-                  <th style="width: 200px">Artist</th>
-                  <th style="width: 200px">Title</th>
-                  <th style="width: 200px">Album</th>
-                  <th style="width: 50px">Track</th>
-                  <th style="width: 50px">Length</th>
-                  <th style="width: 50px">Bitrate</th>
+                  <th class='artist'>Artist</th>
+                  <th class='title'>Title</th>
+                  <th class='album'>Album</th>
+                  <th class='track'>Track</th>
+                  <th class='length'>Length</th>
+                  <th class='bitrate'>Bitrate</th>
                 </tr>
               </thead>
               <tbody id="playlistbody" style="overflow-x: hidden; overflow-y: auto; height: 600px; display: block; padding: 0px; ">
                 % for track in c.tracks:
-                    <tr style="width: 750px;" class="song" href="/.music/${c.r.getFullPath(track)}">
-                      <td class="artist" style='width: 200px;'>${c.r.artist(track)}</td>
-                      <td class="title" style='width: 200px;'>${c.r.title(track)}</td>
-                      <td class="album" style='width: 200px;'>${c.r.album(track)}</td>
-                      <td class="track" style='width: 50px;'>${c.r.tracknum(track)}</td>
-                      <td class="length" style='width: 50px;'>${c.r.length(track)}</td>
-                      <td class="bitrate" style='width: 50px;'>${c.r.bitrate(track)}</td>
+                    <tr style="width: 870px;" class="song" href="/.music/${r.getFullPath(track)}">
+                      <td class='artist'>${r.artist(track)}</td>
+                      <td class='title'>${r.title(track)}</td>
+                      <td class='album'>${r.album(track)}</td>
+                      <td class='track'>${r.tracknum(track)}</td>
+                      <td class='length'>${r.length(track)}</td>
+                      <td class='bitrate'>${r.bitrate(track)}</td>
                     </tr>
                 % endfor
               </tbody>
