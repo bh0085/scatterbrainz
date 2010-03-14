@@ -8,6 +8,10 @@
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script type="text/javascript" src="/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="/jquery-ui-1.8rc3.custom.min.js"></script>
+<script type="text/javascript" src="/scatterbrainz.js"></script>
+<script type="text/javascript" src="/jquery.tree.js"></script>
+<script type="text/javascript" src="/lib/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/jsTreePlugins/jquery.tree.hotkeys.js"></script>
 <link rel="stylesheet" type="text/css" href="/jplayer.blue.monday.css" />
 <link rel="stylesheet" type="text/css" href="/scatterbrainz.css" />
 <link rel="stylesheet" type="text/css" href="/jquery-ui-1.8rc3.custom.css" />
@@ -15,14 +19,7 @@
 
 <body>
 
-<div id="browser">
-<li>artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 artist1 </li>
-<li>artist2</li>
-<li>artist3</li>
-<li>artist4</li>
-<li>artist5</li>
-<li>artist6</li>
-</div>
+<div id="browser"></div>
 
 <div id="jquery_jplayer"></div>
     <div class="jp-playlist-player">
@@ -38,9 +35,9 @@
                   <th class='bitrate'>Bitrate</th>
                 </tr>
               </thead>
-              <tbody id="playlistbody" style="overflow-x: hidden; overflow-y: auto; height: 600px; display: block; padding: 0px; ">
+              <tbody id="playlistbody">
                 % for track in c.tracks:
-                    <tr style="width: 870px;" class="song" href="/.music/${r.getFullPath(track)}">
+                    <tr class="song" href="/.music/${r.getFullPath(track)}">
                       <td class='artist'>${r.artist(track)}</td>
                       <td class='title'>${r.title(track)}</td>
                       <td class='album'>${r.album(track)}</td>
@@ -74,93 +71,6 @@
             <div id="jplayer_total_time" class="jp-total-time"></div>
         </div>
     </div> 
-
-<script type="text/javascript">
-
-$('#playlist').tablesorter();
-$('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
-                              containment: 'parent', items: 'tr',
-                              placeholder: 'placeholder'});
-
-function playRow(row) {
-    $('.playing').removeClass('playing');
-    $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
-                        .jPlayer("play");
-    row.addClass('playing');
-}
-
-function stop() {
-    $("#jquery_jplayer").jPlayer("stop");
-}
-                              
-function play() {
-    playRow($(this));
-}
-
-$(document).ready(function() {
-    $("#jquery_jplayer").jPlayer( {
-        ready: function () {
-            $('.song').dblclick(play);
-        }
-    });
-});
-
-function playlistNextPrev(next) {
-    var playing = $('.playing');
-    if (playing) {
-        playing.removeClass('playing');
-        if (next) {
-            if (playing.next().hasClass('song')) {
-                playing.next().addClass('playing');
-                playRow(playing.next());
-            } else {
-                stop();
-            }
-        } else {
-            if (playing.prev().hasClass('song')) {
-                playing.prev().addClass('playing');
-                playRow(playing.prev());
-            } else {
-                stop();
-            }
-        }
-    }
-}
-
-function playListPrev() {
-    playlistNextPrev(false);
-}
-
-function playListNext() {
-    playlistNextPrev(true);
-}
-
-$(document).ready(function(){
-
-    var jpPlayTime = $("#jplayer_play_time");
-    var jpTotalTime = $("#jplayer_total_time");
-
-    $("#jquery_jplayer").jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-        jpPlayTime.text($.jPlayer.convertTime(playedTime));
-        jpTotalTime.text($.jPlayer.convertTime(totalTime));
-    })
-    .jPlayer("onSoundComplete", function() {
-        playListNext();
-    });
-
-    $("#jplayer_previous").click( function() {
-        playListPrev();
-        return false;
-    });
-
-    $("#jplayer_next").click( function() {
-        playListNext();
-        return false;
-    });
-
-});
-
-</script> 
 
 </body>
 </html>

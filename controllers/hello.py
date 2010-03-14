@@ -3,10 +3,14 @@ import time
 
 import logging
 
+from copy import deepcopy
+
 from couchdb.client import Server, Database
 
 from mutagen.mp3 import MP3
 from mutagen.easyid3 import EasyID3
+
+import simplejson as sjson
 
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
@@ -14,6 +18,8 @@ from pylons.controllers.util import abort, redirect_to
 from scatterbrainz.lib.base import BaseController, render
 
 log = logging.getLogger(__name__)
+
+db = Database('http://localhost:5984/scatterbrainz')
 
 def utf8(s):
     return s.decode('utf-8')
@@ -25,6 +31,23 @@ def mp3info(mp3):
     if mp3.sketchy:
         s += " (sketchy)"
     return s
+    
+def uniqify(seq, idfun=None):
+    # http://www.peterbe.com/plog/uniqifiers-benchmark
+    # order preserving
+    if idfun is None:
+        def idfun(x): return x
+    seen = {}
+    result = []
+    for item in seq:
+        marker = idfun(item)
+        # in old Python versions:
+        # if seen.has_key(marker)
+        # but in new ones:
+        if marker in seen: continue
+        seen[marker] = 1
+        result.append(item)
+    return result
 
 librarysizemap = \
 '''function(doc) {
@@ -81,14 +104,14 @@ class HelloController(BaseController):
 
         # create a database, if it already exists, delete and recreate it
         try:
-            db = server.create('scatterbrainz')
+            db2 = server.create('scatterbrainz')
             log.info('database created')
         except:
             del server['scatterbrainz']
-            db = server.create('scatterbrainz')
+            db2 = server.create('scatterbrainz')
             log.info('database deleted and created')
         
-        create_views(db)
+        create_views(db2)
         
         now = time.time()
 
@@ -98,7 +121,7 @@ class HelloController(BaseController):
         numInserts = 0
         numBad = 0
         tracks = []
-        for dirname, dirnames, filenames in os.walk('/media/data/music/Joanna Newsom'):
+        for dirname, dirnames, filenames in os.walk('/media/data/music/[Funny]'):
             for filename in filenames:
 
                 try:
@@ -148,7 +171,7 @@ class HelloController(BaseController):
                     tracks.append(track)
                     id = id + 1
                     if len(tracks) == 1000:
-                        db.update(tracks)
+                        db2.update(tracks)
                         numInserts = numInserts + 1
                         numLoaded = numLoaded + len(tracks)
                         tracks = []
@@ -160,7 +183,7 @@ class HelloController(BaseController):
                               + e.__class__.__name__ + ': ' + str(e))
 
         if tracks:
-            db.update(tracks)
+            db2.update(tracks)
             numInserts = numInserts + 1
             numLoaded = numLoaded + len(tracks)
 
@@ -169,7 +192,6 @@ class HelloController(BaseController):
                   'numBad':numBad}
 
     def index(self):
-        db = Database('http://localhost:5984/scatterbrainz')
         tracks = []
         for key in db:
             track = db[key]
@@ -178,9 +200,42 @@ class HelloController(BaseController):
         c.tracks = tracks
         return render('/hello.html')
     
-    def artists(self):
-        db = Database('http://localhost:5984/scatterbrainz')
+    def treebrowse(self):
+        id = request.params['id']
+        if id == '0':
+            return self._allartists()
+        else:
+            [type, name] = id.split('/',1)
+            if type == 'artist':
+                return self._albumsforartist(name)
+            elif type == 'album':
+                return self._tracksforalbum(name)
+    
+    def _makeJSON(self, results, type, leaf, namefun):
+        alljson = []
+        for result in results:
+            name = namefun(result)
+            json = {
+                'attributes': {'id' : type + '/' + name}, 
+                'data': name
+            }
+            if not leaf:
+                json['state'] = 'closed'
+            alljson.append(json)
+        return sjson.dumps(alljson)
+    
+    def _allartists(self):
         results = db.view('scatterbrainz/allartists', group=True)
-        artists = map(lambda x : x['key'] + str(x['value']), results)
-        c.artists = artists
-        return str(artists)
+        namefun = lambda x: x['key']
+        return self._makeJSON(results, 'artist', False, namefun)
+    
+    def _albumsforartist(self, artist):
+        results = db.view('scatterbrainz/artistalbum', key=artist)
+        namefun = lambda x: x['value']
+        results = uniqify(results, idfun=namefun)
+        return self._makeJSON(results, 'album', False, namefun)
+    
+    def _tracksforalbum(self, album):
+        results = db.view('scatterbrainz/albumtrack', key=album)
+        namefun = lambda x: x['value']
+        return self._makeJSON(results, 'track', True, namefun)

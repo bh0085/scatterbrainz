@@ -3,6 +3,18 @@
     background-color: #0099FF !important;
 }
 
+.song {
+    width: 870px;
+}
+
+#playlistbody {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 600px;
+    display: block;
+    padding: 0px; 
+}
+
 th, td {
     padding: 0px;
 }
@@ -57,5 +69,7 @@ td.length {
 
 div#browser {
     width: 330px;
+    height: 700px;
     position: absolute;
+    overflow: scroll;
 }
