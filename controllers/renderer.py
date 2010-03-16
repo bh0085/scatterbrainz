@@ -1,8 +1,10 @@
+from urllib import pathname2url
+
 def minsec(sec):
     return "%d:%02d" % (sec / 60, sec % 60)
 
-def path(track):
-    return track.filepath
+def filepath(track):
+    return pathname2url('/.music/' + track.filepath)
 
 def artist(track):
     return track.id3artist

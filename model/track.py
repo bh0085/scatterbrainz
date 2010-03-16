@@ -5,6 +5,8 @@ from sqlalchemy import Column, Integer, String, Unicode, DateTime, ForeignKey
 from scatterbrainz.model.meta import metadata
 from scatterbrainz.model.artist import Artist
 
+from scatterbrainz.controllers import renderer as r
+
 Base = declarative_base(metadata=metadata)
 class Track(Base):
 
@@ -60,6 +62,15 @@ class Track(Base):
         self.id3genre = id3genre
         self.id3lyricist = id3lyricist
         self.added = added
+    
+    def toJSON(self):
+        return dict(title = r.title(self),
+                    artist = r.artist(self),
+                    album = r.album(self),
+                    tracknum = r.tracknum(self),
+                    filepath = r.filepath(self),
+                    bitrate = r.bitrate(self),
+                    length = r.length(self))
 
     def __repr__(self):
         return "<Track%s>" % (self.__dict__)

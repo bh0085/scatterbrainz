@@ -1,87 +1,111 @@
 $(document).ready(function(){
 
     /**
-     * tablesorter and jquery UI sortable BS
-     */
-    
+        * tablesorter and jquery UI sortable BS
+        */
+
     $('#playlist').tablesorter();
     $('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
-                                  containment: 'parent',
-				  /*items: 'tr',*/
-                                  placeholder: 'placeholder'
-				});
+        containment: 'parent',
+        items: 'tr',
+        placeholder: 'placeholder'
+    });
     $("#playlistbody").droppable({
         drop: function(event, ui) {
-	    var browsenode = ui.draggable;
-	    var droptarget = event.originalEvent.target;
-	    //$.getJSON('/', [ data ], [ callback(data, 
-	}
+            var browsenode = ui.draggable;
+            var droptarget = event.originalEvent.target;
+            $.getJSON(
+                '/hello/getTracksAJAX',
+                {'id':browsenode.attr('id')},
+                function(data) {
+                    for (i in data) {
+                        var trackJSON = data[i];
+                        var trackRow = $('<tr>').addClass('song')
+                                                .attr('href', trackJSON['filepath']);
+                        trackRow.append($('<td>').addClass('artist')
+                                                 .text(trackJSON['artist']))
+                                .append($('<td>').addClass('title')
+                                                 .text(trackJSON['title']))
+                                .append($('<td>').addClass('album')
+                                                 .text(trackJSON['album']))
+                                .append($('<td>').addClass('tracknum')
+                                                 .text(trackJSON['tracknum']))
+                                .append($('<td>').addClass('length')
+                                                 .text(trackJSON['length']))
+                                .append($('<td>').addClass('bitrate')
+                                                 .text(trackJSON['bitrate']));
+                        $("#playlistbody").append(trackRow);
+                        $('#playlist thead th').unbind('click');
+                        $('#playlist').tablesorter();
+                    }
+                }
+            );
+        }
     });
     $('#browser').tree({
-	data : { 
-	    async : true,
-	    type : 'json',
-	    opts : {
-		url : '/hello/treebrowse'
-	    }
-	},
-	ui : {
-	    theme_name : 'default'
-	},
-	plugins : {
-	    hotkeys : { }
-	},
-	types : {
-	    'default' : {
-		clickable	: true,
-		renameable	: false,
-		deletable	: false,
-		creatable	: false,
-		draggable	: false,
-		max_children	: -1,
-		max_depth	: -1,
-		valid_children	: 'all',
-		icon : {
-		    image : false,
-		    position : false
-		}
-	    }
-	}
+        data : { 
+            async : true,
+            type : 'json',
+            opts : {
+                url : '/hello/treeBrowseAJAX'
+            }
+        },
+        ui : {
+            theme_name : 'default'
+        },
+        plugins : {
+            hotkeys : { }
+        },
+        types : {
+            'default' : {
+                clickable	: true,
+                renameable	: false,
+                deletable	: false,
+                creatable	: false,
+                draggable	: false,
+                max_children	: -1,
+                max_depth	: -1,
+                valid_children	: 'all',
+                icon : {
+                    image : false,
+                    position : false
+                }
+            }
+        }
     });
-    
+
     /**
-     * make browser nodes draggable w/ jquery ui live shit
-     */
+        * make browser nodes draggable w/ jquery ui live shit
+        */
     $('li.browsenode').live("mouseover", function() {
-	node = $(this);
-	if (!node.data("init")) {
-	    node.data("init", true);
-	    node.draggable({ opacity: 0.7,
-			     helper: function(event) {
-				return $('<div>').text('o hai');
-			     },
-			     appendTo: '#playlistbody'
-			     /*connectToSortable: '#playlistbody'*/
-			     });
-	}
+        node = $(this);
+        if (!node.data("init")) {
+            node.data("init", true);
+            node.draggable({ opacity: 0.7,
+                helper: function(event) {
+                    return $('<div>').text('o hai');
+                },
+                appendTo: '#playlistbody'
+            });
+        }
     });
-    
+
     /**
-     * jplayer playlist BS
-     */
-    
+        * jplayer playlist BS
+        */
+
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
-            $('.song').dblclick(play);
+            $('.song').live('dblclick',play);
         }
     });
     var jpPlayTime = $("#jplayer_play_time");
     var jpTotalTime = $("#jplayer_total_time");
     $("#jquery_jplayer").jPlayer("onProgressChange",
     function(loadPercent, playedPercentRelative,
-             playedPercentAbsolute, playedTime, totalTime) {
-        jpPlayTime.text($.jPlayer.convertTime(playedTime));
-        jpTotalTime.text($.jPlayer.convertTime(totalTime));
+        playedPercentAbsolute, playedTime, totalTime) {
+    jpPlayTime.text($.jPlayer.convertTime(playedTime));
+    jpTotalTime.text($.jPlayer.convertTime(totalTime));
     }).jPlayer("onSoundComplete", playListNext);
     $("#jplayer_previous").click(playListPrev);
     $("#jplayer_next").click(playListNext);
@@ -91,14 +115,14 @@ $(document).ready(function(){
 function playRow(row) {
     $('.playing').removeClass('playing');
     $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
-                        .jPlayer("play");
+        .jPlayer("play");
     row.addClass('playing');
 }
 
 function stop() {
     $("#jquery_jplayer").jPlayer("stop");
 }
-                              
+
 function play() {
     playRow($(this));
 }
@@ -134,8 +158,8 @@ function playListNext() {
 }
 
 /**
- * Playlist rendering stuff
- */
+    * Playlist rendering stuff
+    */
 function playlistRowMap(trackJSON) {
-    
+
 }

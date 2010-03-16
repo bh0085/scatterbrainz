@@ -56,11 +56,11 @@ body {
     width: 220px;
 }
 
-.track, .length, .bitrate {
+.tracknum, .length, .bitrate {
     width: 70px;
 }
 
-td.track, td.bitrate {
+td.tracknum, td.bitrate {
     text-align: center;
 }
 

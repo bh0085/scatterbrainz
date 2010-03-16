@@ -20,21 +20,37 @@ from scatterbrainz.model.album import Album
 class HelloController(BaseController):
     
     def index(self):
-        c.tracks = Session.query(Track)
         return render('/hello.html')
 
-    def treebrowse(self):
+    def treeBrowseAJAX(self):
         idStr = request.params['id']
         if idStr == '0':
-            return self._allartists()
+            return self._allArtistsTreeJSON()
         else:
             [type, id] = idStr.split('/',1)
             if type == 'Artist':
-                return self._albumsforartist(id)
+                return self._albumsForArtistTreeJSON(id)
             elif type == 'Album':
-                return self._tracksforalbum(id)
+                return self._tracksForAlbumTreeJSON(id)
+            else:
+                raise Exception('bad type '+type)
     
-    def _makeJSON(self, results, leaf, namefun):
+    def _allArtistsTreeJSON(self):
+        artists = Session.query(Artist)
+        namefun = lambda x: x.name
+        return self._treeJSON(artists, False, namefun)
+    
+    def _albumsForArtistTreeJSON(self, artistid):
+        albums = Session.query(Album).join(Track).filter_by(artistid=artistid)
+        namefun = lambda x: x.name
+        return self._treeJSON(albums, False, namefun)
+    
+    def _tracksForAlbumTreeJSON(self, albumid):
+        tracks = Session.query(Track).filter_by(albumid=albumid)
+        namefun = lambda x: x.id3title
+        return self._treeJSON(tracks, True, namefun)
+    
+    def _treeJSON(self, results, leaf, namefun):
         alljson = []
         for result in results:
             id = result.id
@@ -51,17 +67,30 @@ class HelloController(BaseController):
             alljson.append(json)
         return sjson.dumps(alljson)
     
-    def _allartists(self):
-        artists = Session.query(Artist)
-        namefun = lambda x: x.name
-        return self._makeJSON(artists, False, namefun)
+    def getTracksAJAX(self):
+        idStr = request.params['id']
+        [type, id] = idStr.split('/',1)
+        if type == 'Track':
+            return self._trackPlaylistJSON(id)
+        elif type == 'Artist':
+            return self._tracksForArtistPlaylistJSON(id)
+        elif type == 'Album':
+            return self._tracksForAlbumPlaylistJSON(id)
+        else:
+            raise Exception('bad type '+type)
+
+    def _trackPlaylistJSON(self, trackid):
+        tracks = Session.query(Track).filter_by(id=trackid)
+        return self._playlistJSON(tracks)
     
-    def _albumsforartist(self, artistid):
-        albums = Session.query(Album).join(Track).filter_by(artistid=artistid)
-        namefun = lambda x: x.name
-        return self._makeJSON(albums, False, namefun)
-    
-    def _tracksforalbum(self, albumid):
+    def _tracksForAlbumPlaylistJSON(self, albumid):
         tracks = Session.query(Track).filter_by(albumid=albumid)
-        namefun = lambda x: x.id3title
-        return self._makeJSON(tracks, True, namefun)
+        return self._playlistJSON(tracks)
+    
+    def _tracksForArtistPlaylistJSON(self, artistid):
+        tracks = Session.query(Track).filter_by(artistid=artistid)
+        return self._playlistJSON(tracks)
+
+    def _playlistJSON(self, tracks):
+        json = map(lambda x: x.toJSON(), tracks)
+        return sjson.dumps(json)
