@@ -37,7 +37,7 @@
               </thead>
               <tbody id="playlistbody">
                 % for track in c.tracks:
-                    <tr class="song" href="/.music/${r.getFullPath(track)}">
+                    <tr class="song" href="/.music/${r.path(track)}">
                       <td class='artist'>${r.artist(track)}</td>
                       <td class='title'>${r.title(track)}</td>
                       <td class='album'>${r.album(track)}</td>

@@ -13,6 +13,7 @@
     height: 600px;
     display: block;
     padding: 0px; 
+    width: 900px;
 }
 
 th, td {
@@ -71,5 +72,6 @@ div#browser {
     width: 330px;
     height: 700px;
     position: absolute;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
 }

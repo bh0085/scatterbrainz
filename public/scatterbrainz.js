@@ -6,14 +6,23 @@ $(document).ready(function(){
     
     $('#playlist').tablesorter();
     $('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
-                                  containment: 'parent', items: 'tr',
-                                  placeholder: 'placeholder'});
+                                  containment: 'parent',
+				  /*items: 'tr',*/
+                                  placeholder: 'placeholder'
+				});
+    $("#playlistbody").droppable({
+        drop: function(event, ui) {
+	    var browsenode = ui.draggable;
+	    var droptarget = event.originalEvent.target;
+	    //$.getJSON('/', [ data ], [ callback(data, 
+	}
+    });
     $('#browser').tree({
 	data : { 
 	    async : true,
 	    type : 'json',
 	    opts : {
-		    url : '/hello/treebrowse'
+		url : '/hello/treebrowse'
 	    }
 	},
 	ui : {
@@ -21,6 +30,39 @@ $(document).ready(function(){
 	},
 	plugins : {
 	    hotkeys : { }
+	},
+	types : {
+	    'default' : {
+		clickable	: true,
+		renameable	: false,
+		deletable	: false,
+		creatable	: false,
+		draggable	: false,
+		max_children	: -1,
+		max_depth	: -1,
+		valid_children	: 'all',
+		icon : {
+		    image : false,
+		    position : false
+		}
+	    }
+	}
+    });
+    
+    /**
+     * make browser nodes draggable w/ jquery ui live shit
+     */
+    $('li.browsenode').live("mouseover", function() {
+	node = $(this);
+	if (!node.data("init")) {
+	    node.data("init", true);
+	    node.draggable({ opacity: 0.7,
+			     helper: function(event) {
+				return $('<div>').text('o hai');
+			     },
+			     appendTo: '#playlistbody'
+			     /*connectToSortable: '#playlistbody'*/
+			     });
 	}
     });
     
