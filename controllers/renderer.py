@@ -4,7 +4,7 @@ def minsec(sec):
     return "%d:%02d" % (sec / 60, sec % 60)
 
 def filepath(track):
-    return pathname2url('/.music/' + track.filepath)
+    return pathname2url(('/.music/' + track.filepath).encode('utf-8'))
 
 def artist(track):
     return track.id3artist

@@ -18,26 +18,20 @@ $(document).ready(function(){
                 '/hello/getTracksAJAX',
                 {'id':browsenode.attr('id')},
                 function(data) {
-                    for (i in data) {
-                        var trackJSON = data[i];
-                        var trackRow = $('<tr>').addClass('song')
-                                                .attr('href', trackJSON['filepath']);
-                        trackRow.append($('<td>').addClass('artist')
-                                                 .text(trackJSON['artist']))
-                                .append($('<td>').addClass('title')
-                                                 .text(trackJSON['title']))
-                                .append($('<td>').addClass('album')
-                                                 .text(trackJSON['album']))
-                                .append($('<td>').addClass('tracknum')
-                                                 .text(trackJSON['tracknum']))
-                                .append($('<td>').addClass('length')
-                                                 .text(trackJSON['length']))
-                                .append($('<td>').addClass('bitrate')
-                                                 .text(trackJSON['bitrate']));
-                        $("#playlistbody").append(trackRow);
-                        $('#playlist thead th').unbind('click');
-                        $('#playlist').tablesorter();
-                    }
+                    var insertText = '';
+                    $.each(data, function(count, trackJSON) {
+                        insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
+                                      + '<td class="artist">'+trackJSON['artist']+'</td>'
+                                      + '<td class="title">'+trackJSON['title']+'</td>'
+                                      + '<td class="album">'+trackJSON['album']+'</td>'
+                                      + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
+                                      + '<td class="length">'+trackJSON['length']+'</td>'
+                                      + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
+                                    + '</tr>';
+                    });
+                    $("#playlistbody").append(insertText);
+                    $('#playlist thead th').unbind('click');
+                    $('#playlist').tablesorter();
                 }
             );
         }

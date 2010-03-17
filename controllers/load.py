@@ -35,14 +35,14 @@ class LoadController(BaseController):
         commitbuffer = []
         albums = {}
         artists = {}
-        for dirname, dirnames, filenames in os.walk('/media/data/music/Bob Dylan'):
+        for dirname, dirnames, filenames in os.walk('scatterbrainz/public/.music/Bob Dylan'):
             for filename in filenames:
                 try:
                     numFilesSeen = numFilesSeen + 1
                     
                     # get path, size, date
                     fileabspath = os.path.join(dirname,filename)
-                    filepath = os.path.join(os.path.relpath(dirname, '/media/data/music'), filename)
+                    filepath = os.path.join(os.path.relpath(dirname, 'scatterbrainz/public/.music/'), filename)
                     filesize = os.path.getsize(fileabspath)
                     filemtime = datetime.fromtimestamp(os.path.getmtime(fileabspath))
                     
