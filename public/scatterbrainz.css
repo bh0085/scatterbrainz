@@ -74,4 +74,5 @@ div#browser {
     position: absolute;
     overflow-y: auto;
     overflow-x: hidden;
+    left: 0px;
 }

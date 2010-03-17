@@ -69,6 +69,21 @@ $(document).ready(function(){
                     image : false,
                     position : false
                 }
+            },
+            'Artist': {
+                icon: {
+                    image: '/icons/person4small.gif'
+                }
+            },
+            'Album': {
+                icon: {
+                    image: '/icons/cd2small.gif'
+                }
+            },
+            'Track': {
+                icon: {
+                    image: '/icons/note2small.jpg'
+                }
             }
         }
     });

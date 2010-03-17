@@ -58,7 +58,8 @@ class HelloController(BaseController):
             type = result.__class__.__name__
             json = {
                 'attributes': {'id'   : type + '/' + str(id),
-                               'class': 'browsenode'
+                               'class': 'browsenode',
+                               'rel'  : type
                               },
                 'data': name
             }

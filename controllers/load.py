@@ -28,6 +28,7 @@ class LoadController(BaseController):
 
     def load(self):
 
+        done = False
         now = datetime.now()
         numFilesSeen = 0
         numBadFiles = 0
@@ -35,7 +36,7 @@ class LoadController(BaseController):
         commitbuffer = []
         albums = {}
         artists = {}
-        for dirname, dirnames, filenames in os.walk('scatterbrainz/public/.music/Bob Dylan'):
+        for dirname, dirnames, filenames in os.walk('scatterbrainz/public/.music/'):
             for filename in filenames:
                 try:
                     numFilesSeen = numFilesSeen + 1
@@ -69,14 +70,18 @@ class LoadController(BaseController):
                     id3genre = getid3prop(mutagen, 'genre')
                     id3lyricist = getid3prop(mutagen, 'lyricist')
                     
-                    if id3artist in artists:
+                    if not id3artist:
+                        artist = None
+                    elif id3artist in artists:
                         artist = artists[id3artist]
                     else:
                         artist = Artist(id3artist, now)
                         Session.save(artist)
                         artists[id3artist] = artist
                     
-                    if id3album in albums:
+                    if not id3album:
+                        album = None
+                    elif id3album in albums:
                         album = albums[id3album]
                     else:
                         album = Album(id3album, now)
@@ -102,11 +107,17 @@ class LoadController(BaseController):
                                   added=now)
                     
                     Session.save(track)
+                    
+                    if numFilesSeen > 5000:
+                        done = True
+                        break
                 
                 except (UnicodeError) as e:
                     numBadFiles = numBadFiles + 1
                     log.error('Could not load file "' + filename + '" due to exception: '
                               + e.__class__.__name__ + ': ' + str(e))
+            if done:
+                break
         Session.commit()
 
         return """Saw %(numFilesSeen)d tracks, %(numArtists)d artists and %(numAlbums)d albums.
