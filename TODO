@@ -53,6 +53,7 @@
 * last.fm login for play statistics
 * last.fm login/pass to scrobble
 * location for upcoming shows
+* http://www.bandsintown.com/api/requests
 
 == what.cd ==
 * greasemonkey script to validate musicbrainz mappings
