@@ -9,6 +9,7 @@
 * designer
 
 == hierarchical browser ==
+* search
 * slice data other than by artist/album/track
 * show tracks not in an album by an artist
 * various artists
@@ -17,6 +18,7 @@
 == playlist ==
 * multiselect
 * keyboard shortcuts
+* generate random
 
 == id3 ==
 * disc #, other stuff not in mutagen easyid3
@@ -29,6 +31,7 @@
 * relationship browser of some sort
 
 == smart playlists ==
+* search or drag-drop to seed
 * gather relationships: last.fm, musicbrainz, etc.
 * algorithm to pick tracks among relationships
 * guided mode, user picks relationships (collaborated with, similar genre, etc)
