@@ -13,7 +13,7 @@ $(document).ready(function(){
     $("#playlistbody").droppable({
         drop: function(event, ui) {
             var browsenode = ui.draggable;
-            var droptarget = event.originalEvent.target;
+            $(document).data('playlistDropTarget', event.originalEvent.target);
             $.getJSON(
                 '/hello/getTracksAJAX',
                 {'id':browsenode.attr('id')},
@@ -29,7 +29,12 @@ $(document).ready(function(){
                                       + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
                                     + '</tr>';
                     });
-                    $("#playlistbody").append(insertText);
+                    var dropTarget = $(document).data('playlistDropTarget');
+                    if (dropTarget.tagName == 'TD') {
+                        $(dropTarget).parent().after(insertText);
+                    } else {
+                        $("#playlistbody").append(insertText);
+                    }
                     $('#playlist thead th').unbind('click');
                     $('#playlist').tablesorter();
                 }
