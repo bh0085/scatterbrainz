@@ -43,8 +43,9 @@
 
 == last.fm + other music services ==
 * history sniff for user visiting
-* login and scrobble
-* grab useful data
+* last.fm login for play statistics
+* last.fm login/pass to scrobble
+* location for upcoming shows
 
 == what.cd ==
 * greasemonkey script to validate musicbrainz mappings
