@@ -8,6 +8,10 @@
 * right click context menu
 * designer
 
+== jplayer ==
+* autostart when first tracks dragged
+* make 'play' start list too
+
 == hierarchical browser ==
 * search
 * slice data other than by artist/album/track
