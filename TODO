@@ -41,6 +41,11 @@
 * integrate into player somehow
 * also last.fm artist images are nice
 
+== last.fm + other music services ==
+* history sniff for user visiting
+* login and scrobble
+* grab useful data
+
 == what.cd ==
 * greasemonkey script to validate musicbrainz mappings
 
