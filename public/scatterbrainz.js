@@ -80,11 +80,13 @@ $(document).ready(function(){
         node = $(this);
         if (!node.data("init")) {
             node.data("init", true);
-            node.draggable({ opacity: 0.7,
+            node.draggable({
+                opacity: 0.7,
+                appendTo: '#playlistbody',
+                cursorAt: {left: -1, top: -1},
                 helper: function(event) {
-                    return $('<div>').text('o hai');
-                },
-                appendTo: '#playlistbody'
+                    return $('<span>' + event.target.text + '</span>');
+                }
             });
         }
     });
