@@ -47,6 +47,9 @@ class LoadController(BaseController):
                     filesize = os.path.getsize(fileabspath)
                     filemtime = datetime.fromtimestamp(os.path.getmtime(fileabspath))
                     
+                    ext = os.path.splitext(filename)[-1]
+                    if not ext == '.mp3': continue
+  
                     # mp3 length, bitrate, etc.
                     mutagen = MP3(fileabspath, ID3=EasyID3)
                     info = mutagen.info
@@ -88,6 +91,7 @@ class LoadController(BaseController):
                         Session.save(album)
                         albums[id3album] = album
                     
+
                     track = Track(artist=artist,
                                   album=album,
                                   filepath=filepath.decode('utf-8'),
