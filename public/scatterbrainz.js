@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
     /**
-        * tablesorter and jquery UI sortable BS
-        */
+     * tablesorter and jquery UI sortable BS
+     */
 
     $('#playlist').tablesorter();
     $('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
@@ -49,6 +49,11 @@ $(document).ready(function(){
                 url : '/hello/treeBrowseAJAX'
             }
         },
+	callback : { 
+	    beforedata : function (n, t) {
+		return { id : $(n).attr("id") || 'init' };
+	    }
+	},
         ui : {
             theme_name : 'default'
         },
@@ -89,8 +94,8 @@ $(document).ready(function(){
     });
 
     /**
-        * make browser nodes draggable w/ jquery ui live shit
-        */
+     * make browser nodes draggable w/ jquery ui live shit
+     */
     $('li.browsenode').live("mouseover", function() {
         node = $(this);
         if (!node.data("init")) {
@@ -107,8 +112,8 @@ $(document).ready(function(){
     });
 
     /**
-        * jplayer playlist BS
-        */
+     * jplayer playlist BS
+     */
 
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
@@ -126,7 +131,109 @@ $(document).ready(function(){
     $("#jplayer_previous").click(playListPrev);
     $("#jplayer_next").click(playListNext);
 
+    /**
+     * initialize search
+     */
+    $('#searchInput').keyup(function(e) {
+        if(e.keyCode == 13) {
+	    searchHandler();
+	}
+    });
+    
+    $('#ditchSearch').click(ditchSearch);
+    
+    $('#goSearch').click(searchHandler);
+
 });
+
+function searchHandler() {
+    var searchStr = $('#searchInput').attr('value').trim();
+    if (searchStr == "") {
+	ditchSearch();
+    } else {
+	search(searchStr);
+    }
+}
+
+function search(searchStr) {
+    $.getJSON(
+	'/hello/searchAJAX',
+	{'search' : searchStr},
+	searchCallback
+    );
+}
+
+function searchCallback(results) {
+    $('#searchBrowser').tree({
+        data : {
+	    async : true,
+            type : 'json',
+            opts : {
+		url : '/hello/treeBrowseAJAX'
+	    }
+        },
+	callback : { 
+	    // Make sure static is not used once the tree has loaded for the first time
+	    onload : function (t) { 
+		t.settings.data.opts.static = false; 
+	    },
+	    // Take care of refresh calls - n will be false only when the whole tree is refreshed or loaded of the first time
+	    beforedata : function (n, t) {
+		if(n == false) t.settings.data.opts.static = results;
+		return { id : $(n).attr("id") || 'init' };
+	    }
+	},
+        ui : {
+            theme_name : 'default'
+        },
+        plugins : {
+            hotkeys : { }
+        },
+        types : {
+            'default' : {
+                clickable	: true,
+                renameable	: false,
+                deletable	: false,
+                creatable	: false,
+                draggable	: false,
+                max_children	: -1,
+                max_depth	: -1,
+                valid_children	: 'all',
+                icon : {
+                    image : false,
+                    position : false
+                }
+            },
+            'Artist': {
+                icon: {
+                    image: '/icons/person4small.gif'
+                }
+            },
+            'Album': {
+                icon: {
+                    image: '/icons/cd2small.gif'
+                }
+            },
+            'Track': {
+                icon: {
+                    image: '/icons/note2small.jpg'
+                }
+            }
+        }
+    });
+    $('#browser').hide();
+    $('#searchBrowser').show();
+}
+
+function ditchSearch() {
+    $('#searchInput').attr('value', '');
+    $('#browser').show();
+    $('#searchBrowser').hide();
+}
+
+String.prototype.trim = function() {
+    return this.replace(/^\s+|\s+$/g,"");
+}
 
 function playRow(row) {
     $('.playing').removeClass('playing');
@@ -174,8 +281,8 @@ function playListNext() {
 }
 
 /**
-    * Playlist rendering stuff
-    */
+ * Playlist rendering stuff
+ */
 function playlistRowMap(trackJSON) {
 
 }

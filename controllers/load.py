@@ -91,7 +91,6 @@ class LoadController(BaseController):
                         Session.save(album)
                         albums[id3album] = album
                     
-
                     track = Track(artist=artist,
                                   album=album,
                                   filepath=filepath.decode('utf-8'),

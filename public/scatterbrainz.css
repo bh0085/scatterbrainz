@@ -68,11 +68,25 @@ td.length {
     text-align: right;
 }
 
-div#browser {
+div#browseContainer {
     width: 330px;
     height: 700px;
     position: absolute;
     overflow-y: auto;
     overflow-x: hidden;
     left: 0px;
+    top: 35px;
+}
+
+div#search {
+    position: absolute;
+    width: 330px;
+}
+
+input#searchInput {
+    width: 250px;
+}
+
+div#searchBrowser {
+    display: none;
 }

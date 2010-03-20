@@ -63,7 +63,7 @@ class Track(Base):
         self.id3lyricist = id3lyricist
         self.added = added
     
-    def toJSON(self):
+    def toPlaylistJSON(self):
         return dict(title = r.title(self),
                     artist = r.artist(self),
                     album = r.album(self),
@@ -71,6 +71,16 @@ class Track(Base):
                     filepath = r.filepath(self),
                     bitrate = r.bitrate(self),
                     length = r.length(self))
+    
+    def toTreeJSON(self):
+        json = {
+                'attributes': {'id'   : self.__class__.__name__ + '/' + str(self.id),
+                               'class': 'browsenode',
+                               'rel'  : self.__class__.__name__
+                              },
+                'data': self.id3title
+               }
+        return json
 
     def __repr__(self):
         return "<Track%s>" % (self.__dict__)

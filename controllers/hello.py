@@ -3,7 +3,9 @@ import time
 
 import logging
 
-import simplejson as sjson
+import simplejson
+
+from sqlalchemy.orm import contains_eager
 
 from pylons import request, response, session, tmpl_context as c
 from pylons.controllers.util import abort, redirect_to
@@ -24,7 +26,7 @@ class HelloController(BaseController):
 
     def treeBrowseAJAX(self):
         idStr = request.params['id']
-        if idStr == '0':
+        if idStr == 'init':
             return self._allArtistsTreeJSON()
         else:
             [type, id] = idStr.split('/',1)
@@ -37,36 +39,19 @@ class HelloController(BaseController):
     
     def _allArtistsTreeJSON(self):
         artists = Session.query(Artist)
-        namefun = lambda x: x.name
-        return self._treeJSON(artists, False, namefun)
+        return self._dumpFlatJSON(artists)
     
     def _albumsForArtistTreeJSON(self, artistid):
         albums = Session.query(Album).join(Track).filter_by(artistid=artistid)
-        namefun = lambda x: x.name
-        return self._treeJSON(albums, False, namefun)
+        return self._dumpFlatJSON(albums)
     
     def _tracksForAlbumTreeJSON(self, albumid):
         tracks = Session.query(Track).filter_by(albumid=albumid)
-        namefun = lambda x: x.id3title
-        return self._treeJSON(tracks, True, namefun)
+        return self._dumpFlatJSON(tracks)
     
-    def _treeJSON(self, results, leaf, namefun):
-        alljson = []
-        for result in results:
-            id = result.id
-            name = namefun(result)
-            type = result.__class__.__name__
-            json = {
-                'attributes': {'id'   : type + '/' + str(id),
-                               'class': 'browsenode',
-                               'rel'  : type
-                              },
-                'data': name
-            }
-            if not leaf:
-                json['state'] = 'closed'
-            alljson.append(json)
-        return sjson.dumps(alljson)
+    def _dumpFlatJSON(self, results):
+        json = map(lambda x: x.toTreeJSON(), results)
+        return simplejson.dumps(json)
     
     def getTracksAJAX(self):
         idStr = request.params['id']
@@ -93,5 +78,51 @@ class HelloController(BaseController):
         return self._playlistJSON(tracks)
 
     def _playlistJSON(self, tracks):
-        json = map(lambda x: x.toJSON(), tracks)
-        return sjson.dumps(json)
+        json = map(lambda x: x.toPlaylistJSON(), tracks)
+        return simplejson.dumps(json)
+    
+    def searchAJAX(self):
+        search = request.params['search']
+        maxResults = 50
+        artists = Session.query(Artist). \
+                         filter(Artist.name.like('%'+search+'%')) \
+                         [0:maxResults]
+        # this is kind of fucked, need to rethink join model
+        #albums = Session.query(Album). \
+        #                 filter(Artist.name.like('%'+search+'%')). \
+        #                 join(Album). \
+        #                 options(contains_eager(Album.tracks)) \
+        #                 [0:maxResults]
+        tracks = Session.query(Track). \
+                         filter(Track.id3title.like('%'+search+'%')). \
+                         join(Artist). \
+                         join(Album) \
+                         [0:maxResults]
+        if len(artists) == maxResults or len(tracks) == maxResults: #or len(albums) == maxResults:
+            truncated = True
+        else:
+            truncated = False
+        json = []
+        artistIdToJSON = {}
+        albumsIdToJSON = {}
+        for track in tracks:
+            if track.artist.id not in artistIdToJSON:
+                artistJSON = track.artist.toTreeJSON(children=[])
+                json.append(artistJSON)
+                artistIdToJSON[track.artist.id] = artistJSON
+            else:
+                artistJSON = artistIdToJSON[track.artist.id]
+            if track.album.id not in albumsIdToJSON:
+                albumJSON = track.album.toTreeJSON(children=[])
+                artistJSON['children'].append(albumJSON)
+                albumsIdToJSON[track.album.id] = albumJSON
+            else:
+                albumJSON = albumsIdToJSON[track.album.id]
+            albumJSON['children'].append(track.toTreeJSON())
+        for artist in artists:
+            if artist.id not in artistIdToJSON:
+                artistJSON = artist.toTreeJSON()
+                json.append(artistJSON)
+                artistIdToJSON[artist.id] = artistJSON
+        return simplejson.dumps(json)
+    

@@ -16,6 +16,22 @@ class Artist(Base):
     def __init__(self, name, added):
         self.name = name
         self.added = added
+    
+    def toTreeJSON(self, children=None):
+        json = {
+                'attributes': {'id'   : self.__class__.__name__ + '/' + str(self.id),
+                               'class': 'browsenode',
+                               'rel'  : self.__class__.__name__
+                              },
+                'data': self.name,
+                'state' : 'closed'
+               }
+        if children is not None:
+            json['state'] = 'open'
+            json['children'] = children
+        else:
+            json['state'] = 'closed'
+        return json
 
     def __repr__(self):
         return "<Artist%s>" % (self.__dict__)
