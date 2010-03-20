@@ -111,12 +111,8 @@ class LoadController(BaseController):
                                   added=now)
                     
                     Session.save(track)
-                    
-                    if numFilesSeen > 5000:
-                        done = True
-                        break
                 
-                except (UnicodeError) as e:
+                except Exception as e:
                     numBadFiles = numBadFiles + 1
                     log.error('Could not load file "' + filename + '" due to exception: '
                               + e.__class__.__name__ + ': ' + str(e))
