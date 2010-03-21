@@ -13,6 +13,9 @@ $(document).ready(function(){
     $("#playlistbody").droppable({
         drop: function(event, ui) {
             var browsenode = ui.draggable;
+	    if (!browsenode.hasClass('browsenode')) {
+		return;
+	    }
             $(document).data('playlistDropTarget', event.originalEvent.target);
             $.getJSON(
                 '/hello/getTracksAJAX',
@@ -130,13 +133,52 @@ $(document).ready(function(){
     }).jPlayer("onSoundComplete", playListNext);
     $("#jplayer_previous").click(playListPrev);
     $("#jplayer_next").click(playListNext);
-
+    
+    /**
+     * Playlist interaction, shift click, ctrl click, del, etc
+     */
+    $('.song').live('click', function(e) {
+	$('.jp-playlist').focus();
+	var self = $(this);
+	var lastselected = $('.lastSelected');
+	if (lastselected.length > 0) {
+	    if (e.shiftKey) {
+		if (self.prevAll('.lastSelected').length > 0) {
+		    self.prevUntil('.lastSelected').addClass('selected');
+		} else {
+		    self.nextUntil('.lastSelected').addClass('selected');
+		}
+		self.addClass('selected');
+		return true;
+	    } else if (e.ctrlKey) {
+		self.toggleClass('selected').addClass('lastSelected');
+		return true;
+	    }
+	}
+	$('.selected').removeClass('selected');
+	$('.lastSelected').removeClass('lastSelected');
+	self.addClass('selected').addClass('lastSelected');
+	return true;
+    });
+    
+    $('.jp-playlist').bind('keydown', 'ctrl+a', function() {
+	$('.song').addClass('selected');
+	return false;
+    });
+    
+    $('.jp-playlist').bind('keydown', 'del', function() {
+	$('.selected').remove();
+	return false;
+    });
+    
     /**
      * initialize search
      */
-    $('#searchInput').keyup(function(e) {
+    $('#searchInput').keydown(function(e) {
         if(e.keyCode == 13) {
 	    searchHandler();
+	} else if (e.keyCode == 27) {
+	    ditchSearch();
 	}
     });
     

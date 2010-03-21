@@ -10,7 +10,7 @@
 <script type="text/javascript" src="/jquery-ui-1.8rc3.custom.min.js"></script>
 <script type="text/javascript" src="/scatterbrainz.js"></script>
 <script type="text/javascript" src="/jquery.tree.js"></script>
-<script type="text/javascript" src="/lib/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/jsTreePlugins/jquery.tree.hotkeys.js"></script>
 <link rel="stylesheet" type="text/css" href="/jplayer.blue.monday.css" />
 <link rel="stylesheet" type="text/css" href="/scatterbrainz.css" />
@@ -32,7 +32,7 @@
 
 <div id="jquery_jplayer"></div>
     <div class="jp-playlist-player">
-        <div class="jp-playlist">
+        <div class="jp-playlist" tabindex="99">
             <table id="playlist" border="0" cellspacing="0" cellpadding="0">
               <thead class="playlistHead">
                 <tr class="playlistHeadRow">
@@ -44,9 +44,7 @@
                   <th class='bitrate'>Bitrate</th>
                 </tr>
               </thead>
-              <tbody id="playlistbody">
-
-              </tbody>
+              <tbody id="playlistbody"></tbody>
             </table>
         </div> 
         <div class="jp-interface">
