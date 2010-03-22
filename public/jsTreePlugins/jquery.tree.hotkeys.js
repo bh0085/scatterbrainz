@@ -1,5 +1,5 @@
 (function ($) {
-	if(typeof window.hotkeys == "undefined") throw "jsTree hotkeys: jQuery hotkeys plugin not included.";
+	if(typeof jQuery.hotkeys == "undefined") throw "jsTree hotkeys: jQuery hotkeys plugin not included.";
 
 	$.extend($.tree.plugins, {
 		"hotkeys" : {
@@ -64,7 +64,7 @@
 					for(var i in opts.functions) {
 						if(opts.functions.hasOwnProperty(i) && $.inArray(i, $.tree.plugins.hotkeys.bound) == -1) {
 							(function (k) {
-								$(document).bind("keydown", { combi : k, disableInInput: true }, function (event) {
+								$(t.container).bind("keydown", k, function (event) {
 									return $.tree.plugins.hotkeys.exec(k);
 								});
 							})(i);
