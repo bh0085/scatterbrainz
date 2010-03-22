@@ -33,10 +33,6 @@ tr td:last-child {
     padding-right:4px;
 }
 
-.jp-playlist {
-    outline-width: 0;
-}
-
 #playlistbody {
     overflow-x: hidden;
     overflow-y: auto;
@@ -119,4 +115,8 @@ input#searchInput {
 
 div#searchBrowser {
     display: none;
+}
+
+.noBrowserFocusIndicator {
+    outline-width: 0;
 }

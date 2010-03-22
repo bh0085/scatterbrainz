@@ -389,7 +389,8 @@
 						setTimeout( function() { _this.focus.apply(_this); }, 5);
 					})
 					.bind("click.jstree", function (event) { 
-						//event.stopPropagation(); 
+						//event.stopPropagation();
+						$(this).focus();
 						return true;
 					});
 				$("li", this.container.get(0))

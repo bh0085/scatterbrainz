@@ -11,12 +11,7 @@
 					"up"	: function () { $.tree.plugins.hotkeys.get_prev.apply(this); return false; },
 					"down"	: function () { $.tree.plugins.hotkeys.get_next.apply(this); return false; },
 					"left"	: function () { $.tree.plugins.hotkeys.get_left.apply(this); return false; },
-					"right"	: function () { $.tree.plugins.hotkeys.get_right.apply(this); return false; },
-					"f2"	: function () { if(this.selected) this.rename(); return false; },
-					"del"	: function () { if(this.selected) this.remove(); return false; },
-					"ctrl+c": function () { if(this.selected) this.copy(); return false; },
-					"ctrl+x": function () { if(this.selected) this.cut(); return false; },
-					"ctrl+v": function () { if(this.selected) this.paste(); return false; }
+					"right"	: function () { $.tree.plugins.hotkeys.get_right.apply(this); return false; }
 				}
 			},
 			exec : function(key) {
@@ -60,15 +55,16 @@
 
 			callbacks : {
 				oninit : function (t) {
+					$(t.container).unbind();
 					var opts = $.extend(true, {}, $.tree.plugins.hotkeys.defaults, this.settings.plugins.hotkeys);
 					for(var i in opts.functions) {
-						if(opts.functions.hasOwnProperty(i) && $.inArray(i, $.tree.plugins.hotkeys.bound) == -1) {
+						if(opts.functions.hasOwnProperty(i)) { // && $.inArray(i, $.tree.plugins.hotkeys.bound) == -1) {
 							(function (k) {
 								$(t.container).bind("keydown", k, function (event) {
 									return $.tree.plugins.hotkeys.exec(k);
 								});
 							})(i);
-							$.tree.plugins.hotkeys.bound.push(i);
+							//$.tree.plugins.hotkeys.bound.push(i);
 						}
 					}
 				}

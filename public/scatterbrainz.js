@@ -206,6 +206,8 @@ function search(searchStr) {
 }
 
 function searchCallback(results) {
+    $('#browser').hide();
+    $('#searchBrowser').show();
     $('#searchBrowser').tree({
         data : {
 	    async : true,
@@ -263,8 +265,6 @@ function searchCallback(results) {
             }
         }
     });
-    $('#browser').hide();
-    $('#searchBrowser').show();
 }
 
 function ditchSearch() {
