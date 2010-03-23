@@ -12,37 +12,13 @@ $(document).ready(function(){
     });
     $("#playlistbody").droppable({
         drop: function(event, ui) {
-            var browsenode = ui.draggable;
-	    if (!browsenode.hasClass('browsenode')) {
+	    var browsenode = ui.draggable;
+	    if (browsenode.hasClass('browsenode')) {
+		addToPlaylist(browsenode.attr('id'), event.originalEvent.target);
+	    } else {
 		return;
 	    }
-            $(document).data('playlistDropTarget', event.originalEvent.target);
-            $.getJSON(
-                '/hello/getTracksAJAX',
-                {'id':browsenode.attr('id')},
-                function(data) {
-                    var insertText = '';
-                    $.each(data, function(count, trackJSON) {
-                        insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
-                                      + '<td class="artist">'+trackJSON['artist']+'</td>'
-                                      + '<td class="title">'+trackJSON['title']+'</td>'
-                                      + '<td class="album">'+trackJSON['album']+'</td>'
-                                      + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
-                                      + '<td class="length">'+trackJSON['length']+'</td>'
-                                      + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
-                                    + '</tr>';
-                    });
-                    var dropTarget = $(document).data('playlistDropTarget');
-                    if (dropTarget.tagName == 'TD') {
-                        $(dropTarget).parent().after(insertText);
-                    } else {
-                        $("#playlistbody").append(insertText);
-                    }
-                    $('#playlist thead th').unbind('click');
-                    $('#playlist').tablesorter();
-                }
-            );
-        }
+	}
     });
     $('#browser').tree({
         data : { 
@@ -187,6 +163,35 @@ $(document).ready(function(){
     $('#goSearch').click(searchHandler);
 
 });
+
+function addToPlaylist(id, target) {
+    $(document).data('playlistDropTarget', target);
+    $.getJSON(
+	'/hello/getTracksAJAX',
+	{'id': id},
+	function(data) {
+	    var insertText = '';
+	    $.each(data, function(count, trackJSON) {
+		insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
+			      + '<td class="artist">'+trackJSON['artist']+'</td>'
+			      + '<td class="title">'+trackJSON['title']+'</td>'
+			      + '<td class="album">'+trackJSON['album']+'</td>'
+			      + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
+			      + '<td class="length">'+trackJSON['length']+'</td>'
+			      + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
+			    + '</tr>';
+	    });
+	    var dropTarget = $(document).data('playlistDropTarget');
+	    if (dropTarget && dropTarget.tagName == 'TD') {
+		$(dropTarget).parent().after(insertText);
+	    } else {
+		$("#playlistbody").append(insertText);
+	    }
+	    $('#playlist thead th').unbind('click');
+	    $('#playlist').tablesorter();
+	}
+    );
+}
 
 function searchHandler() {
     var searchStr = $('#searchInput').attr('value').trim();
