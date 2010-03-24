@@ -124,7 +124,8 @@ $(document).ready(function(){
 		} else {
 		    self.nextUntil('.lastSelected').addClass('selected');
 		}
-		self.addClass('selected');
+		$('.lastSelected').removeClass('lastSelected');
+		self.addClass('selected').addClass('lastSelected');
 		return true;
 	    } else if (e.ctrlKey) {
 		self.toggleClass('selected').addClass('lastSelected');
@@ -147,6 +148,28 @@ $(document).ready(function(){
 	return false;
     });
     
+    $('.jp-playlist').bind('keydown', 'down', function() {
+	
+	var next = $('.lastSelected').next();
+	if (next.length > 0) {
+	    $('.selected').removeClass('selected').removeClass('lastSelected');
+	    next.addClass('selected').addClass('lastSelected');
+	    scrollTo(next, $('#playlistbody'));
+	}
+	    
+	return false;
+    });
+    
+    $('.jp-playlist').bind('keydown', 'up', function() {
+	var prev = $('.lastSelected').prev();
+	if (prev.length > 0) {
+	    $('.selected').removeClass('selected').removeClass('lastSelected');
+	    prev.addClass('selected').addClass('lastSelected');
+	    scrollTo(prev, $('#playlistbody'));
+	}
+	return false;
+    });
+    
     /**
      * initialize search
      */
@@ -163,6 +186,25 @@ $(document).ready(function(){
     $('#goSearch').click(searchHandler);
 
 });
+
+function scrollTo(e, c) {
+
+    var eTop = e.offset().top;
+    var eBottom = eTop + e.height();
+    var cTop = c.offset().top;
+    var cBottom = cTop + c.height();
+
+    if ((eBottom > cBottom) || (eTop < cTop)) {
+	if (eBottom > cBottom) {
+	    var scrollTop = c.attr('scrollTop') + (eBottom - cBottom) + 'px';
+	} else if (eTop < cTop) {
+	    var scrollTop = c.attr('scrollTop') - (cTop - eTop) + 'px';
+	}
+	c.stop();
+	c.animate({scrollTop: scrollTop}, 100);
+    }
+    
+}
 
 function addToPlaylist(id, target) {
     $(document).data('playlistDropTarget', target);

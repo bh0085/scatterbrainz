@@ -8,13 +8,29 @@
 			defaults : {
 				hover_mode : false,
 				functions : {
-					"up"	: function () { $.tree.plugins.hotkeys.get_prev.apply(this); return false; },
-					"down"	: function () { $.tree.plugins.hotkeys.get_next.apply(this); return false; },
-					"left"	: function () { $.tree.plugins.hotkeys.get_left.apply(this); return false; },
-					"right"	: function () { $.tree.plugins.hotkeys.get_right.apply(this); return false; },
+					"up" : function () {
+					    $.tree.plugins.hotkeys.get_prev.apply(this);
+					    scrollTo($('a.clicked'), $('#browseContainer'));
+					    return false;
+					},
+					"down" : function () {
+					    $.tree.plugins.hotkeys.get_next.apply(this);
+					    scrollTo($('a.clicked'), $('#browseContainer'));
+					    return false;
+					},
+					"left" : function () {
+					    $.tree.plugins.hotkeys.get_left.apply(this);
+					    scrollTo($('a.clicked'), $('#browseContainer'));
+					    return false;
+					},
+					"right"	: function () {
+					    $.tree.plugins.hotkeys.get_right.apply(this);
+					    scrollTo($('a.clicked'), $('#browseContainer'));
+					    return false;
+					},
 					"return" : function () {
-						addToPlaylist(this.selected.attr('id'), null);
-						return false;
+					    addToPlaylist(this.selected.attr('id'), null);
+					    return false;
 					},
 				}
 			},
