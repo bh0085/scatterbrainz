@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src="/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/jquery.jplayer.min.js"></script> 
+<script type="text/javascript" src="/ben/makeacolumnlists/js/columnizer.js"></script>
+<script type="text/javascript" src="/ben/columnizer/autocolumn.js"></script>
+<script type="text/javascript" src="/ben/player.js"></script>
+<script type="text/javascript" src="/ben/playerFuncs.js"></script>
+ 
+ 
+<style> 
+<!--
+ 
+#tracklist {
+width95%;
+	border: 1px solid #009BE3;
+	font-family: "Myriad Pro Regular","Trebuchet MS";
+}
+ 
+#tracklist a, #tracklist a:link, #tracklist a:visited, #tracklist a:hover, #tracklist a:focus, #tracklist a:active {
+	color: #009BE3;
+}
+ 
+#tracklist ul {
+  list-style: none;
+  width:10em;
+  overflow:hidden;
+}
+ 
+#tracklist li { 
+  overflow:hidden;
+  width:20em;
+  line-height:2ex;
+  height:2ex;
+  
+}
+ 
+#plpl  span {
+	color: #CC0090;
+}
+ 
+#plpl .pcent {
+	color: #002869;
+}
+ 
+ 
+-->
+</style> 
+ 
+
+<body class="demos"> 
+
+  <div id="content_main"> 
+    <div class="section"> 
+
+      <div id="jquery_jplayer"></div> 
+      
+      <div id="plpl"> 	
+	Now playing : <span id="trackname">nothing</span> <span class="pcent" id="pcent"></span>
+<a id="play" href="#">Play</a><a id="pause" href="#">Pause</a><a id="stop" href="#">Stop</a>
+	  volume :<a id="vmute" href="#">Mute</a><a id="vhalf" href="#">Half</a><a id="vmax" href="#">Max</a>
+	<div id="player_buffer_message"></div> 
+      </div> 
+    <div id="tracklist"></div>
+
+
+
+    </div> 
+
+    
+  </div> 
+  
+
+  <script type="text/javascript">
+    $.getJSON("/getlocal/alltracks",playerShowTracks);
+  </script>
+		      
+
+</body> 
+</html> 
