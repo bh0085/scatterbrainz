@@ -1,27 +1,15 @@
+<!DOCTYPE HTML>
 <html>
-<head>
-<script type="text/javascript" src="/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/hello2/h2.js"></script>
-<script type="text/javascript" src="/jquery.tree.js"></script>
-<link rel="stylesheet" type="text/css" href="/scatterbrainz.css" />
-</head>
-
-
-<body>
-
-
+<body>		
 <script type="text/javascript" language="javascript">
    var http_request = false;
    function makeRequest(url, parameters) {
-      http_request = false;
-      if (window.XMLHttpRequest) { // Mozilla, Safari,...
-         http_request = new XMLHttpRequest();
-         if (http_request.overrideMimeType) {
-         	// set type accordingly to anticipated content type
-            //http_request.overrideMimeType('text/xml');
-            http_request.overrideMimeType('text/html');
-         }
-      } 
+       http_request = new XMLHttpRequest();
+       if (http_request.overrideMimeType) {
+           // set type accordingly to anticipated content type
+           //http_request.overrideMimeType('text/xml');
+           http_request.overrideMimeType('text/html');
+       }
       if (!http_request) {
          alert('Cannot create XMLHTTP instance');
          return false;
@@ -29,6 +17,9 @@
       http_request.onreadystatechange = alertContents;
       http_request.open('GET', url + parameters, true);
       http_request.send(null);
+
+      return http_request.status
+       
    }
    function alertContents() {
       if (http_request.readyState == 4) {
@@ -37,7 +28,7 @@
             result = http_request.responseText;
             document.getElementById('myspan').innerHTML = result;            
          } else {
-            alert('There was a problem with the request.');
+            alert('There was a problem with the request');
          }
       }
    }
@@ -46,16 +37,15 @@
 
 <br>
 <script type="text/javascript">
-document.write(makeRequest('http://localhost:5000/hello2/songTag', ''));
+songTag = makeRequest('http://localhost:5000/hello2/songTag', '');
+document.write(songTag);
 </script>
 <br>
 <br>
 <span name="myspan" id="myspan"></span>
 
 
-<div id="browser"></div>
-
-
+HMM?
 
 
 </body>

@@ -17,10 +17,11 @@ log = logging.getLogger(__name__)
 class Hello2Controller(BaseController):
 
     def index(self):
-        # Return a rendered template
-
-                
         return render('/hello2.html')
+    def i2(self):
+        return render('/h2player.html')
+    def i2g(self):
+        return render('/h2grav.html')
 
     def pp2(self):
         artists = Session.query(Artist)
@@ -32,13 +33,23 @@ class Hello2Controller(BaseController):
         return render('/hello2.html')
     
     def songTag(self):
+        url = self.songAbsURL()
+        tag = '<audio src='+url+' autoplay=autoplay controls=controls></audio>'
+        return tag
+       
+    def songRelURL(self):
         tracks = Session.query(Track)
         r = tracks[0]
         path = os.path.join('.music', r.filepath )
-        tag = '<audio src=http://localhost:5000/'+urllib.pathname2url(path)+' autoplay=autoplay controls=controls></audio>'
-        return tag
-       
+        out =urllib.pathname2url(path)
+        return out
 
+
+    def songAbsURL(self):
+        rel = self.songRelURL()
+        abs_url = 'http://localhost:5000/'+rel
+        return sjson.dumps([abs_url,abs_url])
+ 
     def printPaths(self):
         tracks = Session.query(Track)
         paths = []
@@ -47,3 +58,5 @@ class Hello2Controller(BaseController):
             
         return paths
     
+
+

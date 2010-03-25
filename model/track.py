@@ -37,6 +37,11 @@ class Track(Base):
     id3composer = Column(Unicode)
     id3genre = Column(Unicode)
     id3lyricist = Column(Unicode)
+
+    # MusicBrainz Properties (or "props" for short)
+    mbtrackid = Column(Unicode)
+    mbalbumid = Column(Unicode)
+    mbartistid= Column(Unicode)
     
     # Generated props
     added = Column(DateTime, nullable=False)
@@ -44,7 +49,7 @@ class Track(Base):
     def __init__(self, artist, album, filepath, filesize, filemtime, mp3bitrate,
                  mp3samplerate, mp3length, id3artist, id3album, id3title,
                  id3tracknum, id3date, id3composer, id3genre, id3lyricist,
-                 added):
+                 added,mbtrackid,mbalbumid,mbartistid):
         self.artist = artist
         self.album = album
         self.filepath = filepath
@@ -61,6 +66,9 @@ class Track(Base):
         self.id3composer = id3composer
         self.id3genre = id3genre
         self.id3lyricist = id3lyricist
+        self.mbtrackid=mbtrackid
+        self.mbalbumid=mbalbumid
+        self.mbartistid=mbartistid
         self.added = added
     
     def toPlaylistJSON(self):

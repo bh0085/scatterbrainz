@@ -64,6 +64,7 @@ class LoadController(BaseController):
                     # id3
                     # keys: ['album', 'date', 'version', 'composer', 'title'
                     #        'genre', 'tracknumber', 'lyricist', 'artist']
+
                     id3artist = getid3prop(mutagen, 'artist')
                     id3album = getid3prop(mutagen, 'album')
                     id3title = getid3prop(mutagen, 'title')
@@ -73,6 +74,14 @@ class LoadController(BaseController):
                     id3genre = getid3prop(mutagen, 'genre')
                     id3lyricist = getid3prop(mutagen, 'lyricist')
                     
+                    # additional musicbrainz related keys: At some point,
+                    # should probably switch from easyID3 to ordinary ID3
+                    # class to get extra MB relationship data.
+                    
+                    mbartistid =getid3prop(mutagen,'musicbrainz_albumartistid')
+                    mbalbumid =getid3prop(mutagen,'musicbrainz_albumid')
+                    mbtrackid =getid3prop(mutagen,'musicbrainz_trackid')
+
                     if not id3artist:
                         artist = None
                     elif id3artist in artists:
@@ -107,7 +116,11 @@ class LoadController(BaseController):
                                   id3composer=id3composer,
                                   id3genre=id3genre,
                                   id3lyricist=id3lyricist,
-                                  added=now)
+                                  added=now,
+                                  mbtrackid=mbtrackid,
+                                  mbalbumid=mbalbumid,
+                                  mbartistid=mbartistid
+                                  )
                     
                     Session.save(track)
                 
