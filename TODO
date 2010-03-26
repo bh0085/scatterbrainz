@@ -11,24 +11,33 @@
 == jplayer ==
 * autostart when first tracks dragged
 * make 'play' start list too
+* ditch jplayer, just use <audio>?
 
 == hierarchical browser ==
-* search
 * slice data other than by artist/album/track
 * show tracks not in an album by an artist
 * various artists
-* keyboard shortcuts
+
+== search ==
+* when cleared, remain at selected node
 
 == playlist ==
 * multiselect
 * keyboard shortcuts
 * generate random
 
+== keyboard ==
+* scroll to end of playlist when appended to
+* / focuses search
+* esc in browser clear search
+* shift down/up in playlist
+* player controls shortcuts
+
 == id3 ==
 * disc #, other stuff not in mutagen easyid3
 
 == sql ==
-* indices
+* indices?
 
 == musicbrainz ==
 * look everything up
@@ -60,3 +69,10 @@
 
 == distributed stuff ==
 * communicate with other instances, share music + metadata
+
+== compatibility ==
+* transcode mp3 to ogg on the fly for firefox et al, gstreamer python thing
+* test lots of browsers
+
+== error handling ==
+* 404s on .mp3s

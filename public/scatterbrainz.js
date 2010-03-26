@@ -206,6 +206,14 @@ function scrollTo(e, c) {
     
 }
 
+function scrollToBottom(c) {
+    c.animate({scrollTop: c.attr('scrollHeight') + 'px'}, 500);
+}
+
+function scrollToTop(c) {
+    c.animate({scrollTop: '0px'}, 500);
+}
+
 function addToPlaylist(id, target) {
     $(document).data('playlistDropTarget', target);
     $.getJSON(
