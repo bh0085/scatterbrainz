@@ -1,0 +1,48 @@
+#tracklist {
+    width95%;
+    border: 1px solid #009BE3;
+    font-family: "Myriad Pro Regular","Trebuchet MS";
+}
+
+#tracklist a, #tracklist a:link, #tracklist a:visited, #tracklist a:hover, #tracklist a:focus, #tracklist a:active {
+    color: #009BE3;
+}
+#tracklist .trackextra {
+    background-color:#EEEEEE;
+    color: #00DD00;
+}
+
+#tracklist ul {
+    list-style: none;
+    width:10em;
+    overflow:hidden;
+}
+
+#tracklist li { 
+    overflow:hidden;
+    width:20em;
+    line-height:2ex;
+    height:2ex;
+    
+}
+
+#plpl  span {
+    color: #CC0090;
+}
+
+#plpl .pcent {
+    color: #002869;
+}
+#info {
+    height : 15em;
+    width: 100%;
+    overflow: hidden;
+}
+
+#info .infowin{
+    float:left;
+    width:15em;
+}
+#info ul {
+    list-style: none;
+}
