@@ -154,7 +154,7 @@ $(document).ready(function(){
 	if (next.length > 0) {
 	    $('.selected').removeClass('selected').removeClass('lastSelected');
 	    next.addClass('selected').addClass('lastSelected');
-	    scrollTo(next, $('#playlistbody'));
+	    scrollTo(next, $('.jp-playlist'));
 	}
 	    
 	return false;
@@ -165,7 +165,7 @@ $(document).ready(function(){
 	if (prev.length > 0) {
 	    $('.selected').removeClass('selected').removeClass('lastSelected');
 	    prev.addClass('selected').addClass('lastSelected');
-	    scrollTo(prev, $('#playlistbody'));
+	    scrollTo(prev, $('.jp-playlist'));
 	}
 	return false;
     });
