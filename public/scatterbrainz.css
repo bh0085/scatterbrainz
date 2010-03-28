@@ -34,11 +34,17 @@ tr td:last-child {
 }
 
 #playlistbody {
+    padding: 0px;
+}
+
+.jp-playlist {
     overflow-x: hidden;
     overflow-y: auto;
     height: 600px;
-    display: block;
-    padding: 0px; 
+}
+
+.playlistTable {
+    table-layout: fixed;
     width: 900px;
 }
 
@@ -48,6 +54,12 @@ th, td {
 
 tr {
     cursor: pointer;
+}
+
+tr * {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow:hidden;
 }
 
 tbody tr:nth-child(odd) {
@@ -65,9 +77,7 @@ body {
 }
 
 .playlistHead {
-    display: block;
-    width: 870px;
-    margin-right: 14px;
+    
 }
 
 .playlistHeadRow {

@@ -10,7 +10,7 @@ $(document).ready(function(){
         items: 'tr',
         placeholder: 'placeholder'
     });
-    $("#playlistbody").droppable({
+    $(".jp-playlist").droppable({
         drop: function(event, ui) {
 	    var browsenode = ui.draggable;
 	    if (browsenode.hasClass('browsenode')) {
@@ -171,6 +171,28 @@ $(document).ready(function(){
     });
     
     /**
+     * Dispatch clicks to fake floating table header over to real table header
+     */
+    $('#playlistHeadTable th.artist').click(function() {
+	$('#playlist th.artist').click();
+    });
+    $('#playlistHeadTable th.title').click(function() {
+	$('#playlist th.title').click();
+    });
+    $('#playlistHeadTable th.album').click(function() {
+	$('#playlist th.album').click();
+    });
+    $('#playlistHeadTable th.tracknum').click(function() {
+	$('#playlist th.tracknum').click();
+    });
+    $('#playlistHeadTable th.length').click(function() {
+	$('#playlist th.length').click();
+    });
+    $('#playlistHeadTable th.bitrate').click(function() {
+	$('#playlist th.bitrate').click();
+    });
+    
+    /**
      * initialize search
      */
     $('#searchInput').keydown(function(e) {
@@ -223,12 +245,12 @@ function addToPlaylist(id, target) {
 	    var insertText = '';
 	    $.each(data, function(count, trackJSON) {
 		insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
-			      + '<td class="artist">'+trackJSON['artist']+'</td>'
-			      + '<td class="title">'+trackJSON['title']+'</td>'
-			      + '<td class="album">'+trackJSON['album']+'</td>'
-			      + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
-			      + '<td class="length">'+trackJSON['length']+'</td>'
-			      + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
+			      + '<td>'+trackJSON['artist']+'</td>'
+			      + '<td>'+trackJSON['title']+'</td>'
+			      + '<td>'+trackJSON['album']+'</td>'
+			      + '<td>'+trackJSON['tracknum']+'</td>'
+			      + '<td>'+trackJSON['length']+'</td>'
+			      + '<td>'+trackJSON['bitrate']+'</td>'
 			    + '</tr>';
 	    });
 	    var dropTarget = $(document).data('playlistDropTarget');

@@ -32,6 +32,7 @@
 * esc in browser clear search
 * shift down/up in playlist
 * player controls shortcuts
+* delete re-selects the next playlist track
 
 == id3 ==
 * disc #, other stuff not in mutagen easyid3

@@ -32,21 +32,44 @@
 
 <div id="jquery_jplayer"></div>
     <div class="jp-playlist-player">
-        <div class="jp-playlist noBrowserFocusIndicator" tabindex="102">
-            <table id="playlist" border="0" cellspacing="0" cellpadding="0">
-              <thead class="playlistHead">
-                <tr class="playlistHeadRow">
-                  <th class='artist'>Artist</th>
-                  <th class='title'>Title</th>
-                  <th class='album'>Album</th>
-                  <th class='tracknum'>Track</th>
-                  <th class='length'>Length</th>
-                  <th class='bitrate'>Bitrate</th>
-                </tr>
-              </thead>
-              <tbody id="playlistbody"></tbody>
+        <div class="playlistHeadDiv noBrowserFocusIndicator">
+            <table id="playlistHeadTable" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+                <thead class="playlistHead">
+                    <tr class="playlistHeadRow">
+                        <th class='artist'>Artist</th>
+                        <th class='title'>Title</th>
+                        <th class='album'>Album</th>
+                        <th class='tracknum'>Track</th>
+                        <th class='length'>Length</th>
+                        <th class='bitrate'>Bitrate</th>
+                    </tr>
+                </thead>
             </table>
-        </div> 
+        </div>
+        <div class="jp-playlist noBrowserFocusIndicator" tabindex="102">
+            <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+                <thead class="playlistHead">
+                    <tr class="playlistHeadRow">
+                        <th class='artist'></th>
+                        <th class='title'></th>
+                        <th class='album'></th>
+                        <th class='tracknum'></th>
+                        <th class='length'></th>
+                        <th class='bitrate'></th>
+                    </tr>
+                </thead>
+                <tbody id="playlistbody">
+                    <!--<tr class="playlistHeadRow">
+                        <td class='artist'>Artist</th>
+                        <td class='title'>Title</th>
+                        <td class='album'>Album</th>
+                        <td class='tracknum'>Track</th>
+                        <td class='length'>Length</th>
+                        <td class='bitrate'>Bitrate</th>
+                    </tr>-->
+                </tbody>
+            </table>
+        </div>
         <div class="jp-interface">
             <ul class="jp-controls"> 
                 <li id="jplayer_play" class="jp-play">play</li> 
