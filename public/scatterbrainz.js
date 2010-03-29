@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
     /**
-     * tablesorter and jquery UI sortable BS
-     */
+        * tablesorter and jquery UI sortable BS
+        */
 
     $('#playlist').tablesorter();
     $('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
@@ -12,13 +12,13 @@ $(document).ready(function(){
     });
     $(".jp-playlist").droppable({
         drop: function(event, ui) {
-	    var browsenode = ui.draggable;
-	    if (browsenode.hasClass('browsenode')) {
-		addToPlaylist(browsenode.attr('id'), event.originalEvent.target);
-	    } else {
-		return;
-	    }
-	}
+            var browsenode = ui.draggable;
+            if (browsenode.hasClass('browsenode')) {
+                addToPlaylist(browsenode.attr('id'), event.originalEvent.target);
+            } else {
+                return;
+            }
+        }
     });
     $('#browser').tree({
         data : { 
@@ -28,11 +28,11 @@ $(document).ready(function(){
                 url : '/hello/treeBrowseAJAX'
             }
         },
-	callback : { 
-	    beforedata : function (n, t) {
-		return { id : $(n).attr("id") || 'init' };
-	    }
-	},
+        callback : { 
+            beforedata : function (n, t) {
+                return { id : $(n).attr("id") || 'init' };
+            }
+        },
         ui : {
             theme_name : 'default'
         },
@@ -73,8 +73,8 @@ $(document).ready(function(){
     });
 
     /**
-     * make browser nodes draggable w/ jquery ui live shit
-     */
+        * make browser nodes draggable w/ jquery ui live shit
+        */
     $('li.browsenode').live("mouseover", function() {
         node = $(this);
         if (!node.data("init")) {
@@ -91,8 +91,8 @@ $(document).ready(function(){
     });
 
     /**
-     * jplayer playlist BS
-     */
+        * jplayer playlist BS
+        */
 
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
@@ -109,105 +109,131 @@ $(document).ready(function(){
     }).jPlayer("onSoundComplete", playListNext);
     $("#jplayer_previous").click(playListPrev);
     $("#jplayer_next").click(playListNext);
-    
+
     /**
-     * Playlist interaction, shift click, ctrl click, del, etc
-     */
+        * Playlist interaction, shift click, ctrl click, del, etc
+        */
     $('.song').live('click', function(e) {
-	$('.jp-playlist').focus();
-	var self = $(this);
-	var lastselected = $('.lastSelected');
-	if (lastselected.length > 0) {
-	    if (e.shiftKey) {
-		if (self.prevAll('.lastSelected').length > 0) {
-		    self.prevUntil('.lastSelected').addClass('selected');
-		} else {
-		    self.nextUntil('.lastSelected').addClass('selected');
-		}
-		$('.lastSelected').removeClass('lastSelected');
-		self.addClass('selected').addClass('lastSelected');
-		return true;
-	    } else if (e.ctrlKey) {
-		self.toggleClass('selected').addClass('lastSelected');
-		return true;
-	    }
-	}
-	$('.selected').removeClass('selected');
-	$('.lastSelected').removeClass('lastSelected');
-	self.addClass('selected').addClass('lastSelected');
-	return true;
+        $('.jp-playlist').focus();
+        var self = $(this);
+        var lastselected = $('.lastSelected');
+        if (lastselected.length > 0) {
+            if (e.shiftKey) {
+                if (self.prevAll('.lastSelected').length > 0) {
+                    self.prevUntil('.lastSelected').addClass('selected');
+                } else {
+                    self.nextUntil('.lastSelected').addClass('selected');
+                }
+                $('.lastSelected').removeClass('lastSelected');
+                self.addClass('selected').addClass('lastSelected');
+                return true;
+            } else if (e.ctrlKey) {
+                self.toggleClass('selected').addClass('lastSelected');
+                return true;
+            }
+        }
+        $('.selected').removeClass('selected');
+        $('.lastSelected').removeClass('lastSelected');
+        self.addClass('selected').addClass('lastSelected');
+        return true;
     });
-    
+
     $('.jp-playlist').bind('keydown', 'ctrl+a', function() {
-	$('.song').addClass('selected');
-	return false;
+        $('.song').addClass('selected');
+        return false;
     });
-    
+
     $('.jp-playlist').bind('keydown', 'del', function() {
-	$('.selected').remove();
-	return false;
+        $('.selected').remove();
+        return false;
     });
-    
+
     $('.jp-playlist').bind('keydown', 'down', function() {
-	
-	var next = $('.lastSelected').next();
-	if (next.length > 0) {
-	    $('.selected').removeClass('selected').removeClass('lastSelected');
-	    next.addClass('selected').addClass('lastSelected');
-	    scrollTo(next, $('.jp-playlist'));
-	}
-	    
-	return false;
-    });
-    
+
+    var next = $('.lastSelected').next();
+    if (next.length > 0) {
+        $('.selected').removeClass('selected').removeClass('lastSelected');
+        next.addClass('selected').addClass('lastSelected');
+        scrollTo(next, $('.jp-playlist'));
+    }
+
+    return false;
+});
+
     $('.jp-playlist').bind('keydown', 'up', function() {
-	var prev = $('.lastSelected').prev();
-	if (prev.length > 0) {
-	    $('.selected').removeClass('selected').removeClass('lastSelected');
-	    prev.addClass('selected').addClass('lastSelected');
-	    scrollTo(prev, $('.jp-playlist'));
-	}
-	return false;
+        var prev = $('.lastSelected').prev();
+        if (prev.length > 0) {
+            $('.selected').removeClass('selected').removeClass('lastSelected');
+            prev.addClass('selected').addClass('lastSelected');
+            scrollTo(prev, $('.jp-playlist'));
+        }
+        return false;
     });
-    
+
     /**
-     * Dispatch clicks to fake floating table header over to real table header
-     */
+        * Dispatch clicks to fake floating table header over to real table header
+        */
     $('#playlistHeadTable th.artist').click(function() {
-	$('#playlist th.artist').click();
+        $('#playlist th.artist').click();
     });
     $('#playlistHeadTable th.title').click(function() {
-	$('#playlist th.title').click();
+        $('#playlist th.title').click();
     });
     $('#playlistHeadTable th.album').click(function() {
-	$('#playlist th.album').click();
+        $('#playlist th.album').click();
     });
     $('#playlistHeadTable th.tracknum').click(function() {
-	$('#playlist th.tracknum').click();
+        $('#playlist th.tracknum').click();
     });
     $('#playlistHeadTable th.length').click(function() {
-	$('#playlist th.length').click();
+        $('#playlist th.length').click();
     });
     $('#playlistHeadTable th.bitrate').click(function() {
-	$('#playlist th.bitrate').click();
+        $('#playlist th.bitrate').click();
     });
-    
+
     /**
-     * initialize search
-     */
+        * initialize search
+        */
     $('#searchInput').keydown(function(e) {
         if(e.keyCode == 13) {
-	    searchHandler();
-	} else if (e.keyCode == 27) {
-	    ditchSearch();
-	}
+            searchHandler();
+        } else if (e.keyCode == 27) {
+            ditchSearch();
+        }
     });
-    
+
     $('#ditchSearch').click(ditchSearch);
-    
+
     $('#goSearch').click(searchHandler);
 
+    $(window).resize(windowResize);
+
+    setTimeout(function() {
+        $(window).resize();
+    }, 100);
+
 });
+
+function windowResize(target) {
+    $(document).data('windowHeightPx', $(window).height());
+    $(document).data('windowWidthPx', $(window).width());
+    var elements = $(".expandHeightToFitBrowser");
+    for (var i=0; i<elements.length; i++) {
+        expandHeightToFitBrowser($(elements[i]));
+    }
+    //var elements = $(".expandWidthToFitBrowser");
+    //for (var i=0; i<elements.length; i++) {
+        //expandWidthToFitBrowser($(elements[i]));
+    //}
+}
+
+function expandHeightToFitBrowser(element) {
+    var elementTopPx = element.offset().top;
+    var elementOffsetPx = element.attr('expandHeightOffsetPx');
+    var elementHeightPx = $(document).data('windowHeightPx') - elementTopPx - elementOffsetPx;
+    element.height(elementHeightPx);
+}
 
 function scrollTo(e, c) {
 
@@ -217,15 +243,15 @@ function scrollTo(e, c) {
     var cBottom = cTop + c.height();
 
     if ((eBottom > cBottom) || (eTop < cTop)) {
-	if (eBottom > cBottom) {
-	    var scrollTop = c.attr('scrollTop') + (eBottom - cBottom) + 'px';
-	} else if (eTop < cTop) {
-	    var scrollTop = c.attr('scrollTop') - (cTop - eTop) + 'px';
-	}
-	c.stop();
-	c.animate({scrollTop: scrollTop}, 100);
+        if (eBottom > cBottom) {
+            var scrollTop = c.attr('scrollTop') + (eBottom - cBottom) + 'px';
+        } else if (eTop < cTop) {
+            var scrollTop = c.attr('scrollTop') - (cTop - eTop) + 'px';
+        }
+        c.stop();
+        c.animate({scrollTop: scrollTop}, 100);
     }
-    
+
 }
 
 function scrollToBottom(c) {
@@ -239,46 +265,46 @@ function scrollToTop(c) {
 function addToPlaylist(id, target) {
     $(document).data('playlistDropTarget', target);
     $.getJSON(
-	'/hello/getTracksAJAX',
-	{'id': id},
-	function(data) {
-	    var insertText = '';
-	    $.each(data, function(count, trackJSON) {
-		insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
-			      + '<td>'+trackJSON['artist']+'</td>'
-			      + '<td>'+trackJSON['title']+'</td>'
-			      + '<td>'+trackJSON['album']+'</td>'
-			      + '<td>'+trackJSON['tracknum']+'</td>'
-			      + '<td>'+trackJSON['length']+'</td>'
-			      + '<td>'+trackJSON['bitrate']+'</td>'
-			    + '</tr>';
-	    });
-	    var dropTarget = $(document).data('playlistDropTarget');
-	    if (dropTarget && dropTarget.tagName == 'TD') {
-		$(dropTarget).parent().after(insertText);
-	    } else {
-		$("#playlistbody").append(insertText);
-	    }
-	    $('#playlist thead th').unbind('click');
-	    $('#playlist').tablesorter();
-	}
+        '/hello/getTracksAJAX',
+        {'id': id},
+        function(data) {
+            var insertText = '';
+            $.each(data, function(count, trackJSON) {
+                insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
+                    + '<td class="artist">'+trackJSON['artist']+'</td>'
+                    + '<td class="title">'+trackJSON['title']+'</td>'
+                    + '<td class="album">'+trackJSON['album']+'</td>'
+                    + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
+                    + '<td class="length">'+trackJSON['length']+'</td>'
+                    + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
+                + '</tr>';
+            });
+            var dropTarget = $(document).data('playlistDropTarget');
+            if (dropTarget && dropTarget.tagName == 'TD') {
+                $(dropTarget).parent().after(insertText);
+            } else {
+                $("#playlistbody").append(insertText);
+            }
+            $('#playlist thead th').unbind('click');
+            $('#playlist').tablesorter();
+        }
     );
 }
 
 function searchHandler() {
     var searchStr = $('#searchInput').attr('value').trim();
     if (searchStr == "") {
-	ditchSearch();
+        ditchSearch();
     } else {
-	search(searchStr);
+        search(searchStr);
     }
 }
 
 function search(searchStr) {
     $.getJSON(
-	'/hello/searchAJAX',
-	{'search' : searchStr},
-	searchCallback
+        '/hello/searchAJAX',
+        {'search' : searchStr},
+        searchCallback
     );
 }
 
@@ -287,23 +313,23 @@ function searchCallback(results) {
     $('#searchBrowser').show();
     $('#searchBrowser').tree({
         data : {
-	    async : true,
+            async : true,
             type : 'json',
             opts : {
-		url : '/hello/treeBrowseAJAX'
-	    }
+                url : '/hello/treeBrowseAJAX'
+            }
         },
-	callback : { 
-	    // Make sure static is not used once the tree has loaded for the first time
-	    onload : function (t) { 
-		t.settings.data.opts.static = false; 
-	    },
-	    // Take care of refresh calls - n will be false only when the whole tree is refreshed or loaded of the first time
-	    beforedata : function (n, t) {
-		if(n == false) t.settings.data.opts.static = results;
-		return { id : $(n).attr("id") || 'init' };
-	    }
-	},
+        callback : { 
+            // Make sure static is not used once the tree has loaded for the first time
+            onload : function (t) { 
+                t.settings.data.opts.static = false; 
+            },
+            // Take care of refresh calls - n will be false only when the whole tree is refreshed or loaded of the first time
+            beforedata : function (n, t) {
+                if(n == false) t.settings.data.opts.static = results;
+                return { id : $(n).attr("id") || 'init' };
+            }
+        },
         ui : {
             theme_name : 'default'
         },
@@ -400,8 +426,8 @@ function playListNext() {
 }
 
 /**
- * Playlist rendering stuff
- */
+    * Playlist rendering stuff
+    */
 function playlistRowMap(trackJSON) {
 
 }

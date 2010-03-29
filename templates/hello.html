@@ -25,7 +25,7 @@
     <span id="goSearch" style="text-align: center; border: 1px solid grey; padding: 0px 5px;">Go</span>
 </div>
 
-<div id="browseContainer">
+<div id="browseContainer" class="expandHeightToFitBrowser" expandHeightOffsetPx="10">
     <div id="browser" class="noBrowserFocusIndicator" tabindex="100"></div>
     <div id="searchBrowser" class="noBrowserFocusIndicator" tabindex="101"></div>
 </div>
@@ -46,7 +46,7 @@
                 </thead>
             </table>
         </div>
-        <div class="jp-playlist noBrowserFocusIndicator" tabindex="102">
+        <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="92" tabindex="102">
             <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
                 <thead class="playlistHead">
                     <tr class="playlistHeadRow">
@@ -58,16 +58,7 @@
                         <th class='bitrate'></th>
                     </tr>
                 </thead>
-                <tbody id="playlistbody">
-                    <!--<tr class="playlistHeadRow">
-                        <td class='artist'>Artist</th>
-                        <td class='title'>Title</th>
-                        <td class='album'>Album</th>
-                        <td class='tracknum'>Track</th>
-                        <td class='length'>Length</th>
-                        <td class='bitrate'>Bitrate</th>
-                    </tr>-->
-                </tbody>
+                <tbody id="playlistbody"></tbody>
             </table>
         </div>
         <div class="jp-interface">

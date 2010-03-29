@@ -10,7 +10,7 @@ div.jp-playlist-player {
 div.jp-interface {
     position: relative;
     background-color:#eee;
-    width:898px;
+    margin-right: 10px;
     height:80px;
     border:1px solid #009be3;
 }

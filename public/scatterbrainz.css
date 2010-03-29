@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .playing {
     background-color: #0099FF !important;
     font-weight: bold;
@@ -7,10 +11,6 @@
 .selected {
     color: black;
     background-color: #BEEBFF !important;
-}
-
-.song {
-    width: 870px;
 }
 
 tr td:first-child {
@@ -39,13 +39,20 @@ tr td:last-child {
 
 .jp-playlist {
     overflow-x: hidden;
-    overflow-y: auto;
-    height: 600px;
+    overflow-y: scroll;
+}
+
+#jquery_jplayer {
+    width: 900px;
+}
+
+.playlistHeadDiv {
+    margin-right: 15px;
 }
 
 .playlistTable {
     table-layout: fixed;
-    width: 900px;
+    width: 100%;
 }
 
 th, td {
@@ -80,28 +87,20 @@ body {
     
 }
 
-.playlistHeadRow {
-    width: 870px;
-}
-
 .placeholder {
     height: 10px;
 }
 
-.artist, .title, .album {
-    width: 220px;
+th.artist, th.title, th.album {
+    width: 24%;
 }
 
-.tracknum, .length, .bitrate {
-    width: 70px;
+th.tracknum, th.length, th.bitrate {
+    width: 9%;
 }
 
-td.tracknum, td.bitrate {
+td.tracknum, td.bitrate, td.length {
     text-align: center;
-}
-
-td.length {
-    text-align: right;
 }
 
 div#browseContainer {
