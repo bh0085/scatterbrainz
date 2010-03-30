@@ -10,6 +10,16 @@ function playerShowTracks(data)
 	l0.attr("href","#");
 	l0.attr("name",item['id']);
 	l0.html("REL ");
+	le.append(l0);
+
+	l1 =$("<a>");
+	l1.addClass("displaymembers")
+	l1.addClass("trackextra")
+	l1.attr("href","#");
+	l1.attr("name",item['id']);
+	l1.html("BAND ");
+	le.append(l1);
+
 	link=$("<a>");
 	br = $("<br>");
 	link.attr("name",'trklisting');
@@ -18,7 +28,6 @@ function playerShowTracks(data)
 	link.attr("title",item['url']);
 	link.attr("href","#");
 	link.append(br)
-	le.append(l0)
 	le.append(link)
 	ue.append(le)
 	
@@ -31,6 +40,9 @@ function playerShowTracks(data)
 
     $('.displayrelations').click(function(){
 	$.getJSON("/getlocal/trackRelationsMB",{trackid:$(this).attr("name")},playerShowTrackRelations);
+    });
+    $('.displaymembers').click(function(){
+	$.getJSON("/getmb/currentMembersForTrackArtist",{trackid:$(this).attr("name")},playerShowBandMembers);
     });
 
     $('a[name|=trklisting]').click(function() {
@@ -81,4 +93,30 @@ function playerShowTrackRelations(data){
     });
     $("#track_relations").children().remove();
     $("#track_relations").append(ue);     
+}
+function playerShowBandMembers(data){
+    ue=$("<ul>")
+
+    le=$("<li>");
+    le.html("Current Members");//+item['year']);
+    ue.append(le);    
+
+    $.each(data['current_members'],function(i,item){
+	le=$("<li>");
+	le.html(item);//+item['year']);
+	ue.append(le);
+    });
+
+    le=$("<li>");
+    le.html("Past Members");//+item['year']);
+    ue.append(le);    
+
+    $.each(data['past_members'],function(i,item){
+	le=$("<li>");
+	le.html(item);//+item['year']);
+	ue.append(le);
+    });
+
+    $("#track_relations").children().remove();
+    $("#track_relations").append(ue);         
 }
