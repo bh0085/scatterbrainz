@@ -91,8 +91,8 @@ $(document).ready(function(){
     });
 
     /**
-        * jplayer playlist BS
-        */
+     * jplayer playlist BS
+     */
 
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
@@ -150,15 +150,15 @@ $(document).ready(function(){
 
     $('.jp-playlist').bind('keydown', 'down', function() {
 
-    var next = $('.lastSelected').next();
-    if (next.length > 0) {
-        $('.selected').removeClass('selected').removeClass('lastSelected');
-        next.addClass('selected').addClass('lastSelected');
-        scrollTo(next, $('.jp-playlist'));
-    }
+        var next = $('.lastSelected').next();
+        if (next.length > 0) {
+            $('.selected').removeClass('selected').removeClass('lastSelected');
+           next.addClass('selected').addClass('lastSelected');
+          scrollTo(next, $('.jp-playlist'));
+        }
 
-    return false;
-});
+        return false;
+    });
 
     $('.jp-playlist').bind('keydown', 'up', function() {
         var prev = $('.lastSelected').prev();
@@ -211,8 +211,24 @@ $(document).ready(function(){
 
     setTimeout(function() {
         $(window).resize();
+        $('#albumArtContainer')
+            .draggable({
+                snap:'html'
+            })
+            .resizable({
+                handles: 'ne, se, nw, sw',
+                aspectRatio: 1.0000,
+                autoHide: true,
+                stop: function(event, ui) {
+                    // Fix aspect ratio bugs
+                    var target = $(event.target);
+                    var size = Math.max(target.width(), target.height());
+                    target.width(size);
+                    target.height(size);
+                }
+            });
     }, 100);
-
+    
 });
 
 function windowResize(target) {
@@ -270,7 +286,8 @@ function addToPlaylist(id, target) {
         function(data) {
             var insertText = '';
             $.each(data, function(count, trackJSON) {
-                insertText += '<tr class="song" href="'+trackJSON['filepath']+'">'
+                insertText += '<tr id="track_'+trackJSON['id']+'" class="song" href="'
+                                                              +trackJSON['filepath']+'">'
                     + '<td class="artist">'+trackJSON['artist']+'</td>'
                     + '<td class="title">'+trackJSON['title']+'</td>'
                     + '<td class="album">'+trackJSON['album']+'</td>'
@@ -385,6 +402,7 @@ function playRow(row) {
     $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
         .jPlayer("play");
     row.addClass('playing');
+    grabAlbumArt(row.attr('id'));
 }
 
 function stop() {
@@ -425,9 +443,17 @@ function playListNext() {
     playlistNextPrev(true);
 }
 
-/**
-    * Playlist rendering stuff
-    */
-function playlistRowMap(trackJSON) {
-
+function grabAlbumArt(trackid) {
+    $.getJSON(
+        '/hello/albumArtAJAX',
+        {'trackid': trackid},
+        function(data) {
+            if ('albumArtURL' in data) {
+                $('#albumArt').attr('src', data['albumArtURL']);
+                $('#albumArtContainer').show();
+            } else {
+                $('#albumArtContainer').hide();
+            }
+        }
+    );
 }

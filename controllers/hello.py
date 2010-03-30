@@ -12,6 +12,8 @@ from pylons.controllers.util import abort, redirect_to
 
 from scatterbrainz.lib.base import BaseController, render
 
+from scatterbrainz.external.getMB import getAlbumArtURL
+
 log = logging.getLogger(__name__)
 
 from scatterbrainz.model.meta import Session
@@ -124,5 +126,14 @@ class HelloController(BaseController):
                 artistJSON = artist.toTreeJSON()
                 json.append(artistJSON)
                 artistIdToJSON[artist.id] = artistJSON
+        return simplejson.dumps(json)
+    
+    def albumArtAJAX(self):
+        trackid = request.params['trackid'].split('_')[1]
+        track = Session.query(Track).filter_by(id=trackid)[0]
+        json = {}
+        albumArtURL = getAlbumArtURL(track.id3artist, track.id3album)
+        if albumArtURL:
+            json['albumArtURL'] = albumArtURL
         return simplejson.dumps(json)
     
