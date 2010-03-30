@@ -8,13 +8,12 @@ Current features
 Server dependencies
 * python 2.6
 * pylons
-* couchdb
-* python-couchdb
+* python sqlite
 * mutagen
 * large music collection
 
 Client dependencies
-* google chrome
+* webkit browser
 
 Thanks
 * jquery

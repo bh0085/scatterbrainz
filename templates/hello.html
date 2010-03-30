@@ -1,7 +1,3 @@
-<%!
-    import scatterbrainz.controllers.renderer as r
-%>
-
 <html>
 <head>
 <script type="text/javascript" src="/jquery-1.4.2.min.js"></script>
@@ -25,28 +21,42 @@
     <span id="goSearch" style="text-align: center; border: 1px solid grey; padding: 0px 5px;">Go</span>
 </div>
 
-<div id="browseContainer">
+<div id="browseContainer" class="expandHeightToFitBrowser" expandHeightOffsetPx="10">
     <div id="browser" class="noBrowserFocusIndicator" tabindex="100"></div>
     <div id="searchBrowser" class="noBrowserFocusIndicator" tabindex="101"></div>
 </div>
 
 <div id="jquery_jplayer"></div>
     <div class="jp-playlist-player">
-        <div class="jp-playlist noBrowserFocusIndicator" tabindex="102">
-            <table id="playlist" border="0" cellspacing="0" cellpadding="0">
-              <thead class="playlistHead">
-                <tr class="playlistHeadRow">
-                  <th class='artist'>Artist</th>
-                  <th class='title'>Title</th>
-                  <th class='album'>Album</th>
-                  <th class='tracknum'>Track</th>
-                  <th class='length'>Length</th>
-                  <th class='bitrate'>Bitrate</th>
-                </tr>
-              </thead>
-              <tbody id="playlistbody"></tbody>
+        <div class="playlistHeadDiv noBrowserFocusIndicator">
+            <table id="playlistHeadTable" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+                <thead class="playlistHead">
+                    <tr class="playlistHeadRow">
+                        <th class='artist'>Artist</th>
+                        <th class='title'>Title</th>
+                        <th class='album'>Album</th>
+                        <th class='tracknum'>Track</th>
+                        <th class='length'>Length</th>
+                        <th class='bitrate'>Bitrate</th>
+                    </tr>
+                </thead>
             </table>
-        </div> 
+        </div>
+        <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="92" tabindex="102">
+            <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+                <thead class="playlistHead">
+                    <tr class="playlistHeadRow">
+                        <th class='artist'></th>
+                        <th class='title'></th>
+                        <th class='album'></th>
+                        <th class='tracknum'></th>
+                        <th class='length'></th>
+                        <th class='bitrate'></th>
+                    </tr>
+                </thead>
+                <tbody id="playlistbody"></tbody>
+            </table>
+        </div>
         <div class="jp-interface">
             <ul class="jp-controls"> 
                 <li id="jplayer_play" class="jp-play">play</li> 
@@ -68,7 +78,11 @@
             <div id="jplayer_play_time" class="jp-play-time"></div> 
             <div id="jplayer_total_time" class="jp-total-time"></div>
         </div>
-    </div> 
+    </div>
+    
+    <div id="albumArtContainer">
+        <img id="albumArt"></img>
+    </div>
 
 </body>
 </html>

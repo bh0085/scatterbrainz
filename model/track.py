@@ -72,7 +72,8 @@ class Track(Base):
         self.added = added
     
     def toPlaylistJSON(self):
-        return dict(title = r.title(self),
+        return dict(id = self.id,
+                    title = r.title(self),
                     artist = r.artist(self),
                     album = r.album(self),
                     tracknum = r.tracknum(self),
