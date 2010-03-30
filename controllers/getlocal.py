@@ -13,7 +13,7 @@ from scatterbrainz.lib.base import BaseController, render
 import os
 import simplejson as sjson
 
-from scatterbrainz.external import getMB
+from scatterbrainz.external import my_MB
 
 log = logging.getLogger(__name__)
 
@@ -24,20 +24,35 @@ class GetlocalController(BaseController):
 
     def alltracks(self):
         tracks = Session.query(Track)
+        count = 0
         namefun = lambda x: x.id3title
         out = []
+        this_artist_count = 0 
+        last_artist = ''
+        max_per_artist = 5
         for t in tracks:
             name = namefun(t)
             type = t.__class__.__name__
-            json = {
-                'type':type,
-                'name':name,
-                'url':self.track_URL_from_id(t.id),
-                'id':t.id,
-                'albumid':t.albumid,
-                'artistid':t.artistid
+
+            this_artist = t.artistid
+            if this_artist == last_artist:
+                this_artist_count = this_artist_count + 1
+            else:
+                this_artist_count = 0
+                last_artist = this_artist
+            if this_artist_count < max_per_artist:
+                json = {
+                    'type':type,
+                    'name':name,
+                    'url':self.track_URL_from_id(t.id),
+                    'id':t.id,
+                    'albumid':t.albumid,
+                    'artistid':t.artistid
                     }
-            out.append(json)
+                out.append(json)
+                count = count + 1
+                if count > 50: break
+
         return sjson.dumps(out)
     
     def trackArtistAlbumsLOCAL(self):
@@ -70,7 +85,7 @@ class GetlocalController(BaseController):
         trackid = request.params['trackid']
 
         mbid=Session.query(Track).filter_by(id=trackid)[0].mbartistid
-        results = getMB.getAlbumsByArtist(mbid)
+        results = my_MB.getAlbumsByArtist(mbid)
         out = []
         for r in results:
             json={
@@ -88,7 +103,7 @@ class GetlocalController(BaseController):
         artist_mbid=Session.query(Track).filter_by(id=trackid)[0].mbartistid
         release_mbid=Session.query(Track).filter_by(id=trackid)[0].mbalbumid
 
-        results = getMB.getTrackRelations(mbid) 
+        results = my_MB.getTrackRelations(mbid) 
         out = {}
         tresults = []
         for r in results:
@@ -98,7 +113,7 @@ class GetlocalController(BaseController):
             tresults.append(json);
         out['track_relations'] =tresults
 
-        results =  getMB.getArtistRelations(artist_mbid) 
+        results =  my_MB.getArtistRelations(artist_mbid) 
         artist_relations=[]
         for r in results:
             json = {
@@ -107,7 +122,7 @@ class GetlocalController(BaseController):
             artist_relations.append(json);
         out['artist_relations'] =artist_relations
 
-        results =  getMB.getReleaseRelations(release_mbid) 
+        results =  my_MB.getReleaseRelations(release_mbid) 
         album_relations=[]
         for r in results:
             json = {
