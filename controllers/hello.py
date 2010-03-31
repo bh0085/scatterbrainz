@@ -12,7 +12,7 @@ from pylons.controllers.util import abort, redirect_to
 
 from scatterbrainz.lib.base import BaseController, render
 
-from scatterbrainz.external.getMB import getAlbumArtURL
+from scatterbrainz.external.my_MB import getAlbumArtURL
 
 log = logging.getLogger(__name__)
 
