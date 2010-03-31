@@ -18,5 +18,11 @@ def init_model(engine):
 from scatterbrainz.model.track import Track
 from scatterbrainz.model.album import Album
 from scatterbrainz.model.artist import Artist
+from scatterbrainz.model.rdf import RDFTriple
 Artist.tracks = orm.relation(Track, backref='artist')
 Album.tracks = orm.relation(Track, backref='album')
+
+#RDF Triple relations
+Album.triples = orm.relation(RDFTriple, backref='album')
+Artist.triples = orm.relation(RDFTriple, backref='artist')
+Track.triples = orm.relation(RDFTriple, backref='track')

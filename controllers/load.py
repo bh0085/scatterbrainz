@@ -13,6 +13,7 @@ from scatterbrainz.lib.base import BaseController, render
 
 from scatterbrainz.model.meta import Session
 from scatterbrainz.model.track import Track
+from scatterbrainz.model.rdf import RDFTriple
 from scatterbrainz.model.artist import Artist
 from scatterbrainz.model.album import Album
 
@@ -123,6 +124,17 @@ class LoadController(BaseController):
                                   )
                     
                     Session.save(track)
+
+                    triple = RDFTriple(subject = u":track",
+                                   predicate = u"ison",
+                                   obj=u":album",
+                                   artist=None,
+                                   track=track,
+                                   album=album)
+                    
+                    Session.save(triple)
+
+                    
                 
                 except Exception as e:
                     numBadFiles = numBadFiles + 1
