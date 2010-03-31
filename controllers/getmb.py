@@ -25,21 +25,20 @@ class GetmbController(BaseController):
 
     def currentMembersForTrackArtist(self):
         trackid = request.params['trackid']
-        track=Session.query(Track).filter_by(id=trackid)[0]
-        artistid=track.artistid
+        track = Session.query(Track).filter_by(id=trackid).one()
         
         #search for triples with subject matching current artist
         db_uri=u""
-        for triple in Session.query(RDFTriple).filter_by(artistid=artistid):
+        for triple in Session.query(RDFTriple).filter_by(artistid=track.artistid):
             if triple.subject==":artist":
                 if triple.predicate=="hasdbpedia":
                     db_uri = triple.obj
                     
         if db_uri =="":
-            art_mbid = track.mbartistid
+            art_mbid = track.artist.mbid
             db_uri = sDB.dbpedia_from_MBID(art_mbid)
             db_unicode = unicode(db_uri.__str__())
-            artist = Session.query(Artist).filter_by(id=artistid)[0]
+            artist = track.artist
             triple = RDFTriple(subject=u":artist",
                                predicate=u"hasdbpedia",
                                obj=db_unicode,

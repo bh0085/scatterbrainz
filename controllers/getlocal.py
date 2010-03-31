@@ -74,8 +74,8 @@ class GetlocalController(BaseController):
                 early_year = (re.search(year_re,t.id3date)).group()
                 json = {
                     'aid':aid,
-                    'mbid':t.mbalbumid,
-                    'name':Session.query(Album).filter_by(id=aid)[0].name,   
+                    'mbid':t.album.mbid,
+                    'name':t.album.name,
                     'year':early_year
                     }
                 out.append(json)
@@ -84,7 +84,8 @@ class GetlocalController(BaseController):
     def trackArtistAlbumsMB(self):
         trackid = request.params['trackid']
 
-        mbid=Session.query(Track).filter_by(id=trackid)[0].mbartistid
+        track = Session.query(Track).filter_by(id=trackid).one()
+        mbid = track.mbid
         results = my_MB.getAlbumsByArtist(mbid)
         out = []
         for r in results:
@@ -99,9 +100,10 @@ class GetlocalController(BaseController):
     def trackRelationsMB(self):
         print "WHATTHSODIHJG"
         trackid=request.params['trackid']
-        mbid=Session.query(Track).filter_by(id=trackid)[0].mbtrackid
-        artist_mbid=Session.query(Track).filter_by(id=trackid)[0].mbartistid
-        release_mbid=Session.query(Track).filter_by(id=trackid)[0].mbalbumid
+        track = Session.query(Track).filter_by(id=trackid).one()
+        mbid=track.mbid
+        artist_mbid=track.artist.mbid
+        release_mbid=track.album.mbid
 
         results = my_MB.getTrackRelations(mbid) 
         out = {}

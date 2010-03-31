@@ -79,16 +79,18 @@ class LoadController(BaseController):
                     # should probably switch from easyID3 to ordinary ID3
                     # class to get extra MB relationship data.
                     
-                    mbartistid =getid3prop(mutagen,'musicbrainz_albumartistid')
-                    mbalbumid =getid3prop(mutagen,'musicbrainz_albumid')
-                    mbtrackid =getid3prop(mutagen,'musicbrainz_trackid')
+                    mbartistid = getid3prop(mutagen,'musicbrainz_albumartistid')
+                    mbalbumid = getid3prop(mutagen,'musicbrainz_albumid')
+                    mbtrackid = getid3prop(mutagen,'musicbrainz_trackid')
 
                     if not id3artist:
                         artist = None
                     elif id3artist in artists:
                         artist = artists[id3artist]
                     else:
-                        artist = Artist(id3artist, now)
+                        artist = Artist(name=id3artist,
+                                        mbid=mbartistid,
+                                        added=now)
                         Session.save(artist)
                         artists[id3artist] = artist
                     
@@ -97,7 +99,10 @@ class LoadController(BaseController):
                     elif id3album in albums:
                         album = albums[id3album]
                     else:
-                        album = Album(id3album, now)
+                        album = Album(name=id3album,
+                                      mbid=mbalbumid,
+                                      albumArtURL=None,
+                                      added=now)
                         Session.save(album)
                         albums[id3album] = album
                     
@@ -118,9 +123,7 @@ class LoadController(BaseController):
                                   id3genre=id3genre,
                                   id3lyricist=id3lyricist,
                                   added=now,
-                                  mbtrackid=mbtrackid,
-                                  mbalbumid=mbalbumid,
-                                  mbartistid=mbartistid
+                                  mbid=mbtrackid,
                                   )
                     
                     Session.save(track)

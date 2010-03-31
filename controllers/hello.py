@@ -12,7 +12,7 @@ from pylons.controllers.util import abort, redirect_to
 
 from scatterbrainz.lib.base import BaseController, render
 
-from scatterbrainz.external.my_MB import getAlbumArtURL
+from scatterbrainz.external.my_MB import getRelease, searchRelease
 
 log = logging.getLogger(__name__)
 
@@ -130,10 +130,29 @@ class HelloController(BaseController):
     
     def albumArtAJAX(self):
         trackid = request.params['trackid'].split('_')[1]
-        track = Session.query(Track).filter_by(id=trackid)[0]
+        track = Session.query(Track).filter_by(id=trackid).one()
+        
+        albumArtURL = None
+        release = None
+        album = track.album     
+        artist = track.artist
+        if album.albumArtURL:
+            albumArtURL = album.albumArtURL
+        elif album.mbid:
+            release = getRelease(album.mbid)
+        else:
+            release = searchRelease(track.id3artist, track.id3album)
+            if release and not album.mbid:
+                album.mbid = release.id
+            if release and not artist.mbid:
+                artist.mbid = release.artist.id
+        if release and not albumArtURL:
+            asin = release.getAsin()
+            if asin:
+                albumArtURL = 'http://ecx.images-amazon.com/images/P/%s.jpg' % (asin)
+                track.album.albumArtURL = albumArtURL
+        Session.commit()
         json = {}
-        albumArtURL = getAlbumArtURL(track.id3artist, track.id3album)
         if albumArtURL:
             json['albumArtURL'] = albumArtURL
         return simplejson.dumps(json)
-    

@@ -11,10 +11,14 @@ class Album(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, nullable=False)
+    mbid = Column(Unicode)
+    albumArtURL = Column(Unicode)
     added = Column(DateTime, nullable=False)
 
-    def __init__(self, name, added):
+    def __init__(self, name, mbid, albumArtURL, added):
         self.name = name
+        self.mbid = mbid
+        self.albumArtURL = albumArtURL
         self.added = added
     
     def toTreeJSON(self, children=None):

@@ -3,7 +3,6 @@
 * app startup filesystem sync
 
 == whole page ==
-* stretch to window
 * nice layout
 * right click context menu
 * designer
@@ -12,6 +11,7 @@
 * autostart when first tracks dragged
 * make 'play' start list too
 * ditch jplayer, just use <audio>?
+* pre-fetch next song
 
 == hierarchical browser ==
 * slice data other than by artist/album/track
@@ -19,12 +19,11 @@
 * various artists
 
 == search ==
-* when cleared, remain at selected node
+* when cleared, remain at selected node in full tree
 
 == playlist ==
-* multiselect
 * keyboard shortcuts
-* generate random
+* generate random tracks or albums
 
 == keyboard ==
 * scroll to end of playlist when appended to
@@ -51,12 +50,10 @@
 * guided mode, user picks relationships (collaborated with, similar genre, etc)
 
 == album art ==
-* make local cache keyed off MBID
-* save musicbrainz ASIN and discogs link
-* fetch images from amazon, discogs, etc.
-* algorithm to fix amazon image urls
+* fallback to google image search
 * integrate into player somehow
 * also last.fm artist images are nice
+* separate page for artwork browsing
 
 == last.fm + other music services ==
 * history sniff for user visiting
@@ -67,6 +64,7 @@
 
 == what.cd ==
 * greasemonkey script to validate musicbrainz mappings
+* download and add to library from discovery tab
 
 == distributed stuff ==
 * communicate with other instances, share music + metadata
@@ -77,3 +75,7 @@
 
 == error handling ==
 * 404s on .mp3s
+
+== tech debt ==
+* sort out proper artist-album-track data model
+* split up javascript
