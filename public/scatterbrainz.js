@@ -402,7 +402,13 @@ function playRow(row) {
     $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
         .jPlayer("play");
     row.addClass('playing');
+    setDocumentTitle($('.artist', row).text() + ' - ' +
+                     $('.title', row).text());
     grabAlbumArt(row.attr('id'));
+}
+
+function setDocumentTitle(title) {
+    document.title = title;
 }
 
 function stop() {
