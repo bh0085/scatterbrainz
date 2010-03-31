@@ -143,9 +143,9 @@ class HelloController(BaseController):
         else:
             release = searchRelease(track.id3artist, track.id3album)
             if release and not album.mbid:
-                album.mbid = release.id
+                album.mbid = release.id.split('/')[-1]
             if release and not artist.mbid:
-                artist.mbid = release.artist.id
+                artist.mbid = release.artist.id.split('/')[-1]
         if release and not albumArtURL:
             asin = release.getAsin()
             if asin:
