@@ -55,4 +55,4 @@ def searchRelease(artistName, albumName):
 
 def getRelease(mbid):
     q = ws.Query()
-    return q.getReleaseById(id)
+    return q.getReleaseById(mbid)

@@ -83,7 +83,7 @@ class Track(Base):
                                'class': 'browsenode',
                                'rel'  : self.__class__.__name__
                               },
-                'data': self.id3title
+                'data': self.id3title or "&nbsp;" # jstree bug triggers on null or ""
                }
         return json
 

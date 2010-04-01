@@ -25,7 +25,7 @@ class Artist(Base):
                                'class': 'browsenode',
                                'rel'  : self.__class__.__name__
                               },
-                'data': self.name,
+                'data': self.name or "&nbsp;", # jstree bug triggers on null or ""
                 'state' : 'closed'
                }
         if children is not None:
