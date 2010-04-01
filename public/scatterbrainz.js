@@ -211,22 +211,6 @@ $(document).ready(function(){
 
     setTimeout(function() {
         $(window).resize();
-        $('#albumArtContainer')
-            .draggable({
-                snap:'html'
-            })
-            .resizable({
-                handles: 'ne, se, nw, sw',
-                aspectRatio: 1.0000,
-                autoHide: true,
-                stop: function(event, ui) {
-                    // Fix aspect ratio bugs
-                    var target = $(event.target);
-                    var size = Math.max(target.width(), target.height());
-                    target.width(size);
-                    target.height(size);
-                }
-            });
     }, 100);
     
 });
