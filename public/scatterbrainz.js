@@ -8,7 +8,8 @@ $(document).ready(function(){
     $('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
         containment: 'parent',
         items: 'tr',
-        placeholder: 'placeholder'
+        placeholder: 'placeholder',
+        distance: 15
     });
     $(".jp-playlist").droppable({
         drop: function(event, ui) {
@@ -85,7 +86,8 @@ $(document).ready(function(){
                 cursorAt: {left: -1, top: -1},
                 helper: function(event) {
                     return $('<span>' + event.target.text + '</span>');
-                }
+                },
+                distance: 15
             });
         }
     });

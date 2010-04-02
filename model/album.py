@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 
-from sqlalchemy import Column, Integer, String, Unicode, DateTime
+from sqlalchemy import Column, Integer, String, Unicode, DateTime, Boolean, ForeignKey
 
 from scatterbrainz.model.meta import metadata
 
@@ -11,12 +11,14 @@ class Album(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, nullable=False)
+    artistid = Column('artistid', Integer, ForeignKey('artists.id'))
     mbid = Column(Unicode)
     albumArtURL = Column(Unicode)
     added = Column(DateTime, nullable=False)
 
-    def __init__(self, name, mbid, albumArtURL, added):
+    def __init__(self, name, artist, mbid, albumArtURL, added):
         self.name = name
+        self.artist = artist
         self.mbid = mbid
         self.albumArtURL = albumArtURL
         self.added = added

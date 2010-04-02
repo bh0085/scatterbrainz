@@ -47,7 +47,10 @@ def getArtistRelations(id):
 
 def searchRelease(artistName, albumName):
     q = ws.Query()
-    filter = ws.ReleaseFilter(artistName=artistName, title=albumName)
+    if artistName:
+        filter = ws.ReleaseFilter(title=albumName, artistName=artistName)
+    else:
+        filter = ws.ReleaseFilter(query=albumName)
     results = q.getReleases(filter)
     if results:
         return results[0].getRelease()

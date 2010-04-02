@@ -21,6 +21,7 @@ from scatterbrainz.model.artist import Artist
 from scatterbrainz.model.rdf import RDFTriple
 Artist.tracks = orm.relation(Track, backref='artist')
 Album.tracks = orm.relation(Track, backref='album')
+Album.artist = orm.relation(Artist, backref='albums')
 
 #RDF Triple relations
 Album.triples = orm.relation(RDFTriple, backref='album')

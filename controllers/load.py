@@ -37,7 +37,15 @@ class LoadController(BaseController):
         commitbuffer = []
         albums = {}
         artists = {}
+        
+        variousArtists = Artist(name='Various Artists',
+                                mbid='89ad4ac3-39f7-470e-963a-56509c546377',
+                                added=now)
+        artists['Various Artists'] = variousArtists
+        Session.save(variousArtists)
+        
         for dirname, dirnames, filenames in os.walk('scatterbrainz/public/.music/'):
+            localAlbums = {}
             for filename in filenames:
                 try:
                     numFilesSeen = numFilesSeen + 1
@@ -79,9 +87,9 @@ class LoadController(BaseController):
                     # should probably switch from easyID3 to ordinary ID3
                     # class to get extra MB relationship data.
                     
-                    mbartistid = getid3prop(mutagen,'musicbrainz_albumartistid')
-                    mbalbumid = getid3prop(mutagen,'musicbrainz_albumid')
-                    mbtrackid = getid3prop(mutagen,'musicbrainz_trackid')
+                    #mbartistid = getid3prop(mutagen,'musicbrainz_albumartistid')
+                    #mbalbumid = getid3prop(mutagen,'musicbrainz_albumid')
+                    #mbtrackid = getid3prop(mutagen,'musicbrainz_trackid')
 
                     if not id3artist:
                         artist = None
@@ -89,22 +97,26 @@ class LoadController(BaseController):
                         artist = artists[id3artist]
                     else:
                         artist = Artist(name=id3artist,
-                                        mbid=mbartistid,
+                                        mbid=None,
                                         added=now)
                         Session.save(artist)
                         artists[id3artist] = artist
                     
                     if not id3album:
                         album = None
-                    elif id3album in albums:
-                        album = albums[id3album]
+                    elif id3album in localAlbums:
+                        album = localAlbums[id3album]
+                        if artist != album.artist:
+                            album.artist = variousArtists
                     else:
                         album = Album(name=id3album,
-                                      mbid=mbalbumid,
+                                      artist=artist,
+                                      mbid=None,
                                       albumArtURL=None,
                                       added=now)
                         Session.save(album)
                         albums[id3album] = album
+                        localAlbums[id3album] = album
                     
                     track = Track(artist=artist,
                                   album=album,
@@ -123,7 +135,7 @@ class LoadController(BaseController):
                                   id3genre=id3genre,
                                   id3lyricist=id3lyricist,
                                   added=now,
-                                  mbid=mbtrackid,
+                                  mbid=None,
                                   )
                     
                     Session.save(track)
@@ -136,8 +148,6 @@ class LoadController(BaseController):
                                    album=album)
                     
                     Session.save(triple)
-
-                    
                 
                 except Exception as e:
                     numBadFiles = numBadFiles + 1
@@ -146,9 +156,10 @@ class LoadController(BaseController):
             if done:
                 break
         Session.commit()
+        otherNow = datetime.now()
 
         return """Saw %(numFilesSeen)d tracks, %(numArtists)d artists and %(numAlbums)d albums.
-                  %(numBadFiles)d failed, %(numSketchy)d sketchy.""" \
+                  %(numBadFiles)d failed, %(numSketchy)d sketchy.  Loaded in %(time)s""" \
                % {'numFilesSeen':numFilesSeen, 'numBadFiles':numBadFiles,
                   'numArtists': len(artists), 'numAlbums': len(albums),
-                  'numSketchy' : numSketchy}
+                  'numSketchy' : numSketchy, 'time' : str(otherNow - now)}
