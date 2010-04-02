@@ -108,7 +108,7 @@ class HelloController(BaseController):
                 artistJSON = artist.toTreeJSON()
                 artistIdToJSON[artist.id] = artistJSON
         for album in albums:
-            if album.artist.id not in artistIdToJSON:
+            if album.artist and album.artist.id not in artistIdToJSON:
                 artistJSON = album.artist.toTreeJSON(children=[])
                 artistIdToJSON[album.artist.id] = artistJSON
                 albumJSON = album.toTreeJSON()
@@ -116,12 +116,14 @@ class HelloController(BaseController):
             else:
                 continue
         for track in tracks:
-            if track.album.artist.id not in artistIdToJSON:
+            if track.album and \
+               track.album.artist and \
+               track.album.artist.id not in artistIdToJSON:
                 artistJSON = track.album.artist.toTreeJSON(children=[])
                 artistIdToJSON[track.album.artist.id] = artistJSON
             else:
                 continue
-            if track.album.id not in albumsIdToJSON:
+            if track.album and track.album.id not in albumsIdToJSON:
                 albumJSON = track.album.toTreeJSON(children=[])
                 artistJSON['children'].append(albumJSON)
                 albumsIdToJSON[track.album.id] = albumJSON
@@ -140,34 +142,41 @@ class HelloController(BaseController):
         else:
             return cmp(a['data'], b['data'])
     
-    def albumArtAJAX(self):
+    def getPlayingTrackInfoAJAX(self):
         trackid = request.params['trackid'].split('_')[1]
         track = Session.query(Track).filter_by(id=trackid).one()
-        
         albumArtURL = None
-        release = None
-        album = track.album     
-        artist = track.album.artist
-        if album.albumArtURL:
-            albumArtURL = album.albumArtURL
-        elif album.mbid:
-            release = getRelease(album.mbid)
-        else:
-            if track.album.artist.name == 'Various Artists':
-                release = searchRelease(None, track.album.name)
+        (artistName, albumName, trackName) = (track.id3artist, track.id3album, track.id3title)
+        if track.album and track.album and track.album.artist:
+            album = track.album
+            artist = album.artist
+            release = None
+            if album.albumArtURL:
+                albumArtURL = album.albumArtURL
+            elif album.mbid:
+                release = getRelease(album.mbid)
             else:
-                release = searchRelease(track.album.artist.name, track.album.name)
-            if release and not album.mbid:
-                album.mbid = release.id.split('/')[-1]
-            if release and not artist.mbid:
-                artist.mbid = release.artist.id.split('/')[-1]
-        if release and not albumArtURL:
-            asin = release.getAsin()
-            if asin:
-                albumArtURL = 'http://ecx.images-amazon.com/images/P/%s.jpg' % (asin)
-                track.album.albumArtURL = albumArtURL
-        Session.commit()
+                if artist.name == 'Various Artists':
+                    release = searchRelease(None, album.name)
+                else:
+                    release = searchRelease(artist.name, album.name)
+                if release and not album.mbid:
+                    album.mbid = release.id.split('/')[-1]
+                if release and not artist.mbid:
+                    artist.mbid = release.artist.id.split('/')[-1]
+            if release:
+                artistName = release.artist.name
+                albumName = release.title
+                if not albumArtURL:
+                    asin = release.getAsin()
+                    if asin:
+                        albumArtURL = 'http://ecx.images-amazon.com/images/P/%s.jpg' % (asin)
+                        album.albumArtURL = albumArtURL
+            Session.commit()
         json = {}
         if albumArtURL:
             json['albumArtURL'] = albumArtURL
+        json['artist'] = artistName
+        json['album'] = albumName
+        json['track'] = trackName
         return simplejson.dumps(json)

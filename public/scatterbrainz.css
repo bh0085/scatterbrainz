@@ -1,5 +1,8 @@
 body {
     overflow: hidden;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 
 .playing {
@@ -75,16 +78,6 @@ tbody tr:nth-child(odd) {
 
 tbody tr:hover {
     background-color: #DDEEFF;
-}
-
-body {
-   -moz-user-select: none;
-   -khtml-user-select: none;
-   user-select: none;
-}
-
-.playlistHead {
-    
 }
 
 .placeholder {

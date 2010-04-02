@@ -17,9 +17,9 @@
 <body>
 
 <div id="search">
-    <span id="ditchSearch" style="text-align: center; border: 1px solid grey; padding: 1px 2px;">X</span>
+    <span id="ditchSearch" style="cursor: pointer; text-align: center; border: 1px solid grey; padding: 1px 2px;">X</span>
     <input type="text" id="searchInput">
-    <span id="goSearch" style="text-align: center; border: 1px solid grey; padding: 0px 5px;">Go</span>
+    <span id="goSearch" style="cursor: pointer; text-align: center; border: 1px solid grey; padding: 0px 5px;">Go</span>
 </div>
 
 <div id="browseContainer" class="expandHeightToFitBrowser" expandHeightOffsetPx="10">
@@ -80,6 +80,17 @@
             <div id="jplayer_total_time" class="jp-total-time"></div>
             <div id="albumArtContainer">
                 <img id="albumArt" src="/icons/vinyl.png" />
+            </div>
+            <div style="font-size:18px;">
+                <div style="margin: 30px;">Artist:
+                    <span id="playingArtist" style="font-weight: bold;"></span>
+                </div>
+                <div style="margin: 30px;">Album:
+                    <span id="playingAlbum" style="font-weight: bold;"></span>
+                </div>
+                <div style="margin: 30px;">Track:
+                    <span id="playingTrack" style="font-weight: bold;"></span>
+                </div>
             </div>
         </div>
     </div>

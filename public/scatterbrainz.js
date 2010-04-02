@@ -390,7 +390,7 @@ function playRow(row) {
     row.addClass('playing');
     setDocumentTitle($('.artist', row).text() + ' - ' +
                      $('.title', row).text());
-    grabAlbumArt(row.attr('id'));
+    populatePlayingTrackInfo(row.attr('id'));
 }
 
 function setDocumentTitle(title) {
@@ -435,17 +435,19 @@ function playListNext() {
     playlistNextPrev(true);
 }
 
-function grabAlbumArt(trackid) {
+function populatePlayingTrackInfo(trackid) {
     $.getJSON(
-        '/hello/albumArtAJAX',
+        '/hello/getPlayingTrackInfoAJAX',
         {'trackid': trackid},
         function(data) {
             if ('albumArtURL' in data) {
                 $('#albumArt').attr('src', data['albumArtURL']);
-                $('#albumArtContainer').show();
             } else {
-                $('#albumArtContainer').hide();
+                $('#albumArt').attr('src', '/icons/vinyl.png');
             }
+            $('#playingArtist').html(data['artist']);
+            $('#playingAlbum').html(data['album']);
+            $('#playingTrack').html(data['track']);
         }
     );
 }
