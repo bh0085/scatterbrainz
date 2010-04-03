@@ -1,5 +1,6 @@
 body {
-    font-family:Verdana, Arial, sans-serif;
+    font-family: sans-serif;
+    font-size: 0.9em;
 }
 
 div.jp-playlist-player {
@@ -9,10 +10,10 @@ div.jp-playlist-player {
 
 div.jp-interface {
     position: relative;
-    background-color:#eee;
-    margin-right: 15px;
+    background-color: #EEF4FF;
     height:252px;
-    border:1px solid #009be3;
+    border:3px solid #B0CDFF;
+    border-left: 0px none;
 }
 
 div.jp-interface  ul.jp-controls {

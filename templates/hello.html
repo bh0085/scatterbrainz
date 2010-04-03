@@ -8,6 +8,7 @@
 <script type="text/javascript" src="/scatterbrainz.js"></script>
 <script type="text/javascript" src="/jquery.tree.js"></script>
 <script type="text/javascript" src="/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/splitter.js"></script>
 <script type="text/javascript" src="/jsTreePlugins/jquery.tree.hotkeys.js"></script>
 <link rel="stylesheet" type="text/css" href="/jplayer.blue.monday.css" />
 <link rel="stylesheet" type="text/css" href="/scatterbrainz.css" />
@@ -16,84 +17,95 @@
 
 <body>
 
-<div id="search">
-    <span id="ditchSearch" style="cursor: pointer; text-align: center; border: 1px solid grey; padding: 1px 2px;">X</span>
-    <input type="text" id="searchInput">
-    <span id="goSearch" style="cursor: pointer; text-align: center; border: 1px solid grey; padding: 0px 5px;">Go</span>
-</div>
-
-<div id="browseContainer" class="expandHeightToFitBrowser" expandHeightOffsetPx="10">
-    <div id="browser" class="noBrowserFocusIndicator" tabindex="100"></div>
-    <div id="searchBrowser" class="noBrowserFocusIndicator" tabindex="101"></div>
-</div>
-
-<div id="jquery_jplayer"></div>
-    <div class="jp-playlist-player">
-        <div class="playlistHeadDiv noBrowserFocusIndicator">
-            <table id="playlistHeadTable" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
-                <thead class="playlistHead">
-                    <tr class="playlistHeadRow">
-                        <th class='artist'>Artist</th>
-                        <th class='title'>Title</th>
-                        <th class='album'>Album</th>
-                        <th class='tracknum'>Track</th>
-                        <th class='length'>Length</th>
-                        <th class='bitrate'>Bitrate</th>
-                    </tr>
-                </thead>
-            </table>
+<div id="leftPane">
+    <div id="search">
+        <div id="ditchSearchContainer">
+            <button id="ditchSearch">Clear search</button>
         </div>
-        <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="262" tabindex="102">
-            <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
-                <thead class="playlistHead">
-                    <tr class="playlistHeadRow">
-                        <th class='artist'></th>
-                        <th class='title'></th>
-                        <th class='album'></th>
-                        <th class='tracknum'></th>
-                        <th class='length'></th>
-                        <th class='bitrate'></th>
-                    </tr>
-                </thead>
-                <tbody id="playlistbody"></tbody>
-            </table>
+        <input type="text" id="searchInput">
+        <div id="goSearchContainer">
+            <button id="goSearch">Search</button>
         </div>
-        <div class="jp-interface">
-            <ul class="jp-controls"> 
-                <li id="jplayer_play" class="jp-play">play</li> 
-                <li id="jplayer_pause" class="jp-pause">pause</li> 
-                <li id="jplayer_stop" class="jp-stop">stop</li> 
-                <li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
-                <li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
-                <li id="jplayer_previous" class="jp-previous">previous</li> 
-                <li id="jplayer_next" class="jp-next">next</li> 
-            </ul> 
-            <div class="jp-progress"> 
-                <div id="jplayer_load_bar" class="jp-load-bar"> 
-                    <div id="jplayer_play_bar" class="jp-play-bar"></div> 
-                </div> 
+    </div>
+    
+    <div id="browseContainer" class="expandHeightToFitBrowser" expandHeightOffsetPx="10">
+        <div id="browser" class="noBrowserFocusIndicator" tabindex="100"></div>
+        <div id="searchBrowser" class="noBrowserFocusIndicator" tabindex="101"></div>
+    </div>
+</div>
+<div class="jp-playlist-player">
+    <div id="jquery_jplayer"></div>
+    <div id="playlistURcorner"></div>
+    <div class="playlistHeadDiv noBrowserFocusIndicator">
+        <table id="playlistHeadTable" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+            <thead class="playlistHead">
+                <tr class="playlistHeadRow">
+                    <th class='artist'>Artist</th>
+                    <th class='title'>Title</th>
+                    <th class='album'>Album</th>
+                    <th class='tracknum'>Track</th>
+                    <th class='length'>Length</th>
+                    <th class='bitrate'>Bitrate</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="rightPane">
+    <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="262" tabindex="102">
+        <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+            <thead class="playlistHead">
+                <tr class="playlistHeadRow">
+                    <th class='artist'></th>
+                    <th class='title'></th>
+                    <th class='album'></th>
+                    <th class='tracknum'></th>
+                    <th class='length'></th>
+                    <th class='bitrate'></th>
+                </tr>
+            </thead>
+            <tbody id="playlistbody"></tbody>
+        </table>
+    </div>
+    <div class="jp-interface">
+        <ul class="jp-controls"> 
+            <li id="jplayer_play" class="jp-play">play</li> 
+            <li id="jplayer_pause" class="jp-pause">pause</li> 
+            <li id="jplayer_stop" class="jp-stop">stop</li> 
+            <li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
+            <li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
+            <li id="jplayer_previous" class="jp-previous">previous</li> 
+            <li id="jplayer_next" class="jp-next">next</li> 
+        </ul> 
+        <div class="jp-progress"> 
+            <div id="jplayer_load_bar" class="jp-load-bar"> 
+                <div id="jplayer_play_bar" class="jp-play-bar"></div> 
             </div> 
-            <div id="jplayer_volume_bar" class="jp-volume-bar"> 
-                <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
-            </div> 
-            <div id="jplayer_play_time" class="jp-play-time"></div> 
-            <div id="jplayer_total_time" class="jp-total-time"></div>
-            <div id="albumArtContainer">
-                <img id="albumArt" src="/icons/vinyl.png" />
+        </div> 
+        <div id="jplayer_volume_bar" class="jp-volume-bar"> 
+            <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
+        </div> 
+        <div id="jplayer_play_time" class="jp-play-time"></div> 
+        <div id="jplayer_total_time" class="jp-total-time"></div>
+        <div id="albumArtContainer">
+            <img id="albumArt" src="/icons/vinyl.png" />
+        </div>
+        <div style="font-size:18px;">
+            <div style="margin: 30px;">Artist:
+                <span id="playingArtist" style="font-weight: bold;"></span>
             </div>
-            <div style="font-size:18px;">
-                <div style="margin: 30px;">Artist:
-                    <span id="playingArtist" style="font-weight: bold;"></span>
-                </div>
-                <div style="margin: 30px;">Album:
-                    <span id="playingAlbum" style="font-weight: bold;"></span>
-                </div>
-                <div style="margin: 30px;">Track:
-                    <span id="playingTrack" style="font-weight: bold;"></span>
-                </div>
+            <div style="margin: 30px;">Album:
+                <span id="playingAlbum" style="font-weight: bold;"></span>
+            </div>
+            <div style="margin: 30px;">Track:
+                <span id="playingTrack" style="font-weight: bold;"></span>
             </div>
         </div>
     </div>
+    </div>
+</div>
+
+<!-- leave this div for splitbar so it doesn't interfere w/ jstree-marker -->
+<div></div>
 
 </body>
 </html>

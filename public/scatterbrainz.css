@@ -1,3 +1,5 @@
+/* colors: http://colorschemedesigner.com/#3H51HaY--8HSM */
+
 body {
     overflow: hidden;
     -moz-user-select: none;
@@ -5,15 +7,13 @@ body {
     user-select: none;
 }
 
-.playing {
-    background-color: #0099FF !important;
-    font-weight: bold;
-    font-style: italic;
+.selected {
+    background-color: #D2E3FF !important;
 }
 
-.selected {
-    color: black;
-    background-color: #BEEBFF !important;
+.playing {
+    font-weight: bold;
+    background-color: #A9C2EE !important;
 }
 
 tr td:first-child {
@@ -43,6 +43,15 @@ tr td:last-child {
 .jp-playlist {
     overflow-x: hidden;
     overflow-y: scroll;
+    border-right: 3px solid #B0CDFF;
+}
+
+#playlistURcorner {
+    float: right;
+    width: 18px;
+    height: 20px;
+    background-color: #B0CDFF;
+    border-top-right-radius: 10px;
 }
 
 #jquery_jplayer {
@@ -50,12 +59,16 @@ tr td:last-child {
 }
 
 .playlistHeadDiv {
-    margin-right: 15px;
+    margin-right: 18px;
 }
 
 .playlistTable {
     table-layout: fixed;
     width: 100%;
+}
+
+thead {
+    background-color: #B0CDFF;
 }
 
 th, td {
@@ -73,11 +86,11 @@ tr * {
 }
 
 tbody tr:nth-child(odd) {
-    background-color: #EEEEEE;
+    background-color: #EEF4FF;
 }
 
 tbody tr:hover {
-    background-color: #DDEEFF;
+    background-color: #D2E3FF;
 }
 
 .placeholder {
@@ -96,23 +109,60 @@ td.tracknum, td.bitrate, td.length {
     text-align: center;
 }
 
-div#browseContainer {
+div#leftPane {
     width: 330px;
-    height: 700px;
+}
+
+div#browseContainer {
+    width: 100%;
     position: absolute;
     overflow-y: auto;
     overflow-x: hidden;
     left: 0px;
     top: 35px;
+    border: 3px solid #B0CDFF;
+    border-right: 0px none;
 }
 
 div#search {
-    position: absolute;
-    width: 330px;
+    height: 100%;
+    width: 100%;
+    border-left: 3px solid #B0CDFF;
+    border-top: 3px solid #B0CDFF;
+    border-top-left-radius: 20px;
+}
+
+div#ditchSearchContainer {
+    float: left;
+    width: 10%;
+}
+
+button#ditchSearch {
+    height:20px;
+    width: 20px;
+    position: relative;
+    top: 5px;
+    left: 7px;
+}
+
+div#goSearchContainer {
+    float: left;
+    width: 10%;
+}
+
+button#goSearch {
+    height:20px;
+    width: 20px;
+    position: relative;
+    top: 5px;
+    left: 6px;
 }
 
 input#searchInput {
-    width: 250px;
+    float: left;
+    width: 80%;
+    position: relative;
+    top: 2px;
 }
 
 div#searchBrowser {
@@ -132,7 +182,7 @@ div#albumArtContainer {
     padding: 1px;
 }
 
-div#albumArtContainer:hover {
+div#albumArtContainer:hover, div#albumArtContainer.expand {
     height: auto;
     width: auto;
 }
@@ -140,4 +190,23 @@ div#albumArtContainer:hover {
 img#albumArt {
     width: inherit;
     height: inherit;
+}
+
+.vsplitbar {
+    padding-bottom: 1px;
+    margin-left: 3px;
+    margin-right: 10px;
+    width: 3px;
+    background: #B0CDFF;
+}
+
+.hsplitbar {
+    background-color: pink;
+    height: 10px;
+    width: 50%;
+}
+
+.ui-state-hover {
+    border: 1px solid #FBD850 !important;
+    background-color: #EB8F00 !important;
 }

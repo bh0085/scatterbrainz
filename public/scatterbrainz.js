@@ -57,7 +57,7 @@ $(document).ready(function(){
             },
             'Artist': {
                 icon: {
-                    image: '/icons/person4small.gif'
+                    image: '/icons/artist.gif'
                 }
             },
             'Album': {
@@ -146,7 +146,14 @@ $(document).ready(function(){
     });
 
     $('.jp-playlist').bind('keydown', 'del', function() {
+        var next = $('.selected:last').next('tr');
+        var prev = $('.selected:first').prev('tr');
         $('.selected').remove();
+        if (next.length) {
+            next.addClass('selected').addClass('lastSelected');
+        } else if (prev.length) {
+            prev.addClass('selected').addClass('lastSelected');
+        }
         return false;
     });
 
@@ -205,13 +212,38 @@ $(document).ready(function(){
         }
     });
 
-    $('#ditchSearch').click(ditchSearch);
+    $('#ditchSearch').click(ditchSearch)
+                     .button({
+                        icons: {
+                            primary: 'ui-icon-circle-close'
+                        },
+                        text: false
+                     });
 
-    $('#goSearch').click(searchHandler);
+    $('#goSearch').click(searchHandler)
+                     .button({
+                        icons: {
+                            primary: 'ui-icon-circle-triangle-e'
+                        },
+                        text: false
+                     });
 
     $(window).resize(windowResize);
+    
+    $('#albumArtContainer').click(function() {
+        $(this).toggleClass('expand');
+    });
 
     setTimeout(function() {
+        $("body").splitter({
+            'sizeLeft' : true,
+            'cursor'   : 'col-resize',
+            'resizeToWidth' : true
+        });
+        //$('#rightPane').splitter({
+        //    'sizeTop' : true,
+        //    'splitHorizontal': true
+        //});
         $(window).resize();
     }, 100);
     
