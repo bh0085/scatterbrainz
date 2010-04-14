@@ -240,13 +240,8 @@ $(document).ready(function(){
             'cursor'   : 'col-resize',
             'resizeToWidth' : true
         });
-        //$('#rightPane').splitter({
-        //    'sizeTop' : true,
-        //    'splitHorizontal': true
-        //});
         $(window).resize();
     }, 100);
-    
 });
 
 function windowResize(target) {
@@ -256,10 +251,6 @@ function windowResize(target) {
     for (var i=0; i<elements.length; i++) {
         expandHeightToFitBrowser($(elements[i]));
     }
-    //var elements = $(".expandWidthToFitBrowser");
-    //for (var i=0; i<elements.length; i++) {
-        //expandWidthToFitBrowser($(elements[i]));
-    //}
 }
 
 function expandHeightToFitBrowser(element) {
