@@ -98,7 +98,7 @@ $(document).ready(function(){
 
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
-            $('.song').live('dblclick',play);
+            $('.song').live('dblclick', play);
         }
     });
     var jpPlayTime = $("#jplayer_play_time");
@@ -233,6 +233,8 @@ $(document).ready(function(){
     $('#albumArtContainer').click(function() {
         $(this).toggleClass('expand');
     });
+    
+    $("#playMode").buttonset();
 
     setTimeout(function() {
         $("body").splitter({
@@ -261,6 +263,10 @@ function expandHeightToFitBrowser(element) {
 }
 
 function scrollTo(e, c) {
+
+    if (!e) {
+        return;
+    }
 
     var eTop = e.offset().top;
     var eBottom = eTop + e.height();
@@ -292,29 +298,31 @@ function addToPlaylist(id, target) {
     $.getJSON(
         '/hello/getTracksAJAX',
         {'id': id},
-        function(data) {
-            var insertText = '';
-            $.each(data, function(count, trackJSON) {
-                insertText += '<tr id="track_'+trackJSON['id']+'" class="song" href="'
-                                                              +trackJSON['filepath']+'">'
-                    + '<td class="artist">'+trackJSON['artist']+'</td>'
-                    + '<td class="title">'+trackJSON['title']+'</td>'
-                    + '<td class="album">'+trackJSON['album']+'</td>'
-                    + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
-                    + '<td class="length">'+trackJSON['length']+'</td>'
-                    + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
-                + '</tr>';
-            });
-            var dropTarget = $(document).data('playlistDropTarget');
-            if (dropTarget && dropTarget.tagName == 'TD') {
-                $(dropTarget).parent().after(insertText);
-            } else {
-                $("#playlistbody").append(insertText);
-            }
-            $('#playlist thead th').unbind('click');
-            $('#playlist').tablesorter();
-        }
+        addToPlaylistCallback
     );
+}
+
+function addToPlaylistCallback(data) {
+    var insertText = '';
+    $.each(data, function(count, trackJSON) {
+        insertText += '<tr id="track_'+trackJSON['id']+'" class="song" href="'
+                                                      +trackJSON['filepath']+'">'
+            + '<td class="artist">'+trackJSON['artist']+'</td>'
+            + '<td class="title">'+trackJSON['title']+'</td>'
+            + '<td class="album">'+trackJSON['album']+'</td>'
+            + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
+            + '<td class="length">'+trackJSON['length']+'</td>'
+            + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
+        + '</tr>';
+    });
+    var dropTarget = $(document).data('playlistDropTarget');
+    if (dropTarget && dropTarget.tagName == 'TD') {
+        $(dropTarget).parent().after(insertText);
+    } else {
+        $("#playlistbody").append(insertText);
+    }
+    $('#playlist thead th').unbind('click');
+    $('#playlist').tablesorter();
 }
 
 function searchHandler() {
@@ -432,19 +440,22 @@ function playlistNextPrev(next) {
     var playing = $('.playing');
     if (playing) {
         playing.removeClass('playing');
+        stop();
         if (next) {
             if (playing.next().hasClass('song')) {
                 playing.next().addClass('playing');
                 playRow(playing.next());
-            } else {
-                stop();
+            } else if ($('#playlistRepeat').attr('checked')) {
+                $('.song:first').dblclick();
+            } else if ($('#playlistRandomTrack').attr('checked')) {
+                nextRandomTrack();
+            } else if ($('#playlistRandomAlbum').attr('checked')) {
+                nextRandomAlbum();
             }
         } else {
             if (playing.prev().hasClass('song')) {
                 playing.prev().addClass('playing');
                 playRow(playing.prev());
-            } else {
-                stop();
             }
         }
     }
@@ -456,6 +467,29 @@ function playListPrev() {
 
 function playListNext() {
     playlistNextPrev(true);
+}
+
+function nextRandomTrack() {
+    $.getJSON(
+        '/hello/randomTrackAJAX',
+        {},
+        playRandomCallback
+    );
+}
+
+function nextRandomAlbum() {
+    $.getJSON(
+        '/hello/randomAlbumAJAX',
+        {},
+        playRandomCallback
+    );
+}
+
+function playRandomCallback(data) {
+    var last = $('.song:last');
+    $(document).data('playlistDropTarget', null);
+    addToPlaylistCallback(data);
+    last.next('.song').dblclick();
 }
 
 function populatePlayingTrackInfo(trackid) {

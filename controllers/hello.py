@@ -5,6 +5,7 @@ import logging
 
 import simplejson
 
+from sqlalchemy.sql.functions import random
 from sqlalchemy.orm import contains_eager
 
 from pylons import request, response, session, tmpl_context as c
@@ -67,7 +68,18 @@ class HelloController(BaseController):
             return self._tracksForAlbumPlaylistJSON(id)
         else:
             raise Exception('bad type '+type)
-
+    
+    def randomTrackAJAX(self):
+        track = Session.query(Track).order_by(random())[0]
+        return simplejson.dumps([track.toPlaylistJSON()])
+    
+    def randomAlbumAJAX(self):
+        album = Session.query(Album).order_by(random())[0]
+        tracks = Session.query(Track) \
+                        .filter_by(albumid=album.id)
+        json = map(lambda x: x.toPlaylistJSON(), tracks)
+        return simplejson.dumps(json)
+    
     def _trackPlaylistJSON(self, trackid):
         tracks = Session.query(Track).filter_by(id=trackid)
         return self._playlistJSON(tracks)

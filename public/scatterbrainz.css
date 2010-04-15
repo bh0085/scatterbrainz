@@ -182,6 +182,7 @@ div#albumArtContainer {
     height: 250px;
     width: 250px;
     padding: 1px;
+    z-index: 500;
 }
 
 div#albumArtContainer:hover, div#albumArtContainer.expand {
@@ -211,4 +212,11 @@ img#albumArt {
 .ui-state-hover {
     border: 1px solid #FBD850 !important;
     background-color: #EB8F00 !important;
+}
+
+#playMode {
+    position: absolute;
+    right: 325px;
+    top: 30px;
+    font-size: 0.9em;
 }

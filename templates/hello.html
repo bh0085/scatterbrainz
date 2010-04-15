@@ -51,56 +51,62 @@
         </table>
     </div>
     <div id="rightPane">
-    <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="262" tabindex="102">
-        <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
-            <thead class="playlistHead">
-                <tr class="playlistHeadRow">
-                    <th class='artist'></th>
-                    <th class='title'></th>
-                    <th class='album'></th>
-                    <th class='tracknum'></th>
-                    <th class='length'></th>
-                    <th class='bitrate'></th>
-                </tr>
-            </thead>
-            <tbody id="playlistbody"></tbody>
-        </table>
-    </div>
-    <div class="jp-interface">
-        <ul class="jp-controls"> 
-            <li id="jplayer_play" class="jp-play">play</li> 
-            <li id="jplayer_pause" class="jp-pause">pause</li> 
-            <li id="jplayer_stop" class="jp-stop">stop</li> 
-            <li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
-            <li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
-            <li id="jplayer_previous" class="jp-previous">previous</li> 
-            <li id="jplayer_next" class="jp-next">next</li> 
-        </ul> 
-        <div class="jp-progress"> 
-            <div id="jplayer_load_bar" class="jp-load-bar"> 
-                <div id="jplayer_play_bar" class="jp-play-bar"></div> 
+        <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="262" tabindex="102">
+            <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
+                <thead class="playlistHead">
+                    <tr class="playlistHeadRow">
+                        <th class='artist'></th>
+                        <th class='title'></th>
+                        <th class='album'></th>
+                        <th class='tracknum'></th>
+                        <th class='length'></th>
+                        <th class='bitrate'></th>
+                    </tr>
+                </thead>
+                <tbody id="playlistbody"></tbody>
+            </table>
+        </div>
+        <div class="jp-interface">
+            <ul class="jp-controls"> 
+                <li id="jplayer_play" class="jp-play">play</li> 
+                <li id="jplayer_pause" class="jp-pause">pause</li> 
+                <li id="jplayer_stop" class="jp-stop">stop</li> 
+                <li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
+                <li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
+                <li id="jplayer_previous" class="jp-previous">previous</li> 
+                <li id="jplayer_next" class="jp-next">next</li> 
+            </ul> 
+            <div class="jp-progress"> 
+                <div id="jplayer_load_bar" class="jp-load-bar"> 
+                    <div id="jplayer_play_bar" class="jp-play-bar"></div> 
+                </div> 
             </div> 
-        </div> 
-        <div id="jplayer_volume_bar" class="jp-volume-bar"> 
-            <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
-        </div> 
-        <div id="jplayer_play_time" class="jp-play-time"></div> 
-        <div id="jplayer_total_time" class="jp-total-time"></div>
-        <div id="albumArtContainer">
-            <img id="albumArt" src="/icons/vinyl.png" />
+            <div id="jplayer_volume_bar" class="jp-volume-bar"> 
+                <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
+            </div> 
+            <div id="jplayer_play_time" class="jp-play-time"></div> 
+            <div id="jplayer_total_time" class="jp-total-time"></div>
+            <div id="albumArtContainer">
+                <img id="albumArt" src="/icons/vinyl.png" />
+            </div>
+            <div>
+                <div style="margin: 32px;">Artist:
+                    <span id="playingArtist" style="font-weight: bold;"></span>
+                </div>
+                <div style="margin: 32px;">Album:
+                    <span id="playingAlbum" style="font-weight: bold;"></span>
+                </div>
+                <div style="margin: 32px;">Track:
+                    <span id="playingTrack" style="font-weight: bold;"></span>
+                </div>
+            </div>
+            <div id="playMode">
+                <input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">Nothing</label>
+                <br><input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">Repeat playlist</label>
+                <br><input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">Random track</label>
+                <br><input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">Random album</label>
+            </div>
         </div>
-        <div style="font-size:18px;">
-            <div style="margin: 30px;">Artist:
-                <span id="playingArtist" style="font-weight: bold;"></span>
-            </div>
-            <div style="margin: 30px;">Album:
-                <span id="playingAlbum" style="font-weight: bold;"></span>
-            </div>
-            <div style="margin: 30px;">Track:
-                <span id="playingTrack" style="font-weight: bold;"></span>
-            </div>
-        </div>
-    </div>
     </div>
 </div>
 
