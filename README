@@ -2,7 +2,7 @@ This is a web-based streaming music player that plays mp3s in-browser using HTML
 
 Features
 * Catalogs a directory of mp3s and tags
-* Tree browser to 
+* Tree browser to queue artists/albums/tracks
 * Plays mp3s in your html5 compliant browser
 * Looks up currently playing tracks in musicbrainz and displays amazon album art.
 
