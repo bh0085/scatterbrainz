@@ -279,7 +279,6 @@
 
 			var eventsForHtmlAudio = {
 				setFile: function(e, mp3, ogg) {
-					self.config.audio = new Audio();
 					self.config.audio.id = self.config.aid;
 					self.config.aSel.replaceWith(self.config.audio);
 					self.config.aSel = $("#"+self.config.aid);
@@ -306,6 +305,7 @@
 					if(self.config.isFileSet) {
 						if(self.config.isWaitingForPlay) {
 							self.config.audio.src = self.config.diag.src;
+							self.config.audio.load();
 						}
 						self.config.audio.play();
 						element.trigger("jPlayer.setButtons", true);
@@ -327,8 +327,6 @@
 						try {
 							self.config.audio.currentTime = 0;
 							element.trigger("jPlayer.pause");
-							self.config.audio.src = '';
-							self.config.audio.load();
 							clearInterval(self.config.jPlayerControllerId);
 							self.config.jPlayerControllerId = window.setInterval( function() {
 								self.jPlayerController(true); // With override true

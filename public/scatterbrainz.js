@@ -416,7 +416,6 @@ String.prototype.trim = function() {
 
 function playRow(row) {
     $('.playing').removeClass('playing');
-    stop();
     $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
         .jPlayer("play");
     row.addClass('playing');
@@ -441,7 +440,6 @@ function playlistNextPrev(next) {
     var playing = $('.playing');
     if (playing) {
         playing.removeClass('playing');
-        stop();
         if (next) {
             if (playing.next().hasClass('song')) {
                 playing.next().addClass('playing');
