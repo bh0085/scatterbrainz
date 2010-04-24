@@ -97,7 +97,6 @@ class GetlocalController(BaseController):
         return sjson.dumps(out)
 
     def trackRelationsMB(self):
-        print "WHATTHSODIHJG"
         trackid=request.params['trackid']
         mbid=Session.query(Track).filter_by(id=trackid)[0].mbtrackid
         artist_mbid=Session.query(Track).filter_by(id=trackid)[0].mbartistid
@@ -131,7 +130,6 @@ class GetlocalController(BaseController):
             album_relations.append(json);
         out['album_relations'] =album_relations
 
-        print out
         return sjson.dumps(out);
 
     def track_URL_from_id(self,id):
