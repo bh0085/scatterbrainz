@@ -199,7 +199,7 @@
 			// Custom events bubble in jQuery 1.3; don't Yo Dawg
 			if ( e.target != this ) return;
 			// Determine new width/height of splitter container
-			splitter._DF = splitter[0][opts.pxFixed] - splitter._PBF;
+			splitter._DF = splitter[0][opts.pxFixed] - splitter._PBF - 67;
 			splitter._DA = splitter[0][opts.pxSplit] - splitter._PBA;
 			// Bail if splitter isn't visible or content isn't there yet
 			if ( splitter._DF <= 0 || splitter._DA <= 0 ) return;

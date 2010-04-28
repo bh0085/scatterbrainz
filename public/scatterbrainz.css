@@ -1,10 +1,13 @@
 /* colors: http://colorschemedesigner.com/#3H51HaY--8HSM */
 
 body {
+    font-family: sans-serif;
+    font-size: 0.9em;
     overflow: hidden;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
+    background-image: url('http://ocebackgrounds.files.wordpress.com/2008/06/picture-1.png');
 }
 
 .selected {
@@ -17,21 +20,13 @@ body {
 }
 
 tr td:first-child {
-    -moz-border-radius-bottomleft:8px;
-    -webkit-border-bottom-left-radius:8px;
     border-bottom-left-radius:8px;
-    -moz-border-radius-topleft:8px;
-    -webkit-border-top-left-radius:8px;
     border-top-left-radius:8px;
     padding-left:4px;
 }
 
 tr td:last-child {
-    -moz-border-radius-bottomright:8px;
-    -webkit-border-bottom-right-radius:8px;
     border-bottom-right-radius:8px;
-    -moz-border-radius-topright:8px;
-    -webkit-border-top-right-radius:8px;
     border-top-right-radius:8px;
     padding-right:4px;
 }
@@ -44,6 +39,7 @@ tr td:last-child {
     overflow-x: hidden;
     overflow-y: scroll;
     border-right: 3px solid #B0CDFF;
+    border-bottom: 3px solid #B0CDFF;
     margin-left: 3px;
 }
 
@@ -123,6 +119,7 @@ div#browseContainer {
     top: 35px;
     border: 3px solid #B0CDFF;
     border-right: 0px none;
+    border-bottom-left-radius: 15px;
 }
 
 div#search {
@@ -203,20 +200,104 @@ img#albumArt {
     background: #B0CDFF;
 }
 
-.hsplitbar {
-    background-color: pink;
-    height: 10px;
-    width: 50%;
-}
-
 .ui-state-hover {
     border: 1px solid #FBD850 !important;
     background-color: #EB8F00 !important;
 }
 
-#playMode {
+div#dashboard {
+    height: 55px;
     position: absolute;
-    right: 325px;
-    top: 30px;
-    font-size: 0.9em;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border: 3px solid #B0CDFF;
+    border-radius: 15px;
+}
+
+.dashboardIcon:first-child {
+    margin-left: 10px;
+}
+
+.dashboardIcon {
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+
+.dashboardMarqueeContainer {
+    width: 12%;
+    margin: 5px;
+    position: relative;
+    top: 12px;
+}
+
+.dashboardMarquee {
+    white-space: nowrap;
+    overflow: hidden;
+    overflow-x: -webkit-marquee;
+    -webkit-marquee-speed: 100;
+    -webkit-marquee-increment: small;
+    -webkit-marquee-style: alternate;
+}
+
+.transparent {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.left {
+    float: left;
+}
+
+
+/**
+ * jplayer shit
+ */
+ 
+#player_container {
+	position:relative;
+	padding:5px;
+}
+ 
+ul#icons {zoom: 1.5; margin: 0; padding: 0;}
+ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+ul#icons span.ui-icon {float: left; margin: 0 4px;}
+ /*
+ul#icons #volume-min {
+	margin:2px 140px 2px 364px;
+}*/
+ 
+#sliderVolume {
+    width: 150px;
+    height: .4em;
+    position: relative;
+    top: 14px;
+}
+
+#sliderVolume .ui-slider-handle {
+    height:.8em;
+    width:.8em;
+}
+ 
+#bars_holder {
+    width: 150px;
+    margin-left: 10px;
+    margin-top: 4px;
+}
+ 
+#sliderPlayback .ui-slider-handle {
+    height:1.6em;
+}
+ 
+#loaderBar.ui-progressbar {
+    height:.2em;
+    border:0;
+}
+
+#playMode {
+    margin-left: 10px;
+}
+
+.hidden {
+    display: none;
 }
