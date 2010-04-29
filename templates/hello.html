@@ -10,7 +10,6 @@
 <script type="text/javascript" src="/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/splitter.js"></script>
 <script type="text/javascript" src="/jsTreePlugins/jquery.tree.hotkeys.js"></script>
-<link rel="stylesheet" type="text/css" href="/jplayer.blue.monday.css" />
 <link rel="stylesheet" type="text/css" href="/scatterbrainz.css" />
 <link rel="stylesheet" type="text/css" href="/jquery-ui-1.8rc3.custom.css" />
 </head>
@@ -27,8 +26,8 @@
             <button id="goSearch">Search</button>
         </div>
     </div>
-    
-    <div id="browseContainer" class="expandHeightToFitBrowser" expandHeightOffsetPx="10">
+
+    <div id="browseContainer" class="expandHeightToFitBrowser transparent" expandHeightOffsetPx="80">
         <div id="browser" class="noBrowserFocusIndicator" tabindex="100"></div>
         <div id="searchBrowser" class="noBrowserFocusIndicator" tabindex="101"></div>
     </div>
@@ -51,7 +50,7 @@
         </table>
     </div>
     <div id="rightPane">
-        <div class="jp-playlist noBrowserFocusIndicator expandHeightToFitBrowser" expandHeightOffsetPx="262" tabindex="102">
+        <div class="jp-playlist noBrowserFocusIndicator transparent expandHeightToFitBrowser" expandHeightOffsetPx="77" tabindex="102">
             <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
                 <thead class="playlistHead">
                     <tr class="playlistHeadRow">
@@ -66,52 +65,56 @@
                 <tbody id="playlistbody"></tbody>
             </table>
         </div>
-        <div class="jp-interface">
-            <ul class="jp-controls"> 
-                <li id="jplayer_play" class="jp-play">play</li> 
-                <li id="jplayer_pause" class="jp-pause">pause</li> 
-                <li id="jplayer_stop" class="jp-stop">stop</li> 
-                <li id="jplayer_volume_min" class="jp-volume-min">min volume</li> 
-                <li id="jplayer_volume_max" class="jp-volume-max">max volume</li> 
-                <li id="jplayer_previous" class="jp-previous">previous</li> 
-                <li id="jplayer_next" class="jp-next">next</li> 
-            </ul> 
-            <div class="jp-progress"> 
-                <div id="jplayer_load_bar" class="jp-load-bar"> 
-                    <div id="jplayer_play_bar" class="jp-play-bar"></div> 
-                </div> 
-            </div> 
-            <div id="jplayer_volume_bar" class="jp-volume-bar"> 
-                <div id="jplayer_volume_bar_value" class="jp-volume-bar-value"></div> 
-            </div> 
-            <div id="jplayer_play_time" class="jp-play-time"></div> 
-            <div id="jplayer_total_time" class="jp-total-time"></div>
-            <div id="albumArtContainer">
-                <img id="albumArt" src="/icons/vinyl.png" />
-            </div>
-            <div>
-                <div style="margin: 32px;">Artist:
-                    <span id="playingArtist" style="font-weight: bold;"></span>
-                </div>
-                <div style="margin: 32px;">Album:
-                    <span id="playingAlbum" style="font-weight: bold;"></span>
-                </div>
-                <div style="margin: 32px;">Track:
-                    <span id="playingTrack" style="font-weight: bold;"></span>
-                </div>
-            </div>
-            <div id="playMode">
-                <input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">Nothing</label>
-                <br><input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">Repeat playlist</label>
-                <br><input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">Random track</label>
-                <br><input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">Random album</label>
-            </div>
-        </div>
     </div>
 </div>
 
 <!-- leave this div for splitbar so it doesn't interfere w/ jstree-marker -->
 <div></div>
+
+<div id="dashboard" class="transparent">
+
+    <img class="dashboardIcon" src="http://icons3.iconfinder.netdna-cdn.com/data/icons/blackblue/128/guitar.png" />
+
+    <div class="left dashboardMarqueeContainer">
+        <div id="playingArtist" class="left dashboardMarquee"></div>
+    </div>
+
+    <img id="albumArt" class="hidden dashboardIcon" />
+    <img id="noAlbumArt" class="dashboardIcon" src="/icons/vinyl.png" />
+    <div class="left dashboardMarqueeContainer">
+        <div id="playingAlbum" class="left dashboardMarquee"></div>
+    </div>
+
+    <img class="dashboardIcon" src="/icons/note3.png" />
+    <div class="left dashboardMarqueeContainer">
+        <div id="playingTrack" class="left dashboardMarquee"></div>
+    </div>
+
+    <div id="controlsDashboard" class="left">
+        <div id="player_container"> 
+            <ul id="icons" class="left ui-widget ui-helper-clearfix"> 
+                <li id="prev" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-seek-prev"></span></li>
+                <li id="play" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-play"></span></li> 
+                <li id="pause" class="hidden ui-state-default ui-corner-all"><span class="ui-icon ui-icon-pause"></span></li> 
+                <li id="next" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-seek-next"></span></li> 
+                <li id="volume-min" class="hidden ui-state-default ui-corner-all"><span class="ui-icon ui-icon-volume-off"></span></li> 
+                <li id="volume-max" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-volume-on"></span></li> 
+            </ul>
+            <!-- Sliders -->
+            <div id="bars_holder" class="left"> 
+                <div id="sliderPlayback"></div>
+                <div id="loaderBar"></div>
+                <div id="sliderVolume"></div>
+            </div>
+            <span id="playMode" class="left">
+		<input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">no</label>
+		<input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">rpt</label>
+		<input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">trk</label>
+		<input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">alb</label>
+	    </span>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
