@@ -8,7 +8,8 @@ $(document).ready(function(){
     $('#playlistbody').sortable({ axis: 'y', opacity: 0.6,
         containment: 'parent',
         items: 'tr',
-        placeholder: 'placeholder'
+        placeholder: 'placeholder',
+        distance: 15
     });
     $(".jp-playlist").droppable({
         drop: function(event, ui) {
@@ -56,7 +57,7 @@ $(document).ready(function(){
             },
             'Artist': {
                 icon: {
-                    image: '/icons/person4small.gif'
+                    image: '/icons/artist.gif'
                 }
             },
             'Album': {
@@ -85,7 +86,8 @@ $(document).ready(function(){
                 cursorAt: {left: -1, top: -1},
                 helper: function(event) {
                     return $('<span>' + event.target.text + '</span>');
-                }
+                },
+                distance: 15
             });
         }
     });
@@ -96,7 +98,7 @@ $(document).ready(function(){
 
     $("#jquery_jplayer").jPlayer( {
         ready: function () {
-            $('.song').live('dblclick',play);
+            $('.song').live('dblclick', play);
         }
     });
     var jpPlayTime = $("#jplayer_play_time");
@@ -144,7 +146,14 @@ $(document).ready(function(){
     });
 
     $('.jp-playlist').bind('keydown', 'del', function() {
+        var next = $('.selected:last').next('tr');
+        var prev = $('.selected:first').prev('tr');
         $('.selected').remove();
+        if (next.length) {
+            next.addClass('selected').addClass('lastSelected');
+        } else if (prev.length) {
+            prev.addClass('selected').addClass('lastSelected');
+        }
         return false;
     });
 
@@ -203,32 +212,38 @@ $(document).ready(function(){
         }
     });
 
-    $('#ditchSearch').click(ditchSearch);
+    $('#ditchSearch').click(ditchSearch)
+                     .button({
+                        icons: {
+                            primary: 'ui-icon-circle-close'
+                        },
+                        text: false
+                     });
 
-    $('#goSearch').click(searchHandler);
+    $('#goSearch').click(searchHandler)
+                     .button({
+                        icons: {
+                            primary: 'ui-icon-circle-triangle-e'
+                        },
+                        text: false
+                     });
 
     $(window).resize(windowResize);
+    
+    $('#albumArtContainer').click(function() {
+        $(this).toggleClass('expand');
+    });
+    
+    $("#playMode").buttonset();
 
     setTimeout(function() {
+        $("body").splitter({
+            'sizeLeft' : true,
+            'cursor'   : 'col-resize',
+            'resizeToWidth' : true
+        });
         $(window).resize();
-        $('#albumArtContainer')
-            .draggable({
-                snap:'html'
-            })
-            .resizable({
-                handles: 'ne, se, nw, sw',
-                aspectRatio: 1.0000,
-                autoHide: true,
-                stop: function(event, ui) {
-                    // Fix aspect ratio bugs
-                    var target = $(event.target);
-                    var size = Math.max(target.width(), target.height());
-                    target.width(size);
-                    target.height(size);
-                }
-            });
     }, 100);
-    
 });
 
 function windowResize(target) {
@@ -238,10 +253,6 @@ function windowResize(target) {
     for (var i=0; i<elements.length; i++) {
         expandHeightToFitBrowser($(elements[i]));
     }
-    //var elements = $(".expandWidthToFitBrowser");
-    //for (var i=0; i<elements.length; i++) {
-        //expandWidthToFitBrowser($(elements[i]));
-    //}
 }
 
 function expandHeightToFitBrowser(element) {
@@ -252,6 +263,10 @@ function expandHeightToFitBrowser(element) {
 }
 
 function scrollTo(e, c) {
+
+    if (!e) {
+        return;
+    }
 
     var eTop = e.offset().top;
     var eBottom = eTop + e.height();
@@ -283,29 +298,31 @@ function addToPlaylist(id, target) {
     $.getJSON(
         '/hello/getTracksAJAX',
         {'id': id},
-        function(data) {
-            var insertText = '';
-            $.each(data, function(count, trackJSON) {
-                insertText += '<tr id="track_'+trackJSON['id']+'" class="song" href="'
-                                                              +trackJSON['filepath']+'">'
-                    + '<td class="artist">'+trackJSON['artist']+'</td>'
-                    + '<td class="title">'+trackJSON['title']+'</td>'
-                    + '<td class="album">'+trackJSON['album']+'</td>'
-                    + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
-                    + '<td class="length">'+trackJSON['length']+'</td>'
-                    + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
-                + '</tr>';
-            });
-            var dropTarget = $(document).data('playlistDropTarget');
-            if (dropTarget && dropTarget.tagName == 'TD') {
-                $(dropTarget).parent().after(insertText);
-            } else {
-                $("#playlistbody").append(insertText);
-            }
-            $('#playlist thead th').unbind('click');
-            $('#playlist').tablesorter();
-        }
+        addToPlaylistCallback
     );
+}
+
+function addToPlaylistCallback(data) {
+    var insertText = '';
+    $.each(data, function(count, trackJSON) {
+        insertText += '<tr id="track_'+trackJSON['id']+'" class="song" href="'
+                                                      +trackJSON['filepath']+'">'
+            + '<td class="artist">'+trackJSON['artist']+'</td>'
+            + '<td class="title">'+trackJSON['title']+'</td>'
+            + '<td class="album">'+trackJSON['album']+'</td>'
+            + '<td class="tracknum">'+trackJSON['tracknum']+'</td>'
+            + '<td class="length">'+trackJSON['length']+'</td>'
+            + '<td class="bitrate">'+trackJSON['bitrate']+'</td>'
+        + '</tr>';
+    });
+    var dropTarget = $(document).data('playlistDropTarget');
+    if (dropTarget && dropTarget.tagName == 'TD') {
+        $(dropTarget).parent().after(insertText);
+    } else {
+        $("#playlistbody").append(insertText);
+    }
+    $('#playlist thead th').unbind('click');
+    $('#playlist').tablesorter();
 }
 
 function searchHandler() {
@@ -402,7 +419,13 @@ function playRow(row) {
     $("#jquery_jplayer").jPlayer("setFile", row.attr('href'))
         .jPlayer("play");
     row.addClass('playing');
-    grabAlbumArt(row.attr('id'));
+    setDocumentTitle($('.artist', row).text() + ' - ' +
+                     $('.title', row).text());
+    populatePlayingTrackInfo(row.attr('id'));
+}
+
+function setDocumentTitle(title) {
+    document.title = title;
 }
 
 function stop() {
@@ -421,15 +444,17 @@ function playlistNextPrev(next) {
             if (playing.next().hasClass('song')) {
                 playing.next().addClass('playing');
                 playRow(playing.next());
-            } else {
-                stop();
+            } else if ($('#playlistRepeat').attr('checked')) {
+                $('.song:first').dblclick();
+            } else if ($('#playlistRandomTrack').attr('checked')) {
+                nextRandomTrack();
+            } else if ($('#playlistRandomAlbum').attr('checked')) {
+                nextRandomAlbum();
             }
         } else {
             if (playing.prev().hasClass('song')) {
                 playing.prev().addClass('playing');
                 playRow(playing.prev());
-            } else {
-                stop();
             }
         }
     }
@@ -443,17 +468,42 @@ function playListNext() {
     playlistNextPrev(true);
 }
 
-function grabAlbumArt(trackid) {
+function nextRandomTrack() {
     $.getJSON(
-        '/hello/albumArtAJAX',
+        '/hello/randomTrackAJAX',
+        {},
+        playRandomCallback
+    );
+}
+
+function nextRandomAlbum() {
+    $.getJSON(
+        '/hello/randomAlbumAJAX',
+        {},
+        playRandomCallback
+    );
+}
+
+function playRandomCallback(data) {
+    var last = $('.song:last');
+    $(document).data('playlistDropTarget', null);
+    addToPlaylistCallback(data);
+    last.next('.song').dblclick();
+}
+
+function populatePlayingTrackInfo(trackid) {
+    $.getJSON(
+        '/hello/getPlayingTrackInfoAJAX',
         {'trackid': trackid},
         function(data) {
             if ('albumArtURL' in data) {
                 $('#albumArt').attr('src', data['albumArtURL']);
-                $('#albumArtContainer').show();
             } else {
-                $('#albumArtContainer').hide();
+                $('#albumArt').attr('src', '/icons/vinyl.png');
             }
+            $('#playingArtist').html(data['artist']);
+            $('#playingAlbum').html(data['album']);
+            $('#playingTrack').html(data['track']);
         }
     );
 }

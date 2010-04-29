@@ -1,24 +1,22 @@
-This is a streaming mp3 music server that's not very good right now.
+This is a web-based streaming music player that plays mp3s in-browser using HTML5 <audio> and has a jquery-heavy UI to browse and queue tracks.  It has some developing functionality to lookup currently playing tracks using various music webservices in order to show questionably useful information.  Think of it like a drunk amarok 1.4 clone for the internet.
 
-Current features
+Features
 * Catalogs a directory of mp3s and tags
-* Displays mp3s in a playlist
+* Tree browser to queue artists/albums/tracks
 * Plays mp3s in your html5 compliant browser
+* Looks up currently playing tracks in musicbrainz and displays amazon album art.
 
 Server dependencies
 * python 2.6
 * pylons
-* python sqlite
 * mutagen
-* large music collection
 
 Client dependencies
-* webkit browser
+* browser with html5 audio mp3 support (webkit)
 
 Thanks
 * jquery
 * musicbrainz
-* amarok 1.4
 * last.fm
 * viixy.com
 

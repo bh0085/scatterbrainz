@@ -45,17 +45,18 @@ def getArtistRelations(id):
     relations =  r.getRelations();
     return relations
 
-def getAlbumArtURL(artistName, albumName):
+def searchRelease(artistName, albumName):
     q = ws.Query()
-    filter = ws.ReleaseFilter(artistName=artistName, title=albumName)
+    if artistName:
+        filter = ws.ReleaseFilter(title=albumName, artistName=artistName)
+    else:
+        filter = ws.ReleaseFilter(query=albumName)
     results = q.getReleases(filter)
     if results:
-        release = results[0].getRelease()
-        asin = release.getAsin()
-        if asin:
-            return 'http://ecx.images-amazon.com/images/P/%s.jpg' % (asin)
+        return results[0].getRelease()
     return None
 
+<<<<<<< HEAD
 def getArtistsAssociated(art_mbid=u"f3b8e107-abe8-4743-b6a3-4a4ee995e71f"):
     q = ws.Query()
     filter = ws.ReleaseFilter(artistId=art_mbid)

@@ -1,5 +1,6 @@
 body {
-    font-family:Verdana, Arial, sans-serif;
+    font-family: sans-serif;
+    font-size: 0.9em;
 }
 
 div.jp-playlist-player {
@@ -8,11 +9,11 @@ div.jp-playlist-player {
 }
 
 div.jp-interface {
+    background-color: #EEF4FF;
+    height:252px;
+    border:3px solid #B0CDFF;
+    border-left: 0px none;
     position: relative;
-    background-color:#eee;
-    margin-right: 15px;
-    height:80px;
-    border:1px solid #009be3;
 }
 
 div.jp-interface  ul.jp-controls {
@@ -30,7 +31,7 @@ li.jp-play,
 li.jp-pause {
     display: block;
     position: absolute;
-    top:20px;
+    bottom:20px;
     width:40px;
     height:40px;
     cursor: pointer;
@@ -55,7 +56,7 @@ li.jp-pause:hover {
 }
 li.jp-stop {
     position: absolute;
-    top:26px;
+    bottom:26px;
     background: url("jplayer.blue.monday.jpg") 0 -83px no-repeat;
     width:28px;
     height:28px;
@@ -73,7 +74,7 @@ li.jp-stop:hover {
 li.jp-previous {
     position: absolute;
     left:20px;
-    top:26px;
+    bottom:26px;
     background: url("jplayer.blue.monday.jpg") 0 -112px no-repeat;
     width:28px;
     height:28px;
@@ -85,7 +86,7 @@ li.jp-previous:hover {
 li.jp-next {
     position: absolute;
     left:88px;
-    top:26px;
+    bottom:26px;
     background: url("jplayer.blue.monday.jpg") 0 -141px no-repeat;
     width:28px;
     height:28px;
@@ -97,7 +98,7 @@ li.jp-next:hover {
 div.jp-progress {
     position: absolute;
     overflow:hidden;
-    top:32px;
+    bottom:32px;
     background-color: #ddd;
     width:122px;
     height:15px;
@@ -118,7 +119,7 @@ div.jp-play-bar {
 }
 li.jp-volume-min {
     position: absolute;
-    top:32px;
+    bottom:32px;
     background: url("jplayer.blue.monday.jpg") 0 -170px no-repeat;
     width:18px;
     height:15px;
@@ -135,7 +136,7 @@ li.jp-volume-min:hover {
 }
 li.jp-volume-max {
     position: absolute;
-    top:32px;
+    bottom:32px;
     background: url("jplayer.blue.monday.jpg") 0 -186px no-repeat;
     width:18px;
     height:15px;
@@ -148,7 +149,7 @@ li.jp-volume-max:hover {
 div.jp-volume-bar {
     position: absolute;
     overflow:hidden;
-    top:37px;
+    bottom:37px;
     background: url("jplayer.blue.monday.jpg") 0 -250px repeat-x;
     width:46px;
     height:5px;
@@ -165,7 +166,7 @@ div.jp-volume-bar-value {
 div.jp-play-time,
 div.jp-total-time {
     position: absolute;
-    top:49px;
+    bottom:16px;
     width:122px;
     font-size:.64em;
     font-style:oblique;
