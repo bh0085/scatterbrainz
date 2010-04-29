@@ -56,7 +56,6 @@ def searchRelease(artistName, albumName):
         return results[0].getRelease()
     return None
 
-<<<<<<< HEAD
 def getArtistsAssociated(art_mbid=u"f3b8e107-abe8-4743-b6a3-4a4ee995e71f"):
     q = ws.Query()
     filter = ws.ReleaseFilter(artistId=art_mbid)
@@ -90,3 +89,7 @@ def getArtistsAssociated(art_mbid=u"f3b8e107-abe8-4743-b6a3-4a4ee995e71f"):
    
 
     return track_results
+
+def getRelease(mbid):
+    q = ws.Query()
+    return q.getReleaseById(mbid)
