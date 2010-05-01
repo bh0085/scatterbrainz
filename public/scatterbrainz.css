@@ -7,7 +7,7 @@ body {
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
-    background-image: url('http://ocebackgrounds.files.wordpress.com/2008/06/picture-1.png');
+    background: #3689e6 url('/icons/clouds.png') no-repeat center top;
 }
 
 .selected {
