@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div id="browseContainer" class="expandHeightToFitBrowser transparent" expandHeightOffsetPx="80">
+    <div id="browseContainer" class="expandHeightToFitBrowser transparent" expandHeightOffsetPx="70">
         <div id="browser" class="noBrowserFocusIndicator" tabindex="100"></div>
         <div id="searchBrowser" class="noBrowserFocusIndicator" tabindex="101"></div>
     </div>
@@ -50,7 +50,7 @@
         </table>
     </div>
     <div id="rightPane">
-        <div class="jp-playlist noBrowserFocusIndicator transparent expandHeightToFitBrowser" expandHeightOffsetPx="77" tabindex="102">
+        <div class="jp-playlist noBrowserFocusIndicator transparent expandHeightToFitBrowser" expandHeightOffsetPx="67" tabindex="102">
             <table id="playlist" class="playlistTable" border="0" cellspacing="0" cellpadding="0">
                 <thead class="playlistHead">
                     <tr class="playlistHeadRow">
@@ -113,6 +113,11 @@
 		    <input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">Random track</label>
 		    <input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">Random album</label>
 		</div>
+	    </div>
+	    <div id="abrepeat" class="left">
+		<button id="arepeat">A</button>
+		<button id="brepeat" style="display:none;">B</button>
+		<button id="cancelrepeat" style="display:none;">X</button>
 	    </div>
         </div>
     </div>

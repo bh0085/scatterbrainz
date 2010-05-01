@@ -216,7 +216,7 @@ div#dashboard {
     white-space: nowrap;
     overflow: hidden;
     overflow-x: -webkit-marquee;
-    -webkit-marquee-speed: 100;
+    -webkit-marquee-speed: 120;
     -webkit-marquee-increment: small;
     -webkit-marquee-style: alternate;
 }
@@ -281,6 +281,14 @@ ul#icons #volume-min {
 #playModeContainer {
     margin-left: 10px;
     zoom: 0.8;
+}
+
+#abrepeat {
+    zoom: 0.8;
+}
+
+#abrepeat .ui-button-text {
+    padding: 0.4em 0.7em;
 }
 
 #playMode, #playModeContainer label {
