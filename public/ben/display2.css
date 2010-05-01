@@ -1,0 +1,90 @@
+body {
+    background-color:#289976;
+    font-family:Optima, sans-serif;
+    font-size:26
+
+}
+
+#main_outer{
+    position:absolute;
+    top:0px;
+    left:0px;
+    margin:0;
+    padding:0;
+    border-width:0;
+    
+}
+
+#main_display{
+
+    width:auto;
+    height:auto;
+    margin:10px;
+    background-color:#FFE877;
+    border-style:solid;
+    border-width:10px;
+    border-color:#67cc8e;
+    padding:10px;
+}
+
+.scrollwrapper {
+	position:relative;	/* needed */
+	z-index:1;			/* needed and important */
+	width:50%;
+	height:100%;		/* needed */
+	overflow:hidden;	/* suggested */
+}
+
+.scrollcolumn {
+	width:auto;
+}
+
+
+#wrapper1 {
+    float:left;
+}
+#wrapper2 {
+} 
+.iscrolled_list{
+    color:#FF5600
+}
+/*
+Some Colors, from Green - Red
+289976
+67CC8E
+B1FF91
+FFE877
+FF5600
+*/
+
+
+/*Info for debugging on the iphone... No Console :(  */
+
+#info_main {
+    position: fixed;
+    top:85%;
+    left:10px;
+    width:90%;
+    height:10px;
+}
+#info_text {
+    position:relative;
+    background-color:#FFFFFF;
+    border-width:1px;
+    border-style:solid;
+    width:auto;
+    height:30px;
+    top:0px;
+    bottom:0px;
+    
+}
+
+/*Some IPOD SPECIFIC STUFF/*/
+
+@media only screen and (max-device-width: 600px) {
+    body{
+	-webkit-text-size-adjust:none;
+	font-family:Helvetica, Arial, Verdana, sans-serif;
+    }
+
+}

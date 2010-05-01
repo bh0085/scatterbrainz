@@ -18,7 +18,7 @@ def getTrackRelations(id):
         urlRelations=True
         )
     r =q.getTrackById(id,inc)
-    relations =  r.getRelations();#m.Relation.TO_ARTIST)
+    relations =  r.getRelations();
     return relations
 
 def getReleaseRelations(id):
@@ -55,6 +55,40 @@ def searchRelease(artistName, albumName):
     if results:
         return results[0].getRelease()
     return None
+
+def getArtistsAssociated(art_mbid=u"f3b8e107-abe8-4743-b6a3-4a4ee995e71f"):
+    q = ws.Query()
+    filter = ws.ReleaseFilter(artistId=art_mbid)
+    results = q.getReleases(filter)
+    out = results
+
+    import re
+    year_re = re.compile("[0-9]{4}")
+    track_results = []
+    
+    try:
+        for r in results:
+            r_mbid = r.release.getId()
+            inc = ws.ReleaseIncludes(tracks=True,releaseEvents=True)
+            release = q.getReleaseById(r_mbid, include=inc)
+            if not release: continue
+            tracks = release.getTracks()
+            for t in tracks:
+                track_mbid = t.getId()
+                inc = ws.TrackIncludes(artistRelations=True)
+                track_full = q.getTrackById(track_mbid,include = inc)
+                track_results.append(track_full)
+                
+            fulldate = release.getEarliestReleaseDate()
+            year =re.search(year_re,fulldate).group()
+            title = r.release.getTitle()
+            print year, title
+    except ws.WebServiceError, e:
+	print 'Error:', e
+        raise Exception(e)
+   
+
+    return track_results
 
 def getRelease(mbid):
     q = ws.Query()
