@@ -79,8 +79,7 @@
         <div id="playingArtist" class="left dashboardMarquee"></div>
     </div>
 
-    <img id="albumArt" class="hidden dashboardIcon" />
-    <img id="noAlbumArt" class="dashboardIcon" src="/icons/vinyl.png" />
+    <img class="albumArt dashboardIcon" src="/icons/vinyl.png" />
     <div class="left dashboardMarqueeContainer">
         <div id="playingAlbum" class="left dashboardMarquee"></div>
     </div>
@@ -106,12 +105,15 @@
                 <div id="loaderBar"></div>
                 <div id="sliderVolume"></div>
             </div>
-            <span id="playMode" class="left">
-		<input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">no</label>
-		<input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">rpt</label>
-		<input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">trk</label>
-		<input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">alb</label>
-	    </span>
+	    <div id="playModeContainer" class="left" style="position: relative;">
+		<button id="playMode">Consecutive</button>
+		<div id="playModeMenu" class="hidden">
+		    <input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">Consecutive</label>
+		    <input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">Repeat playlist</label>
+		    <input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">Random track</label>
+		    <input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">Random album</label>
+		</div>
+	    </div>
         </div>
     </div>
 </div>

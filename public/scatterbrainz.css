@@ -2,7 +2,7 @@
 
 body {
     font-family: sans-serif;
-    font-size: 0.9em;
+    font-size: 0.8em;
     overflow: hidden;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -172,26 +172,6 @@ div#searchBrowser {
     outline-width: 0;
 }
 
-div#albumArtContainer {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    height: 250px;
-    width: 250px;
-    padding: 1px;
-    z-index: 500;
-}
-
-div#albumArtContainer:hover, div#albumArtContainer.expand {
-    height: auto;
-    width: auto;
-}
-
-img#albumArt {
-    width: inherit;
-    height: inherit;
-}
-
 .vsplitbar {
     padding-bottom: 1px;
     margin-left: 3px;
@@ -206,7 +186,7 @@ img#albumArt {
 }
 
 div#dashboard {
-    height: 55px;
+    height: 45px;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -221,15 +201,15 @@ div#dashboard {
 
 .dashboardIcon {
     float: left;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 }
 
 .dashboardMarqueeContainer {
-    width: 12%;
+    width: 10%;
     margin: 5px;
     position: relative;
-    top: 12px;
+    top: 8px;
 }
 
 .dashboardMarquee {
@@ -259,7 +239,7 @@ div#dashboard {
 	padding:5px;
 }
  
-ul#icons {zoom: 1.5; margin: 0; padding: 0;}
+ul#icons {margin: 0; padding: 0;}
 ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
 ul#icons span.ui-icon {float: left; margin: 0 4px;}
  /*
@@ -271,7 +251,7 @@ ul#icons #volume-min {
     width: 150px;
     height: .4em;
     position: relative;
-    top: 14px;
+    top: 6px;
 }
 
 #sliderVolume .ui-slider-handle {
@@ -286,7 +266,7 @@ ul#icons #volume-min {
 }
  
 #sliderPlayback .ui-slider-handle {
-    height:1.6em;
+    height:1.2em;
 }
  
 #loaderBar.ui-progressbar {
@@ -294,10 +274,24 @@ ul#icons #volume-min {
     border:0;
 }
 
-#playMode {
-    margin-left: 10px;
-}
-
 .hidden {
     display: none;
+}
+
+#playModeContainer {
+    margin-left: 10px;
+    zoom: 0.8;
+}
+
+#playMode, #playModeContainer label {
+    width: 160px;
+}
+
+#playMode span.ui-button-text {
+    padding: 0.4em 1em;
+}
+
+#playModeMenu {
+    position: absolute;
+    bottom: 100%;
 }
