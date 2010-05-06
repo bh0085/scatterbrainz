@@ -69,24 +69,41 @@
 </div>
 
 <!-- leave this div for splitbar so it doesn't interfere w/ jstree-marker -->
-<div></div>
+<div style="z-index:0 !important;"></div>
 
 <div id="dashboard" class="transparent">
 
-    <img class="dashboardIcon" src="/icons/guitar.png" />
-
-    <div class="left dashboardMarqueeContainer">
-        <div id="playingArtist" class="left dashboardMarquee"></div>
+    <div class="dashboardEntity left">
+        <img class="dashboardIcon" src="/icons/guitar.png" />
+        <div class="dashboardMarqueeContainer">
+            <div id="playingArtist" class="dashboardMarquee"></div>
+        </div>
+        <div class="dashboardPanel hidden">
+            <img class="left" src="/icons/guitar.png" />
+        </div>
     </div>
 
-    <img class="albumArt dashboardIcon" src="/icons/vinyl.png" />
-    <div class="left dashboardMarqueeContainer">
-        <div id="playingAlbum" class="left dashboardMarquee"></div>
+    <div class="dashboardEntity left">
+        <img class="albumArt dashboardIcon" src="/icons/vinyl.png" />
+        <div class="dashboardMarqueeContainer">
+            <div id="playingAlbum" class="dashboardMarquee"></div>
+        </div>
+        <div class="dashboardPanel hidden">
+            <img class="albumArt left" src="/icons/vinyl.png" style="overflow:hidden;"/>
+            <div style="float:left;">
+                <span id="asin"></span>
+            </div>
+        </div>
     </div>
 
-    <img class="dashboardIcon" src="/icons/note3.png" />
-    <div class="left dashboardMarqueeContainer">
-        <div id="playingTrack" class="left dashboardMarquee"></div>
+    <div class="dashboardEntity left">
+        <img class="dashboardIcon" src="/icons/note3.png" />
+        <div class="dashboardMarqueeContainer">
+            <div id="playingTrack" class="dashboardMarquee"></div>
+        </div>
+        <div class="dashboardPanel hidden">
+            <div id="lyrics"></div>
+        </div>
     </div>
 
     <div id="controlsDashboard" class="left">
@@ -105,20 +122,20 @@
                 <div id="loaderBar"></div>
                 <div id="sliderVolume"></div>
             </div>
-	    <div id="playModeContainer" class="left" style="position: relative;">
-		<button id="playMode">Consecutive</button>
-		<div id="playModeMenu" class="hidden">
-		    <input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">Consecutive</label>
-		    <input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">Repeat playlist</label>
-		    <input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">Random track</label>
-		    <input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">Random album</label>
-		</div>
-	    </div>
-	    <div id="abrepeat" class="left">
-		<button id="arepeat">A</button>
-		<button id="brepeat" style="display:none;">B</button>
-		<button id="cancelrepeat" style="display:none;">X</button>
-	    </div>
+            <div id="playModeContainer" class="left" style="position: relative;">
+                <button id="playMode">Consecutive</button>
+                <div id="playModeMenu" class="hidden">
+                    <input type="radio" id="playlistNothing" name="repeat" checked="checked" /><label for="playlistNothing">Consecutive</label>
+                    <input type="radio" id="playlistRepeat" name="repeat" /><label for="playlistRepeat">Repeat playlist</label>
+                    <input type="radio" id="playlistRandomTrack" name="repeat" /><label for="playlistRandomTrack">Random track</label>
+                    <input type="radio" id="playlistRandomAlbum" name="repeat" /><label for="playlistRandomAlbum">Random album</label>
+                </div>
+            </div>
+            <div id="abrepeat" class="left">
+                <button id="arepeat">A</button>
+                <button id="brepeat" style="display:none;">B</button>
+                <button id="cancelrepeat" style="display:none;">X</button>
+            </div>
         </div>
     </div>
 </div>

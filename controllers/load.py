@@ -111,8 +111,6 @@ class LoadController(BaseController):
                     else:
                         album = Album(name=id3album,
                                       artist=artist,
-                                      mbid=None,
-                                      albumArtURL=None,
                                       added=now)
                         Session.save(album)
                         albums[id3album] = album

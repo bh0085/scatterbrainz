@@ -206,7 +206,6 @@ div#dashboard {
 }
 
 .dashboardMarqueeContainer {
-    width: 10%;
     margin: 5px;
     position: relative;
     top: 8px;
@@ -215,10 +214,11 @@ div#dashboard {
 .dashboardMarquee {
     white-space: nowrap;
     overflow: hidden;
-    overflow-x: -webkit-marquee;
+    text-overflow: ellipsis;
+    /**overflow-x: -webkit-marquee;
     -webkit-marquee-speed: 120;
     -webkit-marquee-increment: small;
-    -webkit-marquee-style: alternate;
+    -webkit-marquee-style: alternate;**/
 }
 
 .transparent {
@@ -286,7 +286,7 @@ ul#icons #volume-min {
 #abrepeat {
     zoom: 0.8;
 }
-
+    
 #abrepeat .ui-button-text {
     padding: 0.4em 0.7em;
 }
@@ -302,4 +302,27 @@ ul#icons #volume-min {
 #playModeMenu {
     position: absolute;
     bottom: 100%;
+}
+
+.dashboardEntity {
+    width: 15%;
+}
+
+.dashboardEntity:hover {
+    background-color: #D2E3FF;
+    cursor: pointer;
+}
+
+.dashboardPanel {
+    position: absolute;
+    z-index: 200;
+    bottom: 45px;
+    border: 3px solid #B0CDFF;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#lyrics {
+    height: 600px;
+    width: 400px;
+    overflow: auto;
 }

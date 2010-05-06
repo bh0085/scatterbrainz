@@ -345,6 +345,10 @@ $(document).ready(function(){
         $(this).hide();
         $('#arepeat').show();
     });
+    
+    $('.dashboardEntity').click(function(){
+        $(this).find('.dashboardPanel').slideToggle();
+    });
 
     setTimeout(function() {
         $("body").splitter({
@@ -611,7 +615,21 @@ function playRandomCallback(data) {
 
 function populatePlayingTrackInfo(trackid) {
     $.getJSON(
-        '/hello/getPlayingTrackInfoAJAX',
+        '/hello/getTrackInfoAJAX',
+        {'trackid': trackid},
+        function(data) {
+            $('#playingArtist').html(data['artist']);
+            $('#playingAlbum').html(data['album']);
+            $('#playingTrack').html(data['track']);
+            if ('asin' in data) {
+                $('#asin').text(data['asin']);
+            } else {
+                $('#asin').text('');
+            }
+        }
+    );
+    $.getJSON(
+        '/hello/getAlbumArtAJAX',
         {'trackid': trackid},
         function(data) {
             if ('albumArtURL' in data) {
@@ -619,9 +637,17 @@ function populatePlayingTrackInfo(trackid) {
             } else {
                 $('.albumArt').attr('src', '/icons/vinyl.png');
             }
-            $('#playingArtist').html(data['artist']);
-            $('#playingAlbum').html(data['album']);
-            $('#playingTrack').html(data['track']);
+        }
+    );
+    $.getJSON(
+        '/hello/getLyricsAJAX',
+        {'trackid': trackid},
+        function(data) {
+            if ('lyrics' in data) {
+                $('#lyrics').html(data['lyrics']);
+            } else {
+                $('#lyrics').html('');
+            }
         }
     );
 }

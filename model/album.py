@@ -12,15 +12,19 @@ class Album(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, nullable=False)
     artistid = Column('artistid', Integer, ForeignKey('artists.id'))
-    mbid = Column(Unicode)
-    albumArtURL = Column(Unicode)
     added = Column(DateTime, nullable=False)
+    
+    albumArtFilename = Column(Unicode)
+    albumArtOriginalURL = Column(Unicode)
+    lastHitAlbumArtExchange = Column(DateTime)
+    
+    mbid = Column(Unicode)
+    asin = Column(Unicode)
+    lastHitMusicbrainz = Column(DateTime)
 
-    def __init__(self, name, artist, mbid, albumArtURL, added):
+    def __init__(self, name, artist, added):
         self.name = name
         self.artist = artist
-        self.mbid = mbid
-        self.albumArtURL = albumArtURL
         self.added = added
     
     def toTreeJSON(self, children=None):
