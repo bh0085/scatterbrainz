@@ -190,7 +190,7 @@ class HelloController(BaseController):
             
             album = track.album.name
             artist = track.artist.name
-            q = artist + ' ' + album
+            q = (artist + ' ' + album).replace("'","")
 
             site = 'http://www.albumartexchange.com'
 
