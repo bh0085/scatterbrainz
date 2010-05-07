@@ -178,6 +178,9 @@ class HelloController(BaseController):
             return 1
         else:
             return cmp(a['data'], b['data'])
+    
+    def debug(self):
+        raise Exception
 
     def getAlbumArtAJAX(self):
         trackid = request.params['trackid'].split('_')[1]
@@ -189,8 +192,12 @@ class HelloController(BaseController):
             track.album.lastHitAlbumArtExchange = datetime.now()
             
             album = track.album.name
-            artist = track.artist.name
-            q = (artist + ' ' + album).replace("'","")
+            artist = track.album.artist.name
+            if artist == 'Various Artists':
+                q = album
+            else:
+                q = (artist + ' ' + album)
+            q = q.replace("'","")
 
             site = 'http://www.albumartexchange.com'
 
