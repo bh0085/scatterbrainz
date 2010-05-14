@@ -1,101 +1,104 @@
-var myScroll1
-var myScroll2
-var isSmall
-var isIpod
-
-var infoShown = 0;
+var myScroll1;
+var myScroll2;
+var isSmall;
+var isIpod;
 
 $(document).ready(function(){
-    showHideInfo(0);
+    if (isSmall){isIpod = true;} else {isIpod = false;}
+    window.onload = function() {setTimeout( resetDimensions , 100);};
+});
 
-    maxwidth = (Math.max(screen.width,screen.height));
-    initShared();
-    if (maxwidth < 600){ isSmall = true } else {isSmall = false}
-    if (isSmall){isIpod = true} else {isIpod = false}
-    if (isSmall){
-	initSmallView();
-    } else {
-	initBigView();
-    }
-
-    resetDimensions();
-})
+var mc_style = 'equal';
 
 function resetDimensions(){
     h = viewHeight();
     w = viewWidth();
-    $("#main_outer").height(h);
-    $("#main_outer").width(w);
-}
+    if (isIpod){vbump = 60;} else{vbump = 0}
 
-//Called with no argument, toggles infostate.
-function showHideInfo(infoState){
-    infoState = typeof(infoState) != 'undefined' ? infoState : 1 - infoShown;
-    if (infoState){
-	$("#info_main").css("visibility","visible");
-    } else {
-	$("#info_main").css("visibility","hidden");
+    
+    //reset the dimensions of the outer container
+    mo =  $("#main_outer");
+    hout = h - (mo.outerHeight() - mo.height()) + vbump ;
+    wout = w - (mo.outerWidth() - mo.width());
+    mo.height(hout);
+    mo.width(w);
+    
+    //display dimensions.
+    md = $("#main_display");
+    hin = hout - (md.outerHeight() - md.height());
+    win = wout - (md.outerWidth() - md.width());
+    md.width(win);
+    md.height(hin);
+
+
+    //main column dimensions.
+
+    var ncols = 2;
+    var mcs = [];
+    for ( var i = 0 ;  i < ncols ; i++){
+	var mc = $("<div>");
+	mc.addClass("main_column");
+	mcs.push(mc);
+	md.append(mc);
     }
+    
+    var mc_props = [];
+    for (var i = 0 ; i < ncols ; i++){
+	if (mc_style == 'equal'){mc_props.push(1/ncols)}
+    }
+
+    var width_available = md.width();
+    var wids_so_far = 0;
+    var rcol;
+    $.each(mcs, function(i,item){
+	       var mc = item;
+
+	       var this_wid = width_available*mc_props[i];
+	       mc.width(this_wid -(mc.outerWidth() - mc.width()));
+	       rcol = rManagerMakeColumn(mc);
+	       mc.append(rcol.content);
+    });
+
+    
+    initMainControls();
+    styleControls();
 }
 
 function viewWidth(){
-    return window.innerWidth;
+    if (isIpod){
+	w = window.orientation == 90 || window.orientation == -90 ? window.innerWidth : window.innerWidth;
+    } else {
+	w = window.innerWidth;
+
+    }
+    return w;
+    
 }
 function viewHeight(){
     height = 0;
-    if (isIpod){
-	height = window.orientation == 90 || window.orientation == -90 ? 208 : 356;
-    } else {
-	height  = window.innerHeight;
-	if (height> 500){height = 500}
-    }
+    if (isIpod){height = window.orientation == 90 || window.orientation == -90 ? 208 : 356;
+	       } else {
+		   height  = window.innerHeight;
+	       }
     return height;
 }
 
-function initShared(){
-    var headID = document.getElementsByTagName("head")[0];         
-    var cssNode = document.createElement('link');  
-    cssNode.type = 'text/css';
-    cssNode.rel = 'stylesheet';
-    cssNode.href = '/ben/display2.css';
-    cssNode.media = 'screen';
-    headID.appendChild(cssNode);
+
+var hud_timer = null;
+function setHUD(strval){
+    if (!strval){return}
+    if (hud_timer){
+	clearTimeout(hud_timer);
+	hud_timer=null;
+    }
+    hud = $("#HUD");
+    hudbg = $("#HUD_BG");
+    hudtext = $("#HUD_TEXT");
+    hudtext.html(strval);
+    hud.css("visibility",'visible');
+    hud_timer= setTimeout( hideHUD , 1000);
 }
-
-
-
-function initSmallView(){
-    var headID = document.getElementsByTagName("head")[0];             
-    var meta =  document.createElement('meta');  
-    meta.name="viewport";
-    meta.content="width=device-width,minimum-scale=1.0, maximum-scale=1.0";
-    headID.appendChild(meta);
-
-    //Assume that we're working with an ipod... implement iscroll.
-    window.addEventListener('orientationchange', small_setHeight);
-    small_ready();
-    //Set a timer to refresh iScroll once the page has loaded.
-    window.onload = function() {setTimeout(function(){ small_refresh() }, 100)};
+function hideHUD(){
+    $("#HUD").css("visibility",'hidden');
+    hud_timer=null;
 }
-
-function small_ready() {
-    myScroll1 = new iScroll('column1');
-    myScroll2 = new iScroll('column2');
-}
-function small_refresh(){
-    window.scrollTo(0, 1);
-    myScroll1.refresh();
-    myScroll2.refresh();
-}
-
-function small_setHeight() {
-    //document.getElementById('wrapper').style.height = window.orientation == 90 || window.orientation == -90 ? '80px' : '200px';
-}
-
-function initBigView(){
-    setTimeout(function(){ big_loaded() }, 100) ;
-}
-function big_loaded() {
-    console.log("Loaded With 'Big' (non-ipod) View");
-}
-

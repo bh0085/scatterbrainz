@@ -1,53 +1,114 @@
 body {
     background-color:#289976;
-    font-family:Optima, sans-serif;
-    font-size:26
+    font-family: Optima, sans-serif;
+    font-size:14;
+    margin:0px;
 
 }
 
 #main_outer{
-    position:absolute;
     top:0px;
     left:0px;
-    margin:0;
+    position:absolute;
+    overflow:hidden;
     padding:0;
     border-width:0;
-    
-}
-
-#main_display{
-
-    width:auto;
-    height:auto;
-    margin:10px;
-    background-color:#FFE877;
+    margin:0px 0px 0px 0px;
+    border-color:FF5600;
     border-style:solid;
-    border-width:10px;
-    border-color:#67cc8e;
-    padding:10px;
+    background-color:#67cc8e;
+   
+
 }
 
-.scrollwrapper {
-	position:relative;	/* needed */
-	z-index:1;			/* needed and important */
-	width:50%;
-	height:100%;		/* needed */
-	overflow:hidden;	/* suggested */
+/*
+Main display may flow over....
+As a cheat, I'm using overflow hidden in "main_outer" to hide the mess.
+*/
+#main_display{
+    position:absolute;
+    background-color:#FAFAFA;
+    border-style:solid;
+    margin:0;
+    border-width:0;
+    padding:0;
 }
 
-.scrollcolumn {
-	width:auto;
-}
-
-
-#wrapper1 {
+.main_column {
+    background-color:#FFE877;
+    border-color:#289976;
+    border-style:solid;
+    border-width:0px;
+    position:relative;
+    width:50%;
+    height:100%;
     float:left;
 }
-#wrapper2 {
-} 
-.iscrolled_list{
-    color:#FF5600
+
+
+.scrollwrapper {
+    position:relative;	/* relative is needed.. (BUT CHANGED) */
+    z-index:1;			/* needed and important */
+    height:100%;		/* needed */
+    overflow:hidden;	/* suggested */
 }
+
+/*COLUMN BROWSER */
+
+A:link {text-decoration: none;}
+A:visited {text-decoration: none;}
+A:active {text-decoration: none;}
+A:hover {text-decoration: underline; }
+
+.column_ul {
+    position:relative;
+    padding:0px;
+}
+
+li {
+    list-style-type:none;
+}
+
+.dataview_list_item a{
+    position:relative;
+    top:0ex;
+    line-height:3ex;
+    overflow:hidden;
+    height:auto;
+}
+.column_ul>li{
+    height:auto;
+}
+
+.column_ul .dataview_list_item{
+    margin:2px 0px;
+    padding:.75ex 3ex;
+    border-style:solid;
+    border-color:#444444;
+    border-width:1px;
+    height:auto;
+    background-color:#FAFAFA;
+}
+
+.column_ul .dataview_sub_list_item{
+    font-size:10px;
+
+}
+
+/*
+COLUMN CONTROLS START HERE
+*/
+
+.mc_controls{
+    z-index:3;
+    position:absolute;
+    left:2px;
+    width:75px;
+    bottom:2px;
+    height:auto;
+}
+
+
 /*
 Some Colors, from Green - Red
 289976
@@ -58,33 +119,112 @@ FF5600
 */
 
 
-/*Info for debugging on the iphone... No Console :(  */
 
-#info_main {
-    position: fixed;
-    top:85%;
-    left:10px;
-    width:90%;
-    height:10px;
+/*Padding format... top, right, bottom, left*/
+
+/*
+BROWSE CONTROLS START HERE
+*/
+#browseControlsMain
+{
+  z-index:4;
+  background-color:#FFFFFF;
+  position:fixed;
+  width:100%;
+  height:auto;
+  margin:0px auto;
 }
-#info_text {
+
+.button {
+    padding:0;
+    margin:0;
+    cursor: pointer;
     position:relative;
-    background-color:#FFFFFF;
-    border-width:1px;
+    display:inline-block;
+    height: 64px;
+    width: 64px;
+    align:center;
+}
+.button img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border: none;
+    font-size: 36px;
+}
+.button:hover {  color: #8AB134; } 
+.button:active {  background-color:#000000; } 
+
+
+/*buttons live at=3*/
+.column_control {
+    z-index:3;
     border-style:solid;
-    width:auto;
-    height:30px;
+    border-width:2px;
+    border-color:#000000;
+}
+
+/*buttons live at=3*/
+.column_control.is_selected {
+    border-width:2px;
+    border-style:solid;
+    border-color:#CCaaCC;
+
+}
+.column_button_group{
+    border-width:0px;	    
+    border-style:solid;
+    margin:0px;
+}
+.column_button_group.vertical_button_group{
+    border-width:2px;	    
+    border-style:solid;
+    margin:10px 0px;
+}
+
+
+.hud{
+    border-style:solid;
+    border-color:#BBBBBB;
+    border-width:1px;
+    z-index:10;
+
+}
+
+.hud_list_header{
+    font-color:#00FF00;
+    font-size:20;
+}
+
+.hud_list_item{
+    font-size:15;
+    padding:0px 20px;
+}
+
+/*HUD*/
+#HUD{
+    font-size:40px;
+    z-index:1000;
+    visibility:hidden;
+    overflow:hidden;
+    position:absolute;
+    width:100%;
+    height:2ex;
+}
+
+
+
+/*HUD*/
+#HUD > div{
+    position:absolute;
     top:0px;
-    bottom:0px;
-    
+    left:0px;
+}
+#HUD_BG{
+    height:100%;
+    width:100%;
+    background-color:#00FFFF;
 }
 
-/*Some IPOD SPECIFIC STUFF/*/
 
-@media only screen and (max-device-width: 600px) {
-    body{
-	-webkit-text-size-adjust:none;
-	font-family:Helvetica, Arial, Verdana, sans-serif;
-    }
 
-}

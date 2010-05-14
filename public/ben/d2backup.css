@@ -1,0 +1,148 @@
+body {
+    background-color:#289976;
+    font-family:Helvetica, Optima, sans-serif;
+    font-size:26;
+}
+
+#main_outer{
+    top:0;
+    left:0;
+    position:absolute;
+    overflow:hidden;
+    padding:2;
+    border-width:4;
+    margin:0px;
+    border-color:#289976;
+    border-style:solid;
+    background-color:#67cc8e;
+
+}
+
+/*
+Main display may flow over....
+As a cheat, I'm using overflow hidden in "main_outer" to hide the mess.
+*/
+#main_display{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-color:#FAFAFA;
+    border-style:solid;
+    border-width:0;
+    padding:0;
+    display:inline-block;
+}
+
+.main_column {
+    background-color:#000000;
+    border-style:none;
+    position:relative;
+    width:50px;
+    heigh:50px;
+    overflow:hidden;
+}
+
+
+.scrollwrapper {
+    position:relative;	/* relative is needed.. (BUT CHANGED) */
+    z-index:1;			/* needed and important */
+    height:100%;		/* needed */
+    overflow:hidden;	/* suggested */
+    width:100%;
+}
+
+#wrapper1 {
+    float:left;
+    padding:0px 0px 0px 0px;
+}
+#wrapper2 {
+} 
+
+
+/*COLUMN BROWSER */
+
+A:link {text-decoration: none;}
+A:visited {text-decoration: none;}
+A:active {text-decoration: none;}
+A:hover {text-decoration: underline; color: red;}
+
+.column_ul {
+    position:relative;
+}
+
+.column_ul li a{
+    position:relative;
+    color: #000000;
+    top:0ex;
+    float:left;
+    line-height:2ex;
+    overflow:hidden;
+    height:2ex;
+}
+
+.column_ul li{
+    margin:4px 0px;
+    padding:1ex 10px;
+    border-style:solid;
+    border-color:#444444;
+    border-width:1px;
+    height:2ex;
+    list-style: none;
+}
+
+
+/*
+Some Colors, from Green - Red
+289976
+67CC8E
+B1FF91
+FFE877
+FF5600
+*/
+
+
+/*Browse Controls*/
+.controls{
+z-index:2;
+
+}
+
+#browseControlsMain
+{
+  position:fixed;
+  width:100%;
+  height:auto;
+  margin:0px auto;
+}
+
+/*Padding format... top, right, bottom, left*/
+.button {
+    padding:0;
+    margin:3px;
+    cursor: pointer;
+    position:relative;
+    display:inline-block;
+    height: 64px;
+    align:center;
+}
+.button img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border: none;
+}
+.button:hover {
+    color: #8AB134;
+} 
+
+
+
+
+/*Some IPOD SPECIFIC STUFF/*/
+
+@media only screen and (max-device-width: 600px) {
+    body{
+	-webkit-text-size-adjust:none;
+    }
+
+}
