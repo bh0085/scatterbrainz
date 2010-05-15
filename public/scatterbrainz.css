@@ -2,12 +2,12 @@
 
 body {
     font-family: sans-serif;
-    font-size: 0.9em;
+    font-size: 0.8em;
     overflow: hidden;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
-    background-image: url('http://ocebackgrounds.files.wordpress.com/2008/06/picture-1.png');
+    background: #3689e6 url('/icons/clouds.png') no-repeat center top;
 }
 
 .selected {
@@ -172,26 +172,6 @@ div#searchBrowser {
     outline-width: 0;
 }
 
-div#albumArtContainer {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    height: 250px;
-    width: 250px;
-    padding: 1px;
-    z-index: 500;
-}
-
-div#albumArtContainer:hover, div#albumArtContainer.expand {
-    height: auto;
-    width: auto;
-}
-
-img#albumArt {
-    width: inherit;
-    height: inherit;
-}
-
 .vsplitbar {
     padding-bottom: 1px;
     margin-left: 3px;
@@ -206,7 +186,7 @@ img#albumArt {
 }
 
 div#dashboard {
-    height: 55px;
+    height: 45px;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -221,24 +201,24 @@ div#dashboard {
 
 .dashboardIcon {
     float: left;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 }
 
 .dashboardMarqueeContainer {
-    width: 12%;
     margin: 5px;
     position: relative;
-    top: 12px;
+    top: 8px;
 }
 
 .dashboardMarquee {
     white-space: nowrap;
     overflow: hidden;
-    overflow-x: -webkit-marquee;
-    -webkit-marquee-speed: 100;
+    text-overflow: ellipsis;
+    /**overflow-x: -webkit-marquee;
+    -webkit-marquee-speed: 120;
     -webkit-marquee-increment: small;
-    -webkit-marquee-style: alternate;
+    -webkit-marquee-style: alternate;**/
 }
 
 .transparent {
@@ -259,7 +239,7 @@ div#dashboard {
 	padding:5px;
 }
  
-ul#icons {zoom: 1.5; margin: 0; padding: 0;}
+ul#icons {margin: 0; padding: 0;}
 ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
 ul#icons span.ui-icon {float: left; margin: 0 4px;}
  /*
@@ -271,7 +251,7 @@ ul#icons #volume-min {
     width: 150px;
     height: .4em;
     position: relative;
-    top: 14px;
+    top: 6px;
 }
 
 #sliderVolume .ui-slider-handle {
@@ -286,7 +266,7 @@ ul#icons #volume-min {
 }
  
 #sliderPlayback .ui-slider-handle {
-    height:1.6em;
+    height:1.2em;
 }
  
 #loaderBar.ui-progressbar {
@@ -294,10 +274,55 @@ ul#icons #volume-min {
     border:0;
 }
 
-#playMode {
-    margin-left: 10px;
-}
-
 .hidden {
     display: none;
+}
+
+#playModeContainer {
+    margin-left: 10px;
+    zoom: 0.8;
+}
+
+#abrepeat {
+    zoom: 0.8;
+}
+    
+#abrepeat .ui-button-text {
+    padding: 0.4em 0.7em;
+}
+
+#playMode, #playModeContainer label {
+    width: 160px;
+}
+
+#playMode span.ui-button-text {
+    padding: 0.4em 1em;
+}
+
+#playModeMenu {
+    position: absolute;
+    bottom: 100%;
+}
+
+.dashboardEntity {
+    width: 15%;
+}
+
+.dashboardEntity:hover {
+    background-color: #D2E3FF;
+    cursor: pointer;
+}
+
+.dashboardPanel {
+    position: absolute;
+    z-index: 200;
+    bottom: 45px;
+    border: 3px solid #B0CDFF;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#lyrics {
+    height: 600px;
+    width: 400px;
+    overflow: auto;
 }

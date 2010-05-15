@@ -111,8 +111,11 @@ class LoadController(BaseController):
                     else:
                         album = Album(name=id3album,
                                       artist=artist,
+<<<<<<< HEAD
                                       mbid=mbalbumid,
                                       albumArtURL=None,
+=======
+>>>>>>> upstream/master
                                       added=now)
                         Session.save(album)
                         albums[id3album] = album

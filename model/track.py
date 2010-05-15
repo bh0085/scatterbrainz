@@ -41,6 +41,10 @@ class Track(Base):
     # MusicBrainz Properties (or "props" for short)
     mbid = Column(Unicode)
     
+    # Lyrics
+    lyrics = Column(Unicode)
+    lastHitLyricWiki = Column(DateTime)
+    
     # Generated props
     added = Column(DateTime, nullable=False)
 
