@@ -17,7 +17,7 @@ def getMBIDArtistAlbums(mbid):
     except:
         return [];
     return parseLocalAlbums(albums);
-def getMBIDArtistTracks(mbid):
+def getMBIDArtstTracks(mbid):
     try:
         artistid = Session.query(Artist).filter_by(mbid=mbid)[0].id
         tracks = Session.query(Track).filter_by(artistid = artistid)
