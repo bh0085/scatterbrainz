@@ -31,6 +31,10 @@ else:
     names_set = map(lambda x: ( x['name']) ,names )
 
 init_prefs = {
+    'mbhost' : 'rosa.feralhosting.com',
+    'mbport' : '64077',
+    'mbdb' : 'musicbrainz_db',
+    'mbuser' : 'bh0085',
     'scatterbrainz_dir':scatterbrainz_dir,
     'music_dir':music_dir,
     'music_dbfile':os.path.join(scatterbrainz_dir,'external/dbs/music/music.sqlite'),
