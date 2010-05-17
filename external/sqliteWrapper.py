@@ -9,8 +9,7 @@ class sqliteWrapper():
         self.cxn = None
         self.dbfile = dbfile
         self._openCXN()
-        
-            
+                
     def _openCXN(self):
         self.cxn = sqlite3.connect(self.dbfile)
     def _closeCXN(self):
