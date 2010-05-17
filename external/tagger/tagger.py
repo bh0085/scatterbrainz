@@ -63,7 +63,7 @@ def tagDir():
 
         ds = []
 
-        if tracks = []: continue
+        if tracks == []: continue
     
         print '\n\n\nTagging: ' + str(base) + '\n'
         print 'found artists:'
