@@ -49,6 +49,9 @@ def tagDir():
                     if not val[0] in album_names:
                         album_names.append(val[0])
 
+            if 'tracknumber' not in m.keys():
+                print 'Uh oh... track number is not in the key set.... skipping directory.'
+                break
                 
             if 'tracknumber' in m.keys() and 'title' in m.keys():
                 num = m['tracknumber'][0]
