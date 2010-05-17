@@ -62,6 +62,8 @@ def tagDir():
                 tracks.append({'mut':m,'number':num,'name':title,'length':length})
 
         ds = []
+
+        if tracks = []: continue
     
         print '\n\n\nTagging: ' + str(base) + '\n'
         print 'found artists:'
