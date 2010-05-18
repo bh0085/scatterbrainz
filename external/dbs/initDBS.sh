@@ -36,7 +36,7 @@ if (( $doMB == 1 ))
 then
     echo "INITDBS: Initializing MBrainz db with port: " $PGPORT
     cd ${dbs_dir}/mbrainz
-    ./initMusicBrainz.sh -d -i
+    ./initMusicBrainz.sh -d -i -p $PGPORT
     echo
     echo
 fi

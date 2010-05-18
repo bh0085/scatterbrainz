@@ -25,6 +25,7 @@ do
       d)
           doDL=1;;
       p)
+	  echo "Setting PG"
           PGPORT=$OPTARG;;
       i)
 	  doInit=1;;
@@ -32,6 +33,8 @@ do
           echo 'unhandled'
       
   esac
+
+echo "Init Music Brainz Using port: "$PGPORT
 #  echo "$flag" $OPTIND $OPTARG
 done
  
