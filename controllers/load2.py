@@ -43,7 +43,7 @@ class Load2Controller(BaseController):
                         if not os.path.isfile(link):
                             os.link(f_abs,link)
                     else:
-                        print, 'no musicbrainz id for' + f
+                        print 'no musicbrainz id for' + f
     
         for gid in gidlist:
             sqw.query("""INSERT OR REPLACE INTO track(gid) values('"""+gid+"""');""")
