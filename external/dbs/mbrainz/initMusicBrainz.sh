@@ -25,7 +25,6 @@ do
       d)
           doDL=1;;
       p)
-	  echo "Setting PG"
           PGPORT=$OPTARG;;
       i)
 	  doInit=1;;
@@ -34,8 +33,6 @@ do
       
   esac
 done
-
-cd mbserve_dir 
 
 if (( doDL ))
 then
@@ -46,6 +43,8 @@ then
     fi
     svn co http://svn.musicbrainz.org/mb_server/branches/RELEASE_20090524-BRANCH/ mb_server
 fi
+
+cd $mbserve_dir 
 
 if (( doInit ))
 then 
@@ -74,9 +73,9 @@ then
 
 
     echo "Creating DBDefs and putting a secret checksum into the config"
-    cp mb_server/cgi-bin/DBDefs.pm.default  mb_server/cgi-bin/DBDefs.pm
+    cp cgi-bin/DBDefs.pm.default  cgi-bin/DBDefs.pm
     rndnum=014501
-    dbd=mb_server/cgi-bin/DBDefs.pm
+    dbd=cgi-bin/DBDefs.pm
     var="`cat $dbd | sed 's|sub SMTP_SECRET_CHECKSUM { "" }|sub SMTP_SECRET_CHECKSUM { "'${rndnum}'" }|'`"
     echo "Success"
     echo
@@ -138,20 +137,6 @@ then
     then
 	mkdir ~/.cron
     fi
-    cp admin/cron/slave.sh ~/.cron/slave.sh
-    echo "Calling sudo to change execution mode"
-    sudo chmod 777 ~/.cron/slave.sh
-    echo "To enable cron server updating, add ~/.cron/slave.sh to your crontab as:"
-    echo "---"
-    echo "10 1,7 * * * ~/.cron/slave.sh" 
-    echo "---"
-    echo "For twice daily execution"
-    echo
-    read -p "hit enter to continue"
-    echo "Success: copied slave cron scripts"
-    echo
-    echo 
-    echo "Done setting up the DB!"
 
     cp admin/cron/slave.sh ~/.cron/slave.sh
     echo "Calling sudo to change execution mode"
@@ -169,8 +154,6 @@ then
     echo
     echo 
     echo "Done setting up the DB!"   
-
-
 
 
 else
