@@ -40,7 +40,7 @@ then
     echo "Downloading musicbrainz database files."
     if [ -d mb_server ]
     then
-	error_exit "$LINENO - MBrainz appears to already be downloaded"
+	echo "MBrainz appears to already be downloaded"
     fi
     svn co http://svn.musicbrainz.org/mb_server/branches/RELEASE_20090524-BRANCH/ mb_server
 fi
