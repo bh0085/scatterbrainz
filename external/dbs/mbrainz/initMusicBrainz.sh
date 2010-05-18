@@ -75,10 +75,16 @@ then
     cp mb_server/cgi-bin/DBDefs.pm.default  mb_server/cgi-bin/DBDefs.pm
     rndnum=014501
     dbd=mb_server/cgi-bin/DBDefs.pm
-    cat dbd | sed s/'sub SMTP_SECRET_CHECKSUM { "" }'/'sub SMTP_SECRET_CHECKSUM { "'${rndnum}'" }'/ > dbd
+    var="`cat $dbd | sed 's|sub SMTP_SECRET_CHECKSUM { "" }|sub SMTP_SECRET_CHECKSUM { "'${rndnum}'" }|'`"
     echo "Success"
-    
     echo
+    echo "$var" > $dbd
+    echo "Setting DBDefs port"
+    var="`cat $dbd | sed 's|port	=> ""|port	=> "'${PGPORT}'"|'`"
+    echo "Success"
+    echo "$var" > $dbd
+    echo
+
     cd mb_server
     dumpname=20100515-000002
     echo "Getting the MB dumps: "
