@@ -28,7 +28,7 @@ def tagDir():
     ask_certain = True
     ask_maybe = True
 
-    for base, dirs, files in os.walk(music_dir,followlinks = True):
+    for base, dirs, files in os.walk('/Users/bh0085/Torrents/TransmissionDL/1969  Pink Floyd - Ummagumma/',followlinks = True):
         #automatically treat each directory as a cluster
         mut = []
         for f in files:
@@ -269,6 +269,7 @@ def confirmMatch(trks,album, certain = False):
                 m.tags.add(txtrk)
 
                 m.save()
+
             print 'changes saved'
             break
         elif var == 'n':

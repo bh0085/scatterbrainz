@@ -6,7 +6,7 @@ from pylons.controllers.util import abort, redirect
 from scatterbrainz.lib.base import BaseController, render
 
 import os
-from mutagen.easyid3 import EasyID3
+from mutagen.mp3 import MP3
 import dbs.config.queryConfig as qc
 import sqliteWrapper as swrap
 
@@ -35,15 +35,20 @@ class Load2Controller(BaseController):
                 ext = os.path.splitext(f)[-1]
                 if ext == '.mp3':
                     f_abs = os.path.join(base,f)
-                    mutagen = EasyID3(f_abs)
-                    if 'musicbrainz_trackid' in mutagen:
-                        gid =mutagen['musicbrainz_trackid'][0]
+                    mutagen = MP3(f_abs)
+
+                    ##for some reason that nobody will probably ever
+                    ##understand, this does not work with EasyID3
+                    tkey = u'TXXX:MusicBrainz Track Id'
+                    if tkey in mutagen.tags.keys():
+                        gid =mutagen[tkey].text[0]
+
                         link = os.path.join(tracks_dir,gid)
                         if not gid in gidlist: gidlist.append(gid)
                         if not os.path.isfile(link):
                             os.link(f_abs,link)
                     else:
-                        print 'no musicbrainz id for' + f
+                        print 'no musicbrainz id for' + f_abs
     
         for gid in gidlist:
             sqw.query("""INSERT OR REPLACE INTO track(gid) values('"""+gid+"""');""")
@@ -51,7 +56,7 @@ class Load2Controller(BaseController):
         n = len(gidlist)
         return 'moved '+str(n)+' tracks to '+tracks_dir+' , indexed in '+dbfile
 
+
     def addextra(self):
-        
         pass
         
