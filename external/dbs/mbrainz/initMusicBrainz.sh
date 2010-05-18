@@ -33,11 +33,10 @@ do
           echo 'unhandled'
       
   esac
-
-echo "Init Music Brainz Using port: "$PGPORT
-#  echo "$flag" $OPTIND $OPTARG
 done
- 
+
+cd mbserve_dir 
+
 if (( doDL ))
 then
     echo "Downloading musicbrainz database files."
@@ -88,7 +87,6 @@ then
     echo "$var" > $dbd
     echo
 
-    cd mb_server
     dumpname=20100515-000002
     echo "Getting the MB dumps: "
     echo "Input a dumpname, (check:ftp://ftp.musicbrainz.org/pub/musicbrainz/data/fullexport for LATEST)"
@@ -155,7 +153,6 @@ then
     echo 
     echo "Done setting up the DB!"
 
-    cd ${mbserve_dir}
     cp admin/cron/slave.sh ~/.cron/slave.sh
     echo "Calling sudo to change execution mode"
     sudo chmod 777 ~/.cron/slave.sh
