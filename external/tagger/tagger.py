@@ -43,8 +43,9 @@ def tagDir():
         for m in mut:
             album_name = m['TALB'].text[0]
             artist_name = m['TPE1'].text[0]
+            print artist_name
             if not album_name in album_names: album_names.append(album_name)
-            if not artist_name in artist_name: artist_names.append(artist_name) 
+            if not artist_name in artist_names: artist_names.append(artist_name) 
             
             if not m.has_key('TRCK') or not m.has_key('TIT2'): 
                 print "MP3's in the current directory lack track or title data.\n ... Continuing to next dir"
@@ -53,11 +54,12 @@ def tagDir():
             track_num = m['TRCK'].text[0]
             num_re = re.compile('^\W*\d*')
             num = re.search(num_re,str(track_num)).group()     
-            title = m['TIT2']
+            title = m['TIT2'].text[0]
             length = m.info.length*1000
             tracks.append({'mut':m,'number':num,'name':title,'length':length})
 
         if tracks == []: continue
+
         ds = []
     
         print '\n\n\nTagging: ' + str(base) + '\n'
@@ -69,6 +71,7 @@ def tagDir():
 
         for a in artist_names:
             for alb in album_names:
+                print a, alb
                 d = pgw.queryToDict("""
 select set_limit(.6);
 select 
@@ -127,10 +130,12 @@ def matchAlbum(tracks, albums):
     warning_flags = []
 
     ntracks = len(tracks)
-    
+
     trks = tracks
     amatched = albums
 
+    print ntracks
+    print len(amatched[0])
     l =len(amatched)
     for i in range(l):
         idx = l - i - 1
@@ -139,6 +144,7 @@ def matchAlbum(tracks, albums):
             amatched.pop(idx)
 
 
+    print "LEN AMATCHED: " +str( len(amatched))
     nmeans = zeros(len(amatched))
     lmeans = zeros(len(amatched))
     nmins = zeros(len(amatched))
@@ -146,15 +152,16 @@ def matchAlbum(tracks, albums):
 
     namefun = lambda x: x['name']
     numfun = lambda x:int(x['number'])
+    
 
     trks = sorted(trks,key =numfun)
     for a in amatched:
-        
         a = sorted(a,
                    key = numfun)
 
-    
+
     if tracks[0].has_key('number'):
+        
         for j in range(len( amatched)):
             a = amatched[j]
             tnames = map(namefun, trks)
@@ -168,6 +175,7 @@ def matchAlbum(tracks, albums):
             length_sims = np.divide(length_sims,10000)
             length_sims[np.where(length_sims > 1)] = 1
             length_sims = 1 - length_sims
+            
 
             nmeans[j] = (name_sims.mean())
             lmeans[j] = (length_sims.mean())
@@ -179,6 +187,9 @@ def matchAlbum(tracks, albums):
         nmeans = np.delete(nmeans,bad)
         lmeans =np.delete(lmeans,bad)
         nmins = np.delete(nmins,bad)
+        print bad
+        print nmeans, lmeans
+
         for b in bad:
             amatched.pop(b)
             all_sims.pop(b)
@@ -248,11 +259,11 @@ def confirmMatch(trks,album, certain = False):
                 art_key = 'TXXX:MusicBrainz Artist Id'
                 if alb_key in m.tags.keys():m.tags.pop(alb_key)
                 if art_key in m.tags.keys():m.tags.pop(art_key)
-                if trk_key in m.tags.keys():m.tags.pop(
+                if trk_key in m.tags.keys():m.tags.pop(trk_key)
 
-                txart = TXXX(3, 'MusicBrainz Artist Id', album[i]['artist_mbid'])
-                txalb = TXXX(3, 'MusicBrainz Album Id', album[i]['album_mbid'])
-                txtrk = TXXX(3, 'MusicBrainz Track Id', album[i]['track_mbid'])
+                txart = TXXX(3,'MusicBrainz Artist Id', album[i]['artist_mbid'])
+                txalb = TXXX(3,'MusicBrainz Album Id', album[i]['album_mbid'])
+                txtrk = TXXX(3,'MusicBrainz Track Id', album[i]['track_mbid'])
                 m.tags.add(txart)
                 m.tags.add(txalb)
                 m.tags.add(txtrk)
