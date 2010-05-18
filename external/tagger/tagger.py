@@ -53,7 +53,7 @@ def tagDir():
 
             track_num = m['TRCK'].text[0]
             num_re = re.compile('^\W*\d*')
-            num = re.search(num_re,str(track_num)).group()     
+            num = re.search(num_re,unicode(track_num)).group()     
             title = m['TIT2'].text[0]
             length = m.info.length*1000
             tracks.append({'mut':m,'number':num,'name':title,'length':length})
@@ -62,7 +62,7 @@ def tagDir():
 
         ds = []
     
-        print '\n\n\nTagging: ' + str(base) + '\n'
+        print '\n\n\nTagging: ' + unicode(base) + '\n'
         print 'found artists:'
         pprint.pprint(artist_names)
         print 'and albums:'
@@ -357,7 +357,7 @@ and l_album_artist.link0 = album.id ;
     points[(np.where(length_scores == length_scores.max()))] += length_gap
     points[(np.where(name_scores == name_scores.max()))] += name_gap
     
-    print str(na) + ' albums match the current directory.'
+    print unicode(na) + ' albums match the current directory.'
     print 'Disambiguation matrix: '
     print points
     print
