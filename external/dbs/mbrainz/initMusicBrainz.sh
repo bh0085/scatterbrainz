@@ -16,6 +16,7 @@ doDL=0
 doInit=0
 PGPORT=5432
 mbserve_dir=`pwd`/mb_server
+mbserve_root=`pwd`
 
 while getopts "hdip:" flag
 do
@@ -33,6 +34,8 @@ do
       
   esac
 done
+cd $mbserve_root
+
 
 if (( doDL ))
 then
@@ -114,6 +117,7 @@ then
     su postgres -c "./admin/InitDb.pl --createdb --empty-database"
     echo "Success: Created empty musicbrainz database"
     echo
+    echo `pwd`
     echo "Importing database tables from mbrainz dumps"
     ./admin/InitDB.pl --import mbdump*.tar.bz2
     echo "Success, configured database"
