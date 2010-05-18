@@ -33,7 +33,7 @@ def tagDir():
         mut = []
         for f in files:
             ext = os.path.splitext(f)[-1]
-            if ext == '.mp3': mut.append(MP3(os.path.join(base,f),ID3=EasyID3))
+            if ext == '.mp3': mut.append(MP3(os.path.join(base,f)))
 
         artist_names = []
         album_names = []
@@ -41,29 +41,24 @@ def tagDir():
     
         if mut == []: continue
         for m in mut:
-            for k, val in m.iteritems():
-                if k == 'artist':
-                    if not val[0] in artist_names:
-                        artist_names.append(val[0])
-                if k == 'album':
-                    if not val[0] in album_names:
-                        album_names.append(val[0])
-
-            if 'tracknumber' not in m.keys():
-                print 'Uh oh... track number is not in the key set.... skipping directory.'
+            album_name = m['TALB'].text[0]
+            artist_name = m['TPE1'].text[0]
+            if not album_name in album_names: album_names.append(album_name)
+            if not artist_name in artist_name: artist_names.append(artist_name) 
+            
+            if not m.has_key('TRCK') or not m.has_key('TIT2'): 
+                print "MP3's in the current directory lack track or title data.\n ... Continuing to next dir"
                 break
-                
-            if 'tracknumber' in m.keys() and 'title' in m.keys():
-                num = m['tracknumber'][0]
-                num_re = re.compile('^\W*\d*')
-                num = re.search(num_re,str(num)).group()
-                title = m['title'][0]
-                length = m.info.length* 1000
-                tracks.append({'mut':m,'number':num,'name':title,'length':length})
 
-        ds = []
+            track_num = m['TRCK'].text[0]
+            num_re = re.compile('^\W*\d*')
+            num = re.search(num_re,str(track_num)).group()     
+            title = m['TIT2']
+            length = m.info.length*1000
+            tracks.append({'mut':m,'number':num,'name':title,'length':length})
 
         if tracks == []: continue
+        ds = []
     
         print '\n\n\nTagging: ' + str(base) + '\n'
         print 'found artists:'
@@ -246,9 +241,22 @@ def confirmMatch(trks,album, certain = False):
         if var == 'y':
             for i in range(ntracks):
                 m = trks[i]['mut']
-                m['musicbrainz_trackid'] = album[i]['track_mbid']
-                m['musicbrainz_albumid'] = album[i]['album_mbid']
-                m['musicbrainz_artistid'] = album[i]['artist_mbid']
+                from mutagen.id3 import TXXX
+                
+                alb_key = 'TXXX:MusicBrainz Album Id'
+                trk_key = 'TXXX:MusicBrainz Track Id'
+                art_key = 'TXXX:MusicBrainz Artist Id'
+                if alb_key in m.tags.keys():m.tags.pop(alb_key)
+                if art_key in m.tags.keys():m.tags.pop(art_key)
+                if trk_key in m.tags.keys():m.tags.pop(
+
+                txart = TXXX(3, 'MusicBrainz Artist Id', album[i]['artist_mbid'])
+                txalb = TXXX(3, 'MusicBrainz Album Id', album[i]['album_mbid'])
+                txtrk = TXXX(3, 'MusicBrainz Track Id', album[i]['track_mbid'])
+                m.tags.add(txart)
+                m.tags.add(txalb)
+                m.tags.add(txtrk)
+
                 m.save()
             print 'changes saved'
             break
