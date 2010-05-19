@@ -119,7 +119,7 @@ then
     echo
     echo `pwd`
     echo "Importing database tables from mbrainz dumps"
-    ./admin/InitDB.pl --import mbdump*.tar.bz2
+    admin/InitDB.pl --import mbdump*.tar.bz2
     echo "Success, configured database"
     echo
 
