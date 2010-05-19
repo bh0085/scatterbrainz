@@ -153,7 +153,8 @@ then
     echo
     read -p "hit enter to continue"
     echo 'Pointing cron job to: '$mbserve_dir
-    cat ~/.cron/slave.sh | sed 's|cd.*|cd '$mbserve_dir'|' > ~/.cron/slave.sh
+    var="`cat ~/.cron/slave.sh | sed 's|cd.*|cd '$mbserve_dir'|'`"
+    echo "$var" > ~/.cron/slave.sh
     echo "Success: copied slave cron scripts"
     echo
     echo 
