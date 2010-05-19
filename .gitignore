@@ -1,6 +1,6 @@
 *~
 *.pyc
+*.sqlite
 
 external/.DS_Store
 external/dbs/mbrainz/mb_server
-external/dbs/*/*.sqlite
