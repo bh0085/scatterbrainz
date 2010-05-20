@@ -57,13 +57,15 @@ def main(argv):
         sqw.query('''
     CREATE TABLE album(
       id INTEGER PRIMARY KEY,
-      gid TEXT UNIQUE);
+      gid TEXT UNIQUE,
+      name TEXT); 
     ''')
     if not 'artist' in map(lambda x: x['name'],d):
         sqw.query('''
     CREATE TABLE artist(
       id INTEGER PRIMARY KEY,
-      gid TEXT UNIQUE);
+      gid TEXT UNIQUE,
+      name TEXT UNIQUE);
     ''')
     if not 'track' in map(lambda x: x['name'],d):
         sqw.query('''

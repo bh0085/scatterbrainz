@@ -26,13 +26,20 @@ class sqliteWrapper():
 
     def commit(self):
         self._cxn().commit()
-    def query(self, query):
-        cursor = self._cursor()
-        cursor.execute(query)
 
-    def queryToDict(self,query):
+    def query(self, query,params = None):
         cursor = self._cursor()
-        cursor.execute(query)
+        if not params:
+            cursor.execute(query)
+        else:
+            cursor.execute(query,params)
+
+    def queryToDict(self,query,params = None):
+        cursor = self._cursor()
+        if not params:
+            cursor.execute(query)
+        else:
+            cursor.execute(query,params)
         d = self.fetchDict(cursor)
         return d
     

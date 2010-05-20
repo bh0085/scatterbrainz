@@ -26,13 +26,17 @@ function usage
 PG_PORT=5432
 PG_HOST=localhost
 MB_LOCAL=1
+SB_PORT=5000
+SB_ADDRESS=''
 for i in $* ; do
   case "$i" in
-    --mb-host* ) PG_HOST=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
-    --mb-port* ) PG_PORT=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;; 
-    --no-mb-local ) MB_LOCAL=0 ;; 
-    --help ) usage; exit 0 ;;
-    * ) usage; error_exit "$LINENO unhandled option: $i" ;;
+      --mb-host* ) PG_HOST=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
+      --mb-port* ) PG_PORT=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;; 
+      --no-mb-local ) MB_LOCAL=0 ;; 
+      --sb-port* ) SB_PORT=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
+      --sb-address* ) SB_ADDRESS=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
+      --help ) usage; exit 0 ;;
+      * ) usage; error_exit "$LINENO unhandled option: $i" ;;
   esac
 done
 
@@ -64,6 +68,8 @@ writeval SB_MUSIC_LIB_ABS
 writeval SB_MUSIC_LIB
 writeval SB_FRIENDS_DIR
 writeval SB_FRIENDS_DB
+writeval SB_ADDRESS
+writeval SB_PORT
 
 echo "...Writing MBrainz prefs"
 

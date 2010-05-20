@@ -22,8 +22,6 @@ def toHTML(str_in):
     return html_out
 
 class QueriesController(BaseController):
-
-
     def index(self):
         html = """
 Available queries:
@@ -39,8 +37,6 @@ None
     def getFriendsJSON(self):
         return sjson.dumps(self.getFriends())
 
-
-
     #returns sjson for all music in friends' networks.
     def getFriendsMusic(self):
         friends = self.getFriends()
@@ -50,18 +46,13 @@ None
             q = address+"/queries/getLocalMusicJSON"
             o = urllib2.build_opener()
             d = sjson.loads(o.open(q).read())
-            queries.append(d)
-            
+            queries.append(d)       
         data = {}
         data['nq'] = len(queries)
         data['query0'] = queries[0][0]
-        
         return data
-
     def getFriendsMusicJSON(self):
         return sjson.dumps(self.getFriendsMusic())
-  
-
     #returns sjson for local music.
     def getLocalMusic(self):
         fetched = fm.fetchWithParams(request.params)

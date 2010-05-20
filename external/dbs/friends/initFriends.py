@@ -34,15 +34,26 @@ def main(argv):
             sqw.query("""drop table '""" + table['name'] + """';""")
 
     d = sqw.queryToDict('''select name from sqlite_master where type = 'table';''')
-    if not 'friends' in map(lambda x: x['name'],d):
+    if not 'known' in map(lambda x: x['name'],d):
         sqw.query('''
-    CREATE TABLE friends(
+    CREATE TABLE known(
       id INTEGER PRIMARY KEY,
-      address TEXT,
+      address TEXT UNIQUE,
       pg_port INTEGER, 
       sb_port INTEGER
 );
     ''')
+
+    if not 'friends' in map(lambda x: x['name'],d):
+        sqw.query('''
+    CREATE TABLE friends(
+      id INTEGER PRIMARY KEY,
+      known INTEGER NON NULL UNIQUE,
+      FOREIGN KEY(known) REFERENCES known(id)
+
+);
+    ''')
+
 
 
 if __name__ == "__main__":

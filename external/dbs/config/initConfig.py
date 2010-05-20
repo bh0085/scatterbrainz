@@ -14,6 +14,8 @@ mb_port = os.environ['MB_PORT']
 mb_host = os.environ['MB_HOST']
 friends_dir = os.environ['SB_FRIENDS_DIR']
 friends_dbfile=os.environ['SB_FRIENDS_DB']
+sb_address=os.environ['SB_ADDRESS']
+sb_port=os.environ['SB_PORT']
 
 sqw = swrap.sqliteWrapper(config_dbfile)
 d = sqw.queryToDict('''select name from sqlite_master where type = 'table';''')
@@ -42,7 +44,9 @@ init_prefs = {
     'friends_dir':friends_dir,
     'friends_dbfile':friends_dbfile,
     'config_dir':config_dir,
-    'config_dbfile':config_dbfile
+    'config_dbfile':config_dbfile,
+    'sb_address':sb_address,
+    'sb_port':sb_port
 }
 for k, item in init_prefs.iteritems():
     sqw.query("""
