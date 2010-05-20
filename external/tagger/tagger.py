@@ -22,13 +22,13 @@ def mbrainz():
     return pgw
 
 def tagDir():
-    music_dir = qc.query('music_dir')
+    music_dir = qc.query('music_lib')
     pgw = mbrainz()
 
     ask_certain = True
     ask_maybe = True
 
-    for base, dirs, files in os.walk('/Users/bh0085/Torrents/TransmissionDL/1969  Pink Floyd - Ummagumma/',followlinks = True):
+    for base, dirs, files in os.walk(music_dir,followlinks = True):
         #automatically treat each directory as a cluster
         mut = []
         for f in files:
