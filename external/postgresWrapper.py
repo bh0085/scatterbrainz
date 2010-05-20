@@ -19,6 +19,8 @@ class postgresWrapper():
         self._openCXN()
                 
     def _openCXN(self):
+        print self.port
+        print type(self.port)
         self.cxn = psycopg2.connect(host = self.host,
                                     port = self.port,
                                     database =self.db,

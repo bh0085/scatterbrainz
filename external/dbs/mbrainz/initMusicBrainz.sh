@@ -43,8 +43,14 @@ then
     if [ -d mb_server ]
     then
 	echo "MBrainz appears to already be downloaded"
+	read -p "Have you already set up MBRAINZ (y/n)?" var 
+	if [[ $var != 'n' ]]
+	then
+	    exit 0
+	fi
     fi
     svn co http://svn.musicbrainz.org/mb_server/branches/RELEASE_20090524-BRANCH/ mb_server
+
 fi
 
 cd $mbserve_dir 
@@ -75,16 +81,14 @@ then
     echo
 
 
-    echo "Creating DBDefs and putting a secret checksum into the config"
+    echo "Creating DBDefs"
     cp cgi-bin/DBDefs.pm.default  cgi-bin/DBDefs.pm
     rndnum=014501
     dbd=cgi-bin/DBDefs.pm
     var="`cat $dbd | sed 's|sub SMTP_SECRET_CHECKSUM { "" }|sub SMTP_SECRET_CHECKSUM { "'${rndnum}'" }|'`"
-    echo "Success"
-    echo
-    echo "$var" > $dbd
-    echo "Setting DBDefs port"
-    var="`cat $dbd | sed 's|port	=> ""|port	=> "'${PGPORT}'"|'`"
+    var="`echo "$var" | sed 's|sub REPLICATION_TYPE { RT_STANDALONE }|sub REPLICATION_TYPE { RT_SLAVE }|'`"
+    var="`echo "$var" | sed 's|sub MB_SERVER_ROOT	{ \"/home/httpd/musicbrainz/mb_server\" }|sub MB_SERVER_ROOT	{ \"'${mbserve_dir}'\"}|'`"
+    var="`echo "$var" | sed 's|port	=> ""|port	=> "'${PGPORT}'"|'`"
     echo "Success"
     echo "$var" > $dbd
     echo

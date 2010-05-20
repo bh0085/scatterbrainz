@@ -1,5 +1,13 @@
 This is a web-based streaming music player that plays mp3s in-browser using HTML5 <audio> and has a jquery-heavy UI to browse and queue tracks.  It has some developing functionality to lookup currently playing tracks using various music webservices in order to show questionably useful information.  Think of it like a drunk amarok 1.4 clone for the internet.
 
+DB Setup Instructions:
+   Run configure.sh.
+   Run init.sh.
+   
+   Then load up the webserver. To load tracks, point your browser to:
+     http://(eg:scatterbrainz:5000)/load2/addtracks
+
+
 Features
 * Catalogs a directory of mp3s and tags
 * Tree browser to queue artists/albums/tracks

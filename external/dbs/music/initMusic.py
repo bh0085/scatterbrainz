@@ -47,9 +47,9 @@ def main(argv):
 
 
     d = sqw.queryToDict('''select name from sqlite_master where type = 'table';''')
-    if not 'tracks' in map(lambda x: x['name'],d):
+    if not 'tracklist' in map(lambda x: x['name'],d):
         sqw.query('''
-    CREATE TABLE track(
+    CREATE TABLE tracklist(
       id INTEGER PRIMARY KEY,
       gid TEXT UNIQUE);
     ''')
@@ -65,17 +65,18 @@ def main(argv):
       id INTEGER PRIMARY KEY,
       gid TEXT UNIQUE);
     ''')
-    if not 'track_meta' in map(lambda x: x['name'],d):
+    if not 'track' in map(lambda x: x['name'],d):
         sqw.query('''
-    CREATE TABLE track_meta(
+    CREATE TABLE track(
       id INTEGER PRIMARY KEY,
-      track INTEGER UNIQUE,
+      listing INTEGER UNIQUE,
+      gid TEXT UNIQUE,
       name TEXT,
       number INTEGER,
       length INTEGER,
       album INTEGER,
       artist INTEGER,
-      FOREIGN KEY(track) REFERENCES track(id),
+      FOREIGN KEY(listing) REFERENCES tracklist(id),
       FOREIGN KEY(album) REFERENCES album(id),
       FOREIGN KEY(artist) REFERENCES artist(id)
     );

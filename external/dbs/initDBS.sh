@@ -9,57 +9,35 @@ function usage(){
 	  echo '  -c: set up local configuration db'
 }
 
-doMB=0
-doConfig=0
-doMusic=0
-PGPORT=5432
-dbs_dir=`pwd`
-while getopts "mp:cdh" flag
-do
-  case $flag in
-      h)
-	  usage;;
-      m)
-          doMusic=1;;
-      p)
-          PGPORT=$OPTARG;;
-      c)
-	  doConfig=1;;
-      d)
-	  doMB=1;;
-      *) 
-          echo 'unhandled'
-  esac
-done
+dbcfile=$SB_DIR/dbs.conf
+source $dbcfile
 
-if (( $doMB == 1 ))
+
+if (( $MB_LOCAL == 1 ))
 then
-    echo "INITDBS: Initializing MBrainz db with port: " $PGPORT
-    cd ${dbs_dir}/mbrainz
-    ./initMusicBrainz.sh -d -i -p $PGPORT
+    echo "INITDBS: Initializing MBrainz db with port: " $MB_PORT
+    cd $MB_DIR
+    ./initMusicBrainz.sh -d -i -p $MB_PORT
     echo
     echo
 fi
 
-if (( $doConfig == 1 ))
-then
-    echo "INITDBS: Initializing config"
-    cd ${dbs_dir}/config
-    python initConfig.py
-    echo
-    echo
+echo "INITDBS: Initializing config"
+cd ${SB_CONF_DIR}
+python initConfig.py
+echo
+echo
     
-fi
-
-echo $dbs_dir
-if (( $doMusic == 1 ))
-then
-    echo "INITDBS: Initializing local music db with reset-all"
-    cd ${dbs_dir}/music
-    python initMusic.py --reset-all
-
-    echo
-    echo
-fi
+echo "INITDBS: Initializing local music db with reset-all"
+cd ${SB_MUSIC_DIR}
+python initMusic.py --reset-all
+echo
+echo
+    
+echo "INITDBS: Initializing local friends db with reset-all"
+cd ${SB_FRIENDS_DIR}
+python initFriends.py --reset-all
+echo
+echo
 
 exit 1

@@ -21,6 +21,8 @@ class sqliteWrapper():
             self._openCXN()
             print "Initializing connection"
         return self._cxn().cursor()
+    def close(self):
+        self._closeCXN()
 
     def commit(self):
         self._cxn().commit()
