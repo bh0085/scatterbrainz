@@ -17,7 +17,15 @@ class FriendsController(BaseController):
         # Return a rendered template
         #return render('/friends.mako')
         # or, return a response
-        return 'Hello World'
+        c.cname = "friends"
+        c.cdesc = "a collection of requests to manipulate, broadcast, and augment the 'friends' database"
+        c.methods = [{'n':'addknown','d':'adds a seed friend at swiftway'},
+                     {'n':'list','d':'list current friends'},
+                     {'n':'friendallknown','d':'add currently known server to friends'},
+                     {'n':'annoucetoall','d':'::stub::'},
+                     {'n':'hearabout','d':'called by a remote serve to announce itself'}
+                     ]
+        return render('describe_controller.mako')
 
     def addknown(self):
         fdb = qc.query('friends_dbfile')
@@ -40,6 +48,14 @@ class FriendsController(BaseController):
 
     def announcetoall(self):
         return sjson.dumps("report method not yet implemented... reporting nothing")
+    def friendAddressesJSON(self):
+        sqw = swrap.sqliteWrapper(qc.query('friends_dbfile'))
+        knows = sqw.queryToDict("SELECT address, sb_port FROM known, friends WHERE known.id = friends.known")
+        sqw.close
+        urls = []
+        for k in knows:
+            urls.append("http://"+k['address']+':'+str(k['sb_port']))
+        return sjson.dumps(urls)
     def announcetofriends(self):
         pass
     def friendallknown(self):

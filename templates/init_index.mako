@@ -14,5 +14,5 @@ Remaining tasks include:
 <li>grabbing a list of friends off of the main server.</li>
 </ul><br/>
 To do all of this stuff at once, you can simply point your browser to:</br>
-<a href="http://${c.sb_address}:${c.sb_port}/init/all">http://${c.sb_address}:${c.sb_port}/init/all</a>
+<a href="/init/all">/init/all</a>
 <br/>

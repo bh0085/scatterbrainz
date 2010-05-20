@@ -17,10 +17,14 @@ import mbrainzWrapper as mbwrap
 class MusicController(BaseController):
 
     def index(self):
-        # Return a rendered template
-        #return render('/music.mako')
-        # or, return a response
-        return 'Hello World'
+        c.cname = "music"
+        c.cdesc = "a collection of requests to manipulate, broadcast, and augment the 'music' database"
+        c.methods = [{'n':'addtracks','d':'add tracks living in the music directory.'},
+                     {'n':'addmeta','d':'for all tracks that have been added, add in metadata from musicbrainz.'}
+                     ]
+        return render('describe_controller.mako')
+
+
     def addtracks(self):
         sb_dir = qc.query('scatterbrainz_dir')
         music_lib = qc.query('music_lib')
@@ -90,15 +94,27 @@ LIMIT 1;
 """
                                 , params={'track_gid':t['gid']} )
             r = d[0]
-            mdb.query('INSERT OR IGNORE INTO artist(name,gid) values( :artist_name, :artist_gid);'
-                      ,params = {'artist_name':r['artist_name'],
+
+
+            mdb.query('INSERT OR IGNORE INTO artist(name,gid) values( :artist_name, :artist_gid);',params = {'artist_name':r['artist_name'],
                                  'artist_gid':r['artist_gid']})
-            mdb.query('INSERT OR IGNORE INTO album(name,gid) values( :album_name, :album_gid);'
+
+
+            ans=mdb.queryToDict('select id from artist where gid= :artist_gid;' ,params = {'artist_gid':r['artist_gid']})
+            artist_id = ans[0]['id']
+
+
+            mdb.query('INSERT OR IGNORE INTO album(name,gid,artist) values( :album_name, :album_gid,:artist_id);'
                       ,params = {'album_name':r['album_name'],
+                                 'artist_id':artist_id,
                                  'album_gid':r['album_gid']})
 
             album_id = mdb.queryToDict('SELECT id FROM album WHERE gid = :album_gid',params = {'album_gid':r['album_gid']})[0]['id']
-            artist_id = mdb.queryToDict('SELECT id FROM artist WHERE gid = :artist_gid',params = {'artist_gid':r['artist_gid']})[0]['id']
+
+            artist_id = mdb.queryToDict('''
+SELECT id 
+FROM artist 
+WHERE gid = :artist_gid''',params = {'artist_gid':r['artist_gid']})[0]['id']
 
             mdb.query("""
 INSERT OR IGNORE INTO 

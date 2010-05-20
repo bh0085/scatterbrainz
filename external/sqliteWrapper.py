@@ -59,3 +59,8 @@ class sqliteWrapper():
             dicts.append(fdict)
         return dicts
 
+def queryOnce(dbfile,query,params = None):
+    sqw = sqliteWrapper(dbfile)
+    d = sqw.queryToDict(query,params = params)
+    sqw.close()
+    return d

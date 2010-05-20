@@ -23,19 +23,20 @@ def toHTML(str_in):
 
 class QueriesController(BaseController):
     def index(self):
-        html = """
-Available queries:
-None
-"""
-        return toHTML(html)
-    #sjon, listsfriends.
+        c.cname = "queries"
+        c.cdesc = "a collection of prepacked queries that will return json"
+        c.methods = [{'n':'getFriends','d':'add tracks living in the music directory.'},
+                     {'n':'getLocalMusic','d':'A list of tracks on this computer.'},
+                     {'n':'getFriendsMusic','d':'A list of tracks on friends computers.'}
+                     ]
+        return render('describe_controller.mako')
+
+    
     def getFriends(self):
         sqw = swrap.sqliteWrapper(qc.query('friends_dbfile'))
         d = sqw.queryToDict("select address, sb_port, pg_port from friends")
         sqw.close()
-        return d
-    def getFriendsJSON(self):
-        return sjson.dumps(self.getFriends())
+        return sjson.dumps(d)
 
     #returns sjson for all music in friends' networks.
     def getFriendsMusic(self):
@@ -50,13 +51,8 @@ None
         data = {}
         data['nq'] = len(queries)
         data['query0'] = queries[0][0]
-        return data
-    def getFriendsMusicJSON(self):
-        return sjson.dumps(self.getFriendsMusic())
-    #returns sjson for local music.
+        return sjson.dumps(data)
     def getLocalMusic(self):
-        fetched = fm.fetchWithParams(request.params)
-        return fetched
-    def getLocalMusicJSON(self):
-        return sjson.dumps(self.getLocalMusic())
+        fetched = fm.getAllArtists()
+        return sjson.dumps(fetched)
     

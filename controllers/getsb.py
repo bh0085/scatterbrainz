@@ -21,9 +21,8 @@ log = logging.getLogger(__name__)
 import pgdb
 from pg import OperationalError
 
-import remote_sql.fetchRemote as fr
-import local_sql.fetchLocal as fl
-    
+import dbs.mbrainz.fetchMB as fr
+import dbs.music.fetchMusic as fm
 
 class GetsbController(BaseController):
     cxn = None
@@ -62,7 +61,7 @@ class GetsbController(BaseController):
                 if s == 'remote':
                     src_module = fr
                 elif s =='local':
-                    src_module = fl
+                    src_module = fm
                 
                 if action == 'albums':
                     dt = 'album'

@@ -58,7 +58,11 @@ def main(argv):
     CREATE TABLE album(
       id INTEGER PRIMARY KEY,
       gid TEXT UNIQUE,
-      name TEXT); 
+      artist INT,
+      name TEXT,
+      FOREIGN KEY(artist) REFERENCES artist(id)
+); 
+
     ''')
     if not 'artist' in map(lambda x: x['name'],d):
         sqw.query('''
