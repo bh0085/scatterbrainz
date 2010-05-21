@@ -12,7 +12,7 @@ def configure():
     what_user = raw_input('username: ')
     print "\nWhat.cd password "
     what_pass = raw_input('password: ')
-    what_dbfile=os.path.join(what_dir,'what_'+sb_user)
+    what_dbfile=os.path.join(what_dir,'what_'+sb_user'.sqlite')
     prefs.writePref('what_sb_user',sb_user)
     prefs.writePref('what_user',what_user,sb_user)
     prefs.writePref('what_pass',what_pass,sb_user)
