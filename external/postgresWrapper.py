@@ -72,5 +72,14 @@ class postgresWrapper():
         return dicts
 
 
-
+    def exists(self,query, params):
+        cursor = self._cursor()
+        if not params:
+            cursor.execute(query)
+        else:
+            cursor.execute(query,params)
+        if cursor.fetchone: 
+            return True
+        else:
+            return False
 

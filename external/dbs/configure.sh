@@ -35,6 +35,8 @@ for i in $* ; do
       --no-mb-local ) MB_LOCAL=0 ;; 
       --sb-port* ) SB_PORT=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
       --sb-address* ) SB_ADDRESS=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
+      --sb-user* ) SB_USER=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
+      --sb-password* ) SB_PASS=`echo $i | sed 's/^.*=\(.*\)/\1/'` ;;
       --help ) usage; exit 0 ;;
       * ) usage; error_exit "$LINENO unhandled option: $i" ;;
   esac
@@ -59,6 +61,7 @@ SB_DOCUMENT_ROOT=${SB_DIR}/public
 SB_MUSIC_LIB_ABS=${SB_DOCUMENT_ROOT}/.music
 SB_MUSIC_LIB=.music
 
+
 writeval SB_CONF_DIR
 writeval SB_CONF_DB
 writeval SB_MUSIC_DIR
@@ -70,6 +73,8 @@ writeval SB_FRIENDS_DIR
 writeval SB_FRIENDS_DB
 writeval SB_ADDRESS
 writeval SB_PORT
+writeval SB_USER
+writeval SB_PASS
 
 echo "...Writing MBrainz prefs"
 
@@ -84,6 +89,7 @@ writeval MB_PORT
 echoval MB_LOCAL
 echoval MB_HOST
 echoval MB_PORT
+echoval SB_USER
 
 MB_DIR=${SB_DIR}/external/dbs/mbrainz
 writeval MB_DIR

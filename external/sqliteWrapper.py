@@ -58,6 +58,16 @@ class sqliteWrapper():
                 fdict[key] = val 
             dicts.append(fdict)
         return dicts
+    def exists(self,query, params):
+        cursor = self._cursor()
+        if not params:
+            cursor.execute(query)
+        else:
+            cursor.execute(query,params)
+        if cursor.fetchone: 
+            return True
+        else:
+            return False
 
 def queryOnce(dbfile,query,params = None):
     sqw = sqliteWrapper(dbfile)
