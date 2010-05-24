@@ -1,6 +1,6 @@
 body {
     background-color:#289976;
-    font-family: Optima, sans-serif;
+    font-family: 'Verlag Condensed', 'Abadi MT Condensed', 'Futura Std Light Condensed', 'Futura Condensed', 'Gill Sans', 'Arial Narrow', Calibri, 'Trebuchet MS', Georgia, sans-serif;
     font-size:14;
     margin:0px;
 
@@ -55,10 +55,22 @@ As a cheat, I'm using overflow hidden in "main_outer" to hide the mess.
 
 /*COLUMN BROWSER */
 
-A:link {text-decoration: none;}
-A:visited {text-decoration: none;}
-A:active {text-decoration: none;}
-A:hover {text-decoration: underline; }
+A:link {
+    text-decoration: none; 
+    color:#111111;
+    font-weight:lighter;}
+A:visited {
+    text-decoration: none;
+    color:#111111;
+ font-weight:lighter;}
+A:active {
+    text-decoration: none; 
+    color:#111111;
+font-weight:lighter;}
+A:hover {
+    text-decoration: underline; 
+    color:#111111;
+ font-weight:lighter;}
 
 .column_ul {
     position:relative;
@@ -82,16 +94,18 @@ li {
 
 .column_ul .dataview_list_item{
     margin:2px 0px;
-    padding:.75ex 3ex;
+    padding:.2ex 3ex;
     border-style:solid;
     border-color:#444444;
     border-width:1px;
+    font-weigth:lighter;
+    font-size:20px;
     height:auto;
     background-color:#FAFAFA;
 }
 
 .column_ul .dataview_sub_list_item{
-    font-size:10px;
+    font-size:16px;
 
 }
 

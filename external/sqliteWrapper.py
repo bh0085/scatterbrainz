@@ -64,7 +64,7 @@ class sqliteWrapper():
             cursor.execute(query)
         else:
             cursor.execute(query,params)
-        if cursor.fetchone: 
+        if cursor.fetchone(): 
             return True
         else:
             return False

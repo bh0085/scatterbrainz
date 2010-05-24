@@ -83,3 +83,11 @@ class postgresWrapper():
         else:
             return False
 
+    def queryReturn(self, query, params = None):
+        cursor = self._cursor()
+        if not params:
+            cursor.execute(query)
+        else:
+            cursor.execute(query)
+        return cursor.fetchall()
+

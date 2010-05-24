@@ -24,6 +24,27 @@ values(:name,:value,:user);
     db.commit()
     db.close()
 
+def deletePref(name, username = None):
+    
+    db = sqw.sqliteWrapper(qc.query('config_dbfile'))
+    if not username:
+        db.query("""
+DELETE FROM global
+WHERE name =:name;
+"""
+                           ,params = {'name':name})
+    else:
+        uid = db.queryToDict("""SELECT id FROM user WHERE name = :username;""",params={'username':username})[0]['id']
+        d = db.query("""
+DELETE FROM user_prefs
+WHERE  name = :name
+AND user = :user;
+"""
+                           ,params = {'name':name,
+                                      'user':uid})
+    db.commit()
+    db.close()
+
 def readPref(name, username = None):
     db = sqw.sqliteWrapper(qc.query('config_dbfile'))
     if not username:

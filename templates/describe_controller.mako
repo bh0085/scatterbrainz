@@ -1,4 +1,3 @@
-<script type="text/javascript" src="/jquery-1.4.2.min.js"></script>
 <script type = "text/javascript">
 $(document).ready(function(){
 	u = $("<ul>");
@@ -17,7 +16,7 @@ $(document).ready(function(){
 });
 
 </script>
-Welcome to ${c.cname}<br/>
+-------Scatterbrainz controller description for: <b>${c.cname}</b>-------<br/>
 <br/>
 ${c.cdesc}
 <br/>

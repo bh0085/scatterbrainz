@@ -102,6 +102,18 @@ CREATE TABLE user(
 );
 ''')
 
+if not 'plugin' in map(lambda x: x['name'],d):
+    sqw.query('''
+CREATE TABLE plugin(
+  id INTEGER PRIMARY KEY,
+  name TEXT,
+  user INT,
+  FOREIGN KEY(user) REFERENCES user(id),
+  unique(name,user)
+);
+''')
+
+
 sqw.commit()
 sqw.close()
 

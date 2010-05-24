@@ -21,7 +21,7 @@ function mlinkedListItem(d,rc){
     var header =  $("<li>").append($(mlink(main_type,d,rc,str)).addClass('dataview_list_item_header'));
     elt.append(header);
     
-    if (d['elements']){
+    if (d['elements'].length > 1){
 	$.each(d['elements'],function(idx,item){
 		   var dt = item['datatype'];
 		   str = item['tostring'];

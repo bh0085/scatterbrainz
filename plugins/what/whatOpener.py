@@ -2,22 +2,48 @@ import MultipartPostHandler, urllib2, cookielib
 import urllib
 
 class whatOpener():
-    o = None;
+    def __init__(self,uname, pw):
+        self._opener = None
+        self.uname = uname;
+        self.pw = pw;
+
     def opener(self):
-        if whatOpener.o == None:
+        if self._opener == None:
             self.reload()
 
-        return whatOpener.o
+        return self._opener
+
     def reload(self):
-        print "Opening new connection to what.cd"
-        # build opener with HTTPCookieProcessor
         o = urllib2.build_opener(urllib2.HTTPCookieProcessor())
-        urllib2.install_opener( o)
+        self._opener = o
+
         
-        # assuming the site expects 'user' and 'pass' as query params
-        p = urllib.urlencode( { 'username' : 'bh0085','password':'dinobot1w' })
-        
-        # perform login with params
-        f = o.open( u'http://what.cd/login.php',  p )
+    def requestCookies(self):
+        o = self.opener()
+        for h in o.handlers:
+            if h.__class__ == urllib2.HTTPCookieProcessor:
+                h.cookiejar.clear()
+                
+        p = urllib.urlencode( { 'username' : self.uname,'password':self.pw })
+        f = o.open( u'http://what.cd/login.php',  p )    
         f.close()
-        whatOpener.o = o
+
+    def getCookies(self):
+        o = self.opener()
+        cookies = []
+        for h in o.handlers:
+            if h.__class__ == urllib2.HTTPCookieProcessor:
+                cookies = list(h.cookiejar)
+
+        return cookies
+
+    def setCookies(self, cookies):
+        o = self.opener()
+        for h in o.handlers:
+            if h.__class__ == urllib2.HTTPCookieProcessor:
+                cj = h.cookiejar
+                cj.clear
+                for c in cookies:
+                    cj.set_cookie(c)
+                
+

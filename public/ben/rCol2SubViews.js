@@ -42,6 +42,7 @@ function filterHUDUpdate(){
 }
 
 function infoHUD(rcol){
+    this.hidetime = null;
     this.rcol = rcol;
     c = $("<div>");
     c.addClass("hud");
@@ -66,12 +67,19 @@ function infoHUD(rcol){
     this.show();
 }
 function infoHUDShow(){
-    this.content.css('visibility','visibile');    
+    this.content.css('visibility','visible');    
 }
 function infoHUDHide(){
     this.content.css('visibility','hidden');
 }
 function infoHUDUpdate(){
+    var me = this;
+    clearTimeout(this.hidetime);
+    this.hidetime = setTimeout(function(){
+			 me.hide();
+		       }, 1000);
+
+    me.show();
     var data = this.rcol.focused_data;
     if (! data){
     } else {

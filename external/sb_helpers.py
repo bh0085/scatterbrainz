@@ -48,3 +48,28 @@ def listPrefs(username = None):
     db.close
     return d
 
+def wrap(dbname):
+    dbfile = qc.query(dbname+'_dbfile')
+    db = sqw.sqliteWrapper(dbfile)
+    return db
+
+def lookup_js(name):
+    jsfiles = {
+        'jquery':"/jquery-1.4.2.min.js"
+        }
+    return jsfiles[name] 
+
+
+from webhelpers.html.builder import literal
+def sourced_js(jsfiles, look = False):
+    if look:
+        paths = map(lambda x: lookup_js(x), jsfiles)
+    else:
+        paths = jsfiles
+    html = ""
+    for p in paths:
+        html = html + '<script type="text/javascript" src=%s></script>\n' % p
+
+    html = literal(html)
+
+    return html

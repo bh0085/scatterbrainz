@@ -1,6 +1,7 @@
 *~
 *.pyc
 *.sqlite
+*.cookie
 
 my.conf
 external/.DS_Store
