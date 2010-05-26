@@ -7,6 +7,33 @@ import dbs.config.prefs as prefs
 import os
 import re
 import pickle
+import what.parsers as parsers
+import what.db as wdb
+class soup():
+    def __init__(self,plug):
+        self._plug = plug
+        self._s = self.wrap()
+
+    def s(self):
+        return self._s
+
+    def wrap(self):
+        from sqlalchemy.ext.sqlsoup import SqlSoup
+        "A wrapper for a user's what db, at 'what_$user.sqlite'"
+        dbfile = prefs.readPref('what_dbfile',self._plug.User())
+        dbstr = 'sqlite:///'+dbfile
+        print "Wrapping soup with dbfile: " + dbstr
+        db = SqlSoup(dbstr)
+        return db
+    def commit(self):
+        from sqlalchemy.exc import OperationError
+        #:
+        self.s().flush()
+        #except OperationalError:
+        #    raise Exception("sqlalchemy threw an exception on flush.... you're in trouble...")
+        
+        
+    
 
 class whatOpener():
     def __init__(self,uname, pw):
@@ -22,7 +49,7 @@ class whatOpener():
     def reload(self):
         o = urllib2.build_opener(urllib2.HTTPCookieProcessor())
         self._opener = o
-
+        
         
     def requestCookies(self):
         o = self.opener()
@@ -33,6 +60,7 @@ class whatOpener():
         p = urllib.urlencode( { 'username' : self.uname,'password':self.pw })
         f = o.open( u'http://what.cd/login.php',  p )    
         f.close()
+        print "Requesting new cookies from what.cd"
 
     def getCookies(self):
         o = self.opener()
@@ -63,9 +91,9 @@ class whatPlug():
 
         #query plugin config.
         db = self.wrap()
-        self._dbfile = db.queryToDict("""select  value from config where name = 'db_file'""")[0]['value']
-        self._htmlpath = db.queryToDict("""select  value from config where name = 'db_filepath'""")[0]['value']
-        self._path = db.queryToDict("""select  value from config where name = 'db_path'""")[0]['value']
+        self._dbfile = db.config.filter_by(name = 'db_file').first().value
+        self._htmlpath =db.config.filter_by( name = 'db_filepath').first().value
+        self._path = db.config.filter_by(name = 'db_path').first().value
         self._whatcookiepath = os.path.join(self.whatPath(),self.user+'.cookie')
 
 
@@ -73,6 +101,7 @@ class whatPlug():
         cookiefile = open(self.whatCookieFile(),'w')
         pickle.dump(cookies,cookiefile)
         cookiefile.close()
+        print "Saved cookies to: "  + str(cookiefile)
     
     def cookiesFromFile(self):
         cookiefile = open(self.whatCookieFile())
@@ -97,11 +126,16 @@ class whatPlug():
 
 
     def refreshCookies(self):
-        w = whatOpener(self.whatUser,self.whatPass)
+        w = whatOpener(self.whatUser(),self.whatPass())
         w.requestCookies()
+    
+        f = w.opener().open('http://what.cd/torrents.php?id=243942')
+        print "Refresh: opening url redirects to " + f.url
+
         cookies = w.getCookies()
+
         self.cookiesToFile(cookies)
-        print 'saving cookies'
+        print 'Refresh: saving cookies to file'
 
     def wOpener(self):
 
@@ -109,7 +143,7 @@ class whatPlug():
         pw =self.whatPass()
         whatdir = self.whatPath()
         import pickle
-        
+
         if not os.path.isfile(self.whatCookieFile()):
             self.refreshCookies()
 
@@ -123,10 +157,7 @@ class whatPlug():
 
     
     def wrap(self):    
-        "A wrapper for a user's what db, at 'what_$user.sqlite'"
-        dbfile = prefs.readPref('what_dbfile',self.User())
-        db = sqw.sqliteWrapper(dbfile)
-        return db
+        return wdb.db().soup(self.User())
 
 
     #Some utils for query what.cd artists.
@@ -135,7 +166,7 @@ class whatPlug():
         artid = self.getArtIDForQuery(query)
         if not artid:
             self.addArtistForQuery(query)
-            artod = self.artIDForQuery(query)
+            artod = self.getArtIDForQuery(query)
     
         w = self.wrap()
         e = w.exists("""
@@ -161,7 +192,11 @@ where artist = :artid
             print 'sorry, artist already has html...'
             print 'not bothering to update'
 
-    def addRelease(self, whatid, artistid,force_reload = False):
+    def refreshRelease(self, releaseid,force_reload_html = True):
+        whatid = getWhatIDForReleaseID
+
+    def addRelease(self, whatgrp, artistid,force_reload = False):
+        whatid = re.search(re.compile('id=(\d+)'),whatgrp).group(1)
         w = self.wrap()
         try:
             releaseid = self.getReleaseIDForWhatID(whatid)
@@ -175,24 +210,26 @@ values(:whatid)""",
 
         w.query("""
 insert into artist_release(artist, release)
-values(:artid, :releaseid)""", {'artid':artid,'releaseid':releaseid})
+values(:artid, :releaseid)""", {'artid':artistid,'releaseid':releaseid})
 
 
-        f = fetchReleaseID(whatid)
+        f = self.fetchReleaseID(whatid)
         html = f['html']
 
-        q = fetch
         e = w.exists("""
 select * from release_html
 where release = :releaseid
 """,{'releaseid':releaseid})
+        w.commit()
+        w.close()
+
         if not e:
-            self.addHTMLForRelease(html,releaseID)
+            self.addHTMLForRelease(html,releaseid)
         elif force_reload:
-            self.resetHTMLForRelease(html,releaseID)
+            self.resetHTMLForRelease(html,releaseid)
         else:
             print 'HTML Exists for release and force_rest is unselected'
-        
+
     def setWhatIDForArtistFromURL(self,artid,url):
         whatid = re.search(re.compile('id=(\d+)'),url).group(1)
         w = self.wrap()
@@ -239,6 +276,7 @@ select id from artist
 where whatid = :whatid
 """,
                       {'whatid':whatid})
+        db.close()
         if d == []:
             raise Exception("artIDForWhatID failed: no such artist with whatid");
         return d[0]['whatid']
@@ -252,9 +290,22 @@ select id from release
 where whatid = :whatid
 """,
                       {'whatid':whatid})
+        db.close()
         if d == []:
             raise Exception("releaseIDForWhatID failed: no such release with whatid");        
-        return d[0]['whatid']
+        return d[0]['id']
+
+    def getReleaseIDForWhatID(self,whatid):
+        db = self.wrap()
+        d = db.queryToDict("""
+select id from release
+where whatid = :whatid
+""",
+                      {'whatid':whatid})
+        db.close()
+        if d == []:
+            raise Exception("releaseIDForWhatID failed: no such release with whatid");        
+        return d[0]['id']
 
 
     def addArtistForQuery(self,strname):
@@ -391,12 +442,26 @@ where artist = :artid
             fname = d[0]['filename']
             html = open(fname).read()
         return html
+    def getHTMLForRelease(self,releaseid):
+        db = self.wrap()
+        d = db.queryToDict("""
+select filename
+from release_html
+where release = :releaseid
+""",{'releaseid':releaseid})
+        db.close()
+        if len(d) == 0:
+            html = None
+        else:
+            fname = d[0]['filename']
+            html = open(fname).read()
+        return html
 
 
     def makeMBIDsForArtistQuery(self, strname):
         "Wraps mbidsForArtist"
         query = self.convertQuery(strname)
-        artid = self.artIDForQuery(query)
+        artid = self.getArtIDForQuery(query)
         self.makeMBIDsForArtist(artid)
 
 
@@ -422,6 +487,22 @@ values(:artid,:gid)
                    
         w.commit()
         w.close()
+        
+    def makeMBIDsForArtistReleases(self,artistid):
+        w = self.wrap()
+
+        d = w.queryToDict("select release.id from release, artist_release where artist_release.release = release.id and artist_release.artist = :artistid",{'artistid':artistid})
+
+        releaseids = map(lambda x: x['id'],d)
+        print releaseids
+        for r in releaseids:
+            self.makeMBIDsForRelease(r)
+        
+    def makeMBIDsForRelease(self,releaseid):
+        pageHTML = self.getHTMLForRelease(releaseid)
+        info = parsers.parseTorrentPage(pageHTML)
+        raise Exception()
+
     def makeReleasesForArtist(self,artid):
         html = self.getHTMLForArtist(artid)
         grps = self.torrentGroupsFromArtistHTML(html)
@@ -436,8 +517,6 @@ where artist = :artid
         w.close()
         for g in grps:
             self.addRelease(g,artid)
-            
-    
 
     def convertQuery(self,query):
         query = query.lower()
@@ -446,11 +525,18 @@ where artist = :artid
     
 
     def fetchReleaseID(self,whatid):
-        url = 'http://what.cd/'+whatid
+        url = 'http://what.cd/'+'torrents.php?id='+whatid
         o = self.wOpener().opener()
         f = o.open(url)
-        html = f.read()
-        out = {'html':html,'url':f.url}
+        redirect_url = f.url
+
+        if redirect_url == 'http://what.cd/login.php':
+            self.refreshCookies()
+            o = self.wOpener().opener()
+            f = o.open(url)
+            redirect_url = f.url
+
+        out = {'html':f.read(),'url':redirect_url}
         return out
         
 
@@ -459,6 +545,13 @@ where artist = :artid
         url = "http://what.cd/artist.php?"+ urllib.urlencode({'artistname':query})
         f = o.open(url)
         redirect_url = f.url
+        if redirect_url == 'http://what.cd/login.php':
+            self.refreshCookies()
+            o = self.wOpener().opener()
+            f = o.open(url)
+            redirect_url = f.url
+
+            
         print "Artist query for: " + query + " redirected to "+redirect_url
         if not 'artist' in redirect_url:
             return None
@@ -471,8 +564,6 @@ where artist = :artid
 #all are designed to access the local what db and write 
 #a new entry if no what id is yet stored for the given #
 #query/whatid.
-
-
 
     def loggedTorrentAlbumsFromHTML(self,html):
         from pyquery import PyQuery as pq
@@ -503,5 +594,6 @@ where artist = :artid
         #Establishes an artist in the db with html and a whatid.
         self.addArtistQueryWithHTML(query,True)
         self.makeMBIDsForArtistQuery(query)
-        self.makeReleasesForArtistQuery(query)
+        artid = self.getArtIDForQuery(query)
+        self.makeReleasesForArtist(artid)
         

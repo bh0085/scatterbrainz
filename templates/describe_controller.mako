@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+<%inherit file="base.mako" />
+
+<%def name="head_tags()">
 <script type = "text/javascript">
 $(document).ready(function(){
 	u = $("<ul>");
@@ -15,7 +19,10 @@ $(document).ready(function(){
 	});
 });
 
+
 </script>
+</%def>
+
 -------Scatterbrainz controller description for: <b>${c.cname}</b>-------<br/>
 <br/>
 ${c.cdesc}

@@ -32,51 +32,7 @@ def submitlog():
     file1a.write(d1a)
     file1.write(d1)
 
-def readartist():
 
-    url = u'http://what.cd/artist.php?id=224'
-    wo = whatOpener()
-    o = wo.opener()
-
-    # second request should automatically pass back any
-    # cookies received during login... thanks to the HTTPCookieProcessor
-
-    return torrentinfo(0,o)
-
-  
-    f = o.open( url )
-    data = f.read()
-    uni = unicode(data,'utf-8')    
-    f.close()
-
-    ##Can open the page with libxml2dom
-    import libxml2dom
-    doc = libxml2dom.parseString(data, html=1)
-
-    ##can open with lxml
-    from lxml import etree
-    #tree = etree.fromstring(uni)
-
-    d = pq(uni);
-    
-    htmls = []
-    logged = []
-    import re
-    relog = re.compile("Log")
-    elts =  d("#torrents_album").find("td").find("a").filter(lambda i : pq(this).html() != None).filter(lambda i : re.search(relog,pq(this).html()) != None)
-    elts.each(lambda x : (   logged.append((x))))
-
-    for f in logged:
-        s = f.attr('href');
-        t_id = re.compile("[^t]id=([0-9]*)").search(s).group(1)
-        t_grp_id = re.compile("torrentid=([0-9]*)").search(s).group(1)
-        
-        i = getinfo(t_id,o)
-        break
-        logfile = retrievelog( t_id, t_grp_id, o)
-        if logfile != None:
-            tracks = getlogtracks(logfile)
-            #print tracks
     
 def increasingSequences(arr, max_inc = 1):
     
@@ -128,29 +84,6 @@ def searchTermsToWhat(terms):
 
     return all_outs
     
-
-
-def torrentinfo(t_id,opener):
-    url = 'http://what.cd/torrents.php?id='+t_id
-    text = opener.open(url).read()
-    d = pq(text)
-    fd_re = re.compile('files_(\d*)')
-    file_div_ids =list(re.finditer(fd_re,text))
-
-    all_parsings = []
-    for f in file_div_ids:
-        t_grp_id = f.group(1)
-        file_div_id = f.group()
-        torrent_div = d("#torrent_"+t_grp_id);
-        torrent_fl = torrent_div.find("#files_"+t_grp_id);
-        parsed_fl = parseFileListToTracks(torrent_fl.html());
-        all_parsings.append(parsed_fl)
-
-    nums = parseAlbumInfoToTracks(text);
-    all_parsings.append(nums);
-    
-    best_guess = mergeTracklists(all_parsings)
-    return best_guess
 
     
 

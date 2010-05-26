@@ -8,7 +8,8 @@ var columnControlTypes = [
     ['mixed','internal','click chooses mixed source','sourceSelects'],
     ['remote','internal','click chooses internal source','sourceSelects'],
     ['local','internal','click chooses external source','sourceSelects'],
-    ['tracks','external','click shows tracks','clickActionSelects']]
+    ['tracks','external','click shows tracks','clickActionSelects'],
+    ['what','internal','click chooses what.cd source','sourceSelects']];
 //'group names and exclusive/nonexclusive.'
 
 var columnGroupsAreExclusive = {
@@ -55,16 +56,16 @@ function makeAndStyleColumnControls(rcol){
 
     switch(datatype){
     case 'artist':
-	controls = [0,1,3,4,5];
+	controls = [0,1,3,4,5,6];
 	break;
     case 'album':
-	controls = [3,4,5];
+	controls = [3,4,5,6];
 	break;
     case 'track':
 	controls = [3,4];
 	break;
     case 'member':
-	controls = [1,3,4];
+	controls = [1,3,4,6];
 	break;
     default:
 	controls = [];

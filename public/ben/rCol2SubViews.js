@@ -101,6 +101,15 @@ function infoHUDUpdate(){
 	    li = $("<li>").html(data['locations'][i]).addClass('hud_list_item');
 	    ul.append(li);
 	}
+	li = $("<li>").html('Other data:').addClass('hud_list_header');
+ 	ul.append(li);
+
+	for (key in data){
+	    var str = String(data[key]);
+	    li = $("<li>").html(str).addClass('hud_list_item');
+	    ul.append(li);
+	}
+	
 
 	this.content.append(ul);
 

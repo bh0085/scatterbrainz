@@ -1,6 +1,4 @@
 import dbs.config.queryConfig as qc
-import urllib2
-import sqliteWrapper as sqw
 def sb_root_url():
     addr = qc.query('sb_address')
     port = qc.query('sb_port')
@@ -9,6 +7,7 @@ def sb_root_url():
 
 
 def queryLocalSB(rel):
+    import urllib2
     address = sb_root_url()+rel
     o = urllib2.build_opener()
     data = o.open(address).read()
@@ -23,12 +22,16 @@ def getMyIP():
     return ip
 
 def listUsers():
+    import sqliteWrapper as sqw
+
     db = sqw.sqliteWrapper(qc.query('config_dbfile'))
     d = db.queryToDict('select name from user;');
     db.close
     return d
 
 def userID(username):
+    import sqliteWrapper as sqw
+
     db = sqw.sqliteWrapper(qc.query('config_dbfile'))
     d = db.queryToDict('select id from user where name = :username;',params = {'username':username});
     db.close
@@ -38,6 +41,8 @@ def userID(username):
         return d[0]['id']
 
 def listPrefs(username = None):
+    import sqliteWrapper as sqw
+
     db = sqw.sqliteWrapper(qc.query('config_dbfile'))
     if username:
         uid = userID(username);
@@ -49,6 +54,8 @@ def listPrefs(username = None):
     return d
 
 def wrap(dbname):
+    import sqliteWrapper as sqw
+
     dbfile = qc.query(dbname+'_dbfile')
     db = sqw.sqliteWrapper(dbfile)
     return db
@@ -73,3 +80,22 @@ def sourced_js(jsfiles, look = False):
     html = literal(html)
 
     return html
+
+def unameFromCookie(cookie):
+    users = listUsers()
+    for u in users:
+        if u['name'] in cookie:
+            return u['name']
+    return None
+
+def dtFromAction(action):
+    if action =='artists':
+        return 'artist'
+    elif action =='albums':
+        return 'album'
+    elif action =='members':
+        return 'artist'
+    elif action =='tracks':
+        return 'track'
+    else:
+        raise Exception('unhandled action type: '+action)

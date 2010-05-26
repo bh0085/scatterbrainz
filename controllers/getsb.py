@@ -1,14 +1,10 @@
 import logging
-
+from authkit.authorize.pylons_adaptors import authorize
+from authkit.permissions import RemoteUser, ValidAuthKitUser, UserIn
+from scatterbrainz.lib.base import BaseController, render
 
 from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
-
-from scatterbrainz.lib.base import BaseController, render
-from scatterbrainz.model.track import Track
-from scatterbrainz.model.artist import Artist
-from scatterbrainz.model.album import Album
-from scatterbrainz.model.meta import Session
 
 import os
 import re
@@ -18,11 +14,10 @@ import urllib
 import simplejson as sjson
 
 log = logging.getLogger(__name__)
-import pgdb
-from pg import OperationalError
 
-import dbs.mbrainz.fetchMB as fr
-import dbs.music.fetchMusic as fm
+import sb_helpers as sh
+import dbs.requests.request as db_req
+
 
 class GetsbController(BaseController):
     cxn = None
@@ -48,8 +43,55 @@ class GetsbController(BaseController):
                 match = re.search(r,k).group(1)
                 filters[match] = p[k]
         return filters
- 
+
+    
+    #fetch3 uses memcached for requests...
+    @authorize(RemoteUser())
     def fetch2(self):
+        uname = sh.unameFromCookie(request.cookies['authkit'])
+        
+        p = request.params
+        sources = self.parseSources(p)
+        filters = self.parseFilters(p)
+        action = p['action']
+        
+        data_arr = []
+        for s in sources:
+            req = None
+            if s== 'remote': db = 'mbrainz'
+            elif s == 'local': db = 'music'
+            elif s == 'what': db = 'what'
+            else: raise Exception('data source unhandled')
+            db_params = {'action':action,'src':s}
+            for key, item in filters.iteritems():
+                db_params[key]=item
+            #memcaching disabled (since, true)
+            req = db_req.requestWithParams(uname,db,db_params,True)
+            if not req: continue
+            for r in req: r['source'] = s
+            data_arr.extend(req)
+
+        if len(data_arr) == 0:
+            return None
+        dt = data_arr[0]['datatype']
+        if ( dt =='artist' or dt =='track'):
+            mbstr = dt + "_mbid"
+            data_arr = mergeDict(data_arr, mbstr)
+
+        has_year = False
+        for i in data_arr: 
+            if i.has_key('year'): 
+                has_year = 'True';
+                break;
+        #if has_year: data_arr = mergeDict(data_arr,'year')
+
+        createAllStrs(data_arr,['set_to_merge']);
+        getSBSortData(data_arr)
+        return sjson.dumps(data_arr)
+            
+    def fetch3(self):
+        import dbs.mbrainz.fetchMB as fr
+        import dbs.music.fetchMusic as fm
         p = request.params
         sources = self.parseSources(p)
         filters = self.parseFilters(p)
@@ -62,7 +104,7 @@ class GetsbController(BaseController):
                     src_module = fr
                 elif s =='local':
                     src_module = fm
-                
+                    
                 if action == 'albums':
                     dt = 'album'
                     tryfilter = 'artist_mbid'
@@ -102,7 +144,7 @@ class GetsbController(BaseController):
                 for r in req: r['action'] = action
                 data_arr.extend(req)
                 
-        if (dt == 'album' or dt =='artist' or dt =='track'):
+        if ( dt =='artist' or dt =='track'):
             mbstr = dt + "_mbid"
             data_arr = mergeDict(data_arr, mbstr)
 

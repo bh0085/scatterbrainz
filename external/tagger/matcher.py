@@ -12,6 +12,10 @@ def tokenize(s):
     stripped = re.compile(u"'").sub(u'',stripped)
     stripped = stripped.lower()
     tokens = unicode.split(stripped,u" ")
+    try:
+        tokens.remove('')
+    except: pass
+
     return tokens
 
 def wordUseCount(word,use_type,wrapper):
@@ -108,3 +112,5 @@ where name %% %(artist_name)s;
     
     return matches
 
+def matchTrackListWithArtistMBIDAndGroupName(tracks,artists):
+    pass

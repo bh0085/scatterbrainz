@@ -21,6 +21,9 @@ function mlinkedListItem(d,rc){
     var header =  $("<li>").append($(mlink(main_type,d,rc,str)).addClass('dataview_list_item_header'));
     elt.append(header);
     
+    if ('elements' in d){
+	
+    
     if (d['elements'].length > 1){
 	$.each(d['elements'],function(idx,item){
 		   var dt = item['datatype'];
@@ -29,7 +32,7 @@ function mlinkedListItem(d,rc){
 		   li.addClass('dataview_sub_list_item');
 		   elt.append(li);
 	       });
-    }
+    }}
     
     return elt;
     

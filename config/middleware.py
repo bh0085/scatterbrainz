@@ -9,6 +9,7 @@ from pylons.middleware import ErrorHandler, StatusCodeRedirect
 from pylons.wsgiapp import PylonsApp
 from routes.middleware import RoutesMiddleware
 from auth import AuthMiddleware
+import authkit.authenticate
 
 from scatterbrainz.config.environment import load_environment
 
@@ -47,11 +48,12 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
     app = CacheMiddleware(app, config)
 
     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
-    app = AuthMiddleware(app)
+    #app = AuthMiddleware(app)
 
     if asbool(full_stack):
         # Handle Python exceptions
         app = ErrorHandler(app, global_conf, **config['pylons.errorware'])
+        app = authkit.authenticate.middleware(app, app_conf)
 
         # Display error documents for 401, 403, 404 status codes (and
         # 500 when debug is disabled)

@@ -7,6 +7,5 @@ class mbrainzWrapper(pgw.postgresWrapper):
         self.user = str(qc.query('mbuser'))
         self.db = qc.query('mbdb')
         self.cxn = None
-        print self.port
         self._openCXN()
         print 'opened mbrainz cxn with host'+self.host

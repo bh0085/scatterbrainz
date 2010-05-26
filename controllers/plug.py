@@ -11,8 +11,13 @@ log = logging.getLogger(__name__)
 import sb_helpers as sh
 import simplejson as sjson
 
+from authkit.authorize.pylons_adaptors import authorize
+from authkit.permissions import RemoteUser, ValidAuthKitUser, UserIn
+
+
 class PlugController(BaseController):
 
+    @authorize(RemoteUser())
     def index(self):
         # Return a rendered template
         #return render('/plug.mako')
@@ -32,5 +37,30 @@ class PlugController(BaseController):
         rendered0 = sh.sourced_js(jsfiles,True)
         rendered = rendered0 + render('/plug_list.mako')
         rendered = rendered + render('/describe_controller.mako')
+        
+
+
         return rendered
 
+    def serveMako(self,name):
+        c.username  = sh.unameFromCookie(request.cookies['authkit'])
+        return render(name+'.mako')
+        
+    def what(self):
+        jsfiles = ['jquery']
+        rendered0 = sh.sourced_js(jsfiles,True)
+        c.jsfiles = rendered0
+        c.whatUser = 'bh0085'
+        c.albumnames = []
+        c.artistnames = []
+
+        uname = sh.unameFromCookie(request.cookies['authkit'])
+
+        import dbs.requests.request as r
+        params = {'action':'getArtists'}
+        c.artistnames = r.requestWithParams(uname,'what',params,True)
+        params = {'action':'getAlbums'}
+        c.albumnames = r.requestWithParams(uname,'what',params,True)               
+
+
+        return self.serveMako('what')

@@ -4,6 +4,7 @@ class AuthMiddleware(object):
         self.wrap_app = wrap_app
 
     def __call__(self, environ, start_response):
+        print environ.get('HTTP_AUTHORIZATION')
         if not self.authorized(environ.get('HTTP_AUTHORIZATION')):
             # Essentially self.auth_required is a WSGI application
             # that only knows how to respond with 401...
@@ -13,8 +14,6 @@ class AuthMiddleware(object):
         return self.wrap_app(environ, start_response)
 
     def authorized(self, auth_header):
-        #sorry dan, but i'm killing auth for the moment
-        return True
         if not auth_header:
             # If they didn't give a header, they better login...
             return False
@@ -23,10 +22,20 @@ class AuthMiddleware(object):
         assert auth_type.lower() == 'basic'
         unencoded_info = encoded_info.decode('base64')
         username, password = unencoded_info.split(':', 1)
-        return self.check_password(username, password)
+        # as a bonus, write authentication to the 
+        #request itself so that i can get at it in other controllers.
+
+        val =  self.check_password(username, password)
+        return val
+
 
     def check_password(self, username, password):
         # Not very high security authentication...
+        import dbs.config.config_helpers as ch
+        if ch.userExists(username):
+            p = ch.userPassword(username)
+            if p == password:
+                return True
         try:
             return int(username) + int(password) == 100
         except:
